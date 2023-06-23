@@ -21,12 +21,11 @@ To get started, click **Start**.
 
 ## Project setup
 
-In Google Cloud, resources are organized together in the form of
-projects.
+First, let's make sure we got the correct project selected. Go ahead and select the provided project ID.
 
 <walkthrough-project-setup billing="true"></walkthrough-project-setup>
 
-<walkthrough-enable-apis apis="storage.googleapis.com,
+<walkthrough-enable-apis apis="cloudbuild.googleapis.com,
 run.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
@@ -34,11 +33,3 @@ artifactregistry.googleapis.com">
 ## Exploring the code
 
 
-
-<walkthrough-menu-navigation sectionId="SERVERLESS_SECTION"></walkthrough-menu-navigation>
-
-
-
-
-
-<walkthrough-inline-feedback></walkthrough-inline-feedback> 
