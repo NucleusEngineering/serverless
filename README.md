@@ -1,4 +1,4 @@
-# Run, Build, Extend and Operate Serverless Apps on Google Cloud
+# Serverless Journey: Run, Build, Extend and Operate Serverless Apps on Google Cloud
 
 Welcome to this hands-on tutorial on how to get started with Serverless applications on Google Cloud.
 
