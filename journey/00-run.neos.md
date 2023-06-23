@@ -32,14 +32,8 @@ artifactregistry.googleapis.com">
 
 ## Exploring the code
 
-There is a sample application in `container/`. Let's change directory into that:
-
-```bash
-cd container/
-```
-
 Take some time and 
-<walkthrough-editor-open-file filePath="cloudshell_open/serverless/container/main.go">
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
 familiarize yourself with the code.
 </walkthrough-editor-open-file>
 
@@ -79,4 +73,25 @@ We want our application to be publicly available on the internet.
 
 Cloud Run is available in all Google Cloud Platform regions globally. If you are unsure where to deploy to, you can use the [Region Picker](https://cloud.withgoogle.com/region-picker/) tool to find the most suitable one.
 
+Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoint it created.
+
+## Using Cloud Code 
+
+Alternatively, you can deploy and otherwise manage the lifecycle of your Cloud Run services and other resources using Cloud Code.
+
+Cloud Code is an IDE plugin for both VS Code and Intellj-based IDEs and is designed to make you interaction with Google Cloud more convenient.
+
+Cloud Code is a pre-installed in Cloud Shell.
+
+Click the
+<walkthrough-editor-spotlight spotlightId="activity-bar-cloud-code">
+Cloud Code icon in the activity bar
+</walkthrough-editor-spotlight>
+to expand it.
+
+Within the activity bar
+<walkthrough-editor-spotlight spotlightId="cloud-code-cloud-run-deploy">
+you can directly deploy to Cloud Run
+</walkthrough-editor-spotlight>
+too, with out the need to use the CLI.
 
