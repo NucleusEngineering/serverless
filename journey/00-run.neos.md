@@ -32,4 +32,20 @@ artifactregistry.googleapis.com">
 
 ## Exploring the code
 
+Take some time and familiarize yourself with the code in `container/`.
+
+<walkthrough-editor-open-file filePath="container/main.go">
+Open code
+</walkthrough-editor-open-file>
+
+Also have a look at the dependencies reference in the GO module. You can navigate to it's [upstream repository](https://github.com/helloworlddan/tortune) to figure out what it does.
+
+Once you've understood what's going on, you can try to run that app directly in Cloud Shell, running the following in the terminal:
+
+```bash
+go run main.go
+```
+
+This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview at the top right in Cloud Shell.
+
 
