@@ -1,12 +1,12 @@
 <walkthrough-metadata>
-  <meta name="title" content="Deploy to Cloud Run after building a container from source." />
+  <meta name="title" content="Serverless Journey>: Run a freshly built container on Cloud Run" />
   <meta name="description" content="Learn how to build, containerize, store and deploy a container image to Google Cloud Run." />
   <meta name="component_id" content="1053799" />
   <meta name="keywords" content="deploy, containers, console, run" />
   <meta name="short_id" content="true" />
 </walkthrough-metadata>
 
-# Deploy to Cloud Run after building a container from source.
+# Serverless Journey: Run a freshly built container on Cloud Run
 
 ## ![Cloud Run Logo][intro image]
 
@@ -50,7 +50,9 @@ go run main.go
 
 This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview at the top right in Cloud Shell.
 
-<walkthrough-editor-pointer cssSelector="[id$=web-preview-button]">Web Preview</walkthrough-editor-pointer>
+<walkthrough-editor-spotlight cssSelector="[id$=web-preview-button]">Web Preview</walkthrough-editor-spotlight>
+
+Finally, focus the terminal again and terminate the web server with `Ctrl-C`.
 
 ## Building and deploying the code
 
