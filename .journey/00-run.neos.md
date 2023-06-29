@@ -94,7 +94,9 @@ Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoin
 curl $(gcloud run services describe server --format 'status.url')
 ```
 
-The first deployment to Cloud Run is complete!
+Cloud Run services consist of one or more revisions. Whenever you update your service or it's configuration, you are creating a new revision. Revisions are immutable.
+
+Navigate to the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run) to explore the service and its active revision.
 
 ## Using Cloud Code 
 
@@ -116,3 +118,23 @@ you can directly deploy to Cloud Run
 </walkthrough-editor-spotlight>
 too, with out the need to use the CLI.
 
+Take a moment and familiarize yourself with the wizard, deploy another revision of your service, or explore the previously deployed one.
+
+## Scaling you app
+
+Cloud Run automatically scales your application based how many web requests are coming in via the HTTPS endpoint. Cloud Run's horizontal auto-scaler is extremely fast and can launch 100s of new instances in seconds.
+
+Let's put some load on our newly created service and learn about scaling while we wait:
+
+```bash
+# Use hey to invoke the service 500k times
+hey 500000 $(gcloud run services describe server --format 'status.url')
+```
+
+In order to build modern, cloud-first applications that scale well horizontally, we need to watch you for some design considerations.
+
+**Applications should be engineered to boot quickly.** Cloud Run can start your containers very quickly, but it is your responsibility to bring up a web server and you should engineer your code to do so quickly. The earlier this happens, the earlier Cloud Run is able to route HTTP requests to the new instance, reduce stress on the older instances and hence scale out effectively. Cloud Run considers the lifecycle stage from starting your application to the moment it can serve HTTP requests as 'Startup'. During this time Cloud Run will periodically check if your application has bound the port provided by `$PORT` and if so, Cloud Run considers startup complete and routes live traffic to the new instance.
+
+**Applications should ideally be stateless.** Cloud Run will also automatically scale in again, should application traffic decrease. Container instances will be terminated, if Cloud Run determines that too many are active to deal with the current request load. When an instance is scheduled for termination, Cloud Run will change it's lifecycle stage to 'Shutdown'. You can trap the `SIGTERM` signal in your code and begin graceful shutdown of your instance. Requests will no longer be routed to you container and your application has 10 seconds to persist data over the network, flush caches or complete some other remaining write operations.
+
+<!-- TODO continue request lifecycle, cpu throttling -->
