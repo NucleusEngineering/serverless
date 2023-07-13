@@ -69,7 +69,7 @@ Sometimes it is required to exert more control over the Docker build process. Go
 Create a new file called `Dockerfile` and place it in the same directory as the Go application. Let's start with a simple, single-stage build for Go:
 
 ```Dockerfile
-FROM golang:1.19-bullseye
+FROM golang:1.20-bullseye
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
@@ -94,7 +94,7 @@ Next, let's navigate to [Artifact Registry in the Google cloud Console](https://
 Huh, it seems like our image is quite big! We can fix this by running a [multi-stage Docker build](https://docs.docker.com/build/building/multi-stage/). Let's extend the Dockerfile and replace its contents with the following:
 
 ```Dockerfile
-FROM golang:1.19-bullseye as builder
+FROM golang:1.20-bullseye as builder
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
