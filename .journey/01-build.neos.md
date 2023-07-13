@@ -6,7 +6,7 @@
 
 # Serverless Journey: Building and deploying container images with Cloud Build
 
-![Cloud Build Logo](https://walkthroughs.googleusercontent.com/content/images/build.png)
+![Cloud Build Logo](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
 
 In this tutorial we'll learn how to use Cloud Build, the serverless CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
 
@@ -38,9 +38,18 @@ In the previous section of the Serverless journey we saw how to use Cloud Build 
 
 ## Building with Dockerfiles
 
-
-
 ## Building with a cloudbuild.yaml file
 
 ## Deploying to Cloud Run
 
+## Setting up an automatic source triggers from Github
+
+## Summary
+
+You now know how Cloud Build can help you automate integrating your artifacts.
+
+When you are ready to proceed to the next chapter to learn more about how to implement Google Cloud APIs from your code, execute the following in the shell:
+
+```bash
+cloudshell launch-tutorial .journey/03-extend.neos.md
+```

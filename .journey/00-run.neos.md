@@ -6,7 +6,7 @@
 
 # Serverless Journey: Run a freshly built container image on Cloud Run
 
-![Cloud Run Logo](https://walkthroughs.googleusercontent.com/content/images/run.png)
+![Cloud Run Logo](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
 
 In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the avaliable options to tweak our service.
 
@@ -145,3 +145,12 @@ Deploy a new revision using the [Cloud Run section in the Google Cloud Console](
 
 While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/server/metrics) and explore how the previously executed load test affected scaling.
 
+## Summary
+
+You now have a good feel for what it means to build and deploy your code to Cloud Run.
+
+When you are ready to proceed to the next chapter to learn more about Cloud Build execute the following command in the shell:
+
+```bash
+cloudshell launch-tutorial .journey/01-build.neos.md
+```
