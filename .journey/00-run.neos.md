@@ -6,7 +6,7 @@
 
 # Serverless Journey: Run a freshly built container image on Cloud Run
 
-## ![Cloud Run Logo][https://walkthroughs.googleusercontent.com/content/images/run.png]
+![Cloud Run Logo](https://walkthroughs.googleusercontent.com/content/images/run.png)
 
 In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the avaliable options to tweak our service.
 
@@ -142,3 +142,6 @@ In order to build modern, cloud-first applications that scale well horizontally,
 ![Cloud Run container lifecycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
 
 Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/server) and **enable Startup CPU boost**. 
+
+While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/server/metrics) and explore how the previously executed load test affected scaling.
+
