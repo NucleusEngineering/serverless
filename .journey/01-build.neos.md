@@ -36,13 +36,96 @@ You don't need to provision anything to get started with using Cloud Build, it's
 
 In the previous section of the Serverless journey we saw how to use Cloud Build to automatically build container images from source code using the magic of Build Packs. These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
 
+In order to get started let's set up some configuration:
+
+```bash
+# Set default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
+
+gcloud config set run/region europe-north1 
+gcloud config set artifacts/location europe-north1 
+```
+
+We are building some container images in this tutorial, so let's set up a dedicated Docker iamge registry using Google Cloud Artifact Registry:
+
+```bash
+gcloud artifacts repositories create my-repo --repository-format docker
+
+# Also update config to use this repo
+gcloud config set artifacts/repository my-repo
+```
+
+Great! Let's get started.
+
 ## Building with Dockerfiles
+
+Previously, we build our container images by spceifying the `--source` flag, which will cause Cloud Build to use [Google Cloud Buildpacks](https://cloud.google.com/docs/buildpacks/overview) to automatically determine the toolchain of our application. It then uses templated container build instructions which are based on best practices to build and containerize the application.
+
+Sometimes it is required to exert more control over the Docker build process. Google Cloud Build also understands Dockerfiles. With Dockerfiles it is possible to precisely specify which instructions to execute in order to create the container image. Cloud Build typically inspects the build context and looks for build instructions in the following order:
+
+1. cloudbuild.yaml: If this file is present, Cloud Build will execute the instructions define in it. We'll learn about cloudbuild.yaml files later in this tutorial.
+2. Dockerfile: If this file is present, Cloud Build will use it to execute a container build process that is equivalent to running `docker build`. Finally, it will tag and store the resulting image.
+3. Buildpacks: If no explicit build instructions are available, Cloud Build can still be used to integrate by using Google Cloud Buildpacks.
+
+Create a new file called `Dockerfile` and place it in the same directory as the Go application. Let's start with a simple, single-stage build for Go:
+
+```Dockerfile
+FROM golang:1.19-bullseye
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -v -o server
+CMD ["/app/server"] 
+```
+This Dockerfile:
+1. uses Debian Bullseye with Golang 1.19 as base image
+2. copies the definition of the Go module and installs all dependencies
+3. copies the sources and builds the Go application
+4. specifies the application binary to run
+
+We can now submit the build context to Cloud Build and use the instructions in the Dockerfile to create a new image by running:
+
+```bash
+gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockerbuild .
+```
+
+Next, let's navigate to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/), find the repo and inspect the image.
+
+Huh, it seems like our image is quite big! We can fix this by running a [multi-stage Docker build](https://docs.docker.com/build/building/multi-stage/). Let's extend the Dockerfile and replace its contents with the following:
+
+```Dockerfile
+FROM golang:1.19-bullseye as builder
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -v -o server
+
+FROM gcr.io/distroless/static-debian11
+WORKDIR /app
+COPY --from=builder /app/server /app/server
+CMD ["/app/server"]
+```
+
+Great! We'll keep the first stage as build stage. Once the statically-linked Go binary is built, it is copied to a fresh stage that is based on `gcr.io/distroless/static-debian11`. The _distroless_ images are Google-provided base images that are very small. That means there is less to store and images typically have a much smaller attack surfaces. Let's build again:
+
+```bash
+gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockermultistage .
+```
+
+Navigate back to Artifact Registry in the Google Cloud Console and inspect the new image `dockermultistage`. The resulting image is much smaller.
 
 ## Building with a cloudbuild.yaml file
 
+<!-- TODO cloudbuild.yaml: building, tagging, storing -->
+
 ## Deploying to Cloud Run
 
+<!-- TODO extending cloudbuild.yaml, gcloud command, service agent perms in console-->
+
 ## Setting up an automatic source triggers from Github
+
+<!-- TODO fork on GH, connect repo, create trigger, commit and push code and see it execute -->
 
 ## Summary
 
