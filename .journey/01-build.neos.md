@@ -1,6 +1,6 @@
 
   <meta name="title" content="Serverless Journey>: Building and deploying container images with Cloud Build" />
-  <meta name="description" content="Learn how to build container images, store them in the registry and deploy them to Cloud Run" />
+  <meta name="description" content="Learn how to build container images using Cloud Build" />
   <meta name="keywords" content="deploy, containers, console, run" />
 </walkthrough-metadata>
 
@@ -10,7 +10,7 @@
 
 In this tutorial we'll learn how to use Cloud Build, the serverless CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
 
-<walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
+<walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
 Estimated time:
 <walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
@@ -45,7 +45,7 @@ gcloud config set run/region europe-north1
 gcloud config set artifacts/location europe-north1 
 ```
 
-We are building some container images in this tutorial, so let's set up a dedicated Docker iamge registry using Google Cloud Artifact Registry:
+We are building some container images in this tutorial, so let's set up a dedicated Docker image registry using Google Cloud Artifact Registry:
 
 ```bash
 gcloud artifacts repositories create my-repo --repository-format docker
@@ -58,7 +58,7 @@ Great! Let's get started.
 
 ## Building with Dockerfiles
 
-Previously, we build our container images by spceifying the `--source` flag, which will cause Cloud Build to use [Google Cloud Buildpacks](https://cloud.google.com/docs/buildpacks/overview) to automatically determine the toolchain of our application. It then uses templated container build instructions which are based on best practices to build and containerize the application.
+Previously, we build our container images by specifying the `--source` flag, which will cause Cloud Build to use [Google Cloud Buildpacks](https://cloud.google.com/docs/buildpacks/overview) to automatically determine the tool chain of our application. It then uses templated container build instructions which are based on best practices to build and containerize the application.
 
 Sometimes it is required to exert more control over the Docker build process. Google Cloud Build also understands Dockerfiles. With Dockerfiles it is possible to precisely specify which instructions to execute in order to create the container image. Cloud Build typically inspects the build context and looks for build instructions in the following order:
 
@@ -89,7 +89,7 @@ We can now submit the build context to Cloud Build and use the instructions in t
 gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockerbuild .
 ```
 
-Next, let's navigate to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/), find the repo and inspect the image.
+Next, let's navigate to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/), find the repository and inspect the image.
 
 Huh, it seems like our image is quite big! We can fix this by running a [multi-stage Docker build](https://docs.docker.com/build/building/multi-stage/). Let's extend the Dockerfile and replace its contents with the following:
 
@@ -119,7 +119,7 @@ Navigate back to Artifact Registry in the Google Cloud Console and inspect the n
 
 Cloud Build will build, tag and store your container image when you submit a Dockerfile, but it can do a lot more. You can instruct Cloud Build to execute any arbitrary sequence of instructions by specifying and submitting a `cloudbuild.yaml` file. When detected in the build context, this file will take precedence over any other configuration and will ultimately define what your Cloud Build task does.
 
-In a nutshell, you are able to specify a sequence of steps with each step being executed in a container. You can specify which image and process to execute for every individual step. The steps can collaborate and share data via a shared volume that is automatically mounted into the filesystem at `/workspace`.
+In a nutshell, you are able to specify a sequence of steps with each step being executed in a container. You can specify which image and process to execute for every individual step. The steps can collaborate and share data via a shared volume that is automatically mounted into the file system at `/workspace`.
 
 Go ahead and create a `cloudbuild.yaml` and place it in the same directory as the Dockerfile and the Go application. Add the following contents:
 
@@ -142,15 +142,15 @@ OK. Let's modify the `cloudbuild.yaml` to do something that's actually useful. R
 ```yaml
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml', '.']
+  args: ['build', '-t', '$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuild']
+  args: ['push', '$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml']
 ```
 
-Pay attention to the `$`-prefixed `$PROJECT_ID` and `$_REGION`. `$PROJECT_ID` is a pseudo-variable which is automatically set by the Cloud Build environment. `$_REGION` is what Cloud Build calls a _substitution_ and it allows users to override otherwise static content of the build definition by injecting configuration during invokation of the build. Let's take a look:
+Pay attention to the `$`-prefixed `$PROJECT_ID` and `$_ARTIFACT_REGION`. `$PROJECT_ID` is a pseudo-variable which is automatically set by the Cloud Build environment. `$_ARTIFACT_REGION` is what Cloud Build calls a _substitution_ and it allows users to override otherwise static content of the build definition by injecting configuration during invocation of the build. Let's take a look:
 
 ```bash
-gcloud builds submit --substitutions _REGION=$(gcloud config get-value artifacts/location)
+gcloud builds submit --substitutions _ARTIFACT_REGION=$(gcloud config get-value artifacts/location)
 ```
 
 This will build, tag and store a container image.
@@ -164,10 +164,30 @@ Cloud Build is a versatile tool and is suited to run a wide variety of batch-lik
 We can extend the `cloudbuild.yaml` definition and automatically deploy the newly created image to Cloud Run like this:
 
 ```yaml
-
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'run'
+    - 'deploy'
+    - '--region=$_RUN_REGION'
+    - '--image=$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml'
+    - 'server'
 ```
 
-<!-- TODO extending cloudbuild.yaml, gcloud command, service agent perms in console-->
+In order for this to work, we need to grant some permissions to the service account used by the Cloud Build service agent, so it can interact with Cloud Run resources on our behalf.
+
+Navigate to the [settings section of Cloud Build in the Google Cloud Console](https://console.cloud.google.com/cloud-build/settings/service-account) and assign both the **Cloud Run Admin** and the **Service Account User** roles to Cloud Build's service account.
+
+Finally, let's supply all the substitutions and invoke Cloud Build once again to execute a fresh build and deploy to Cloud Run automatically.
+
+```bash
+gcloud builds submit --substitutions \
+    _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
+```
 
 ## Setting up an automatic source triggers from Github
 

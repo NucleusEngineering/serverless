@@ -8,7 +8,7 @@
 
 ![Cloud Run Logo](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
 
-In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the avaliable options to tweak our service.
+In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the available options to tweak our service.
 
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
@@ -58,7 +58,7 @@ In the following steps, we'll deploy our app to Cloud Run, which is a compute pl
 
 Cloud Run is available in all Google Cloud Platform regions globally. If you are unsure where to deploy to, you can use the [Region Picker](https://cloud.withgoogle.com/region-picker/) tool to find the most suitable one.
 
-You can configure preferred regions and zones in `gcloud` so its invokaction get more convenient.
+You can configure preferred regions and zones in `gcloud` so its invocation get more convenient.
 
 ```bash
 # Set default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
@@ -100,7 +100,7 @@ Navigate to the [Cloud Run section in the Google Cloud Console](https://console.
 
 ## Using Cloud Code 
 
-Alternatively, you can deploy and otherwise manage the lifecycle of your Cloud Run services and other resources using Cloud Code.
+Alternatively, you can deploy and otherwise manage the life cycle of your Cloud Run services and other resources using Cloud Code.
 
 Cloud Code is an IDE plugin for both VS Code and Intellj-based IDEs and is designed to make you interaction with Google Cloud more convenient.
 
@@ -133,13 +133,13 @@ hey 500000 $(gcloud run services describe server --format 'status.url')
 
 In order to build modern, cloud-first applications that scale well horizontally, we need to watch out for some design considerations.
 
-**Applications should be engineered to boot quickly.** Cloud Run can start your containers very quickly, but it is your responsibility to bring up a web server and you should engineer your code to do so quickly. The earlier this happens, the earlier Cloud Run is able to route HTTP requests to the new instance, reduce stress on the older instances and hence scale out effectively. Cloud Run considers the lifecycle stage from starting your application to the moment it can serve HTTP requests as 'Startup'. During this time Cloud Run will periodically check if your application has bound the port provided by `$PORT` and if so, Cloud Run considers startup complete and routes live traffic to the new instance. Depending on your application code, you can further cut down startup time by enabline _Startup CPU boost_. When enabled, Cloud Run will temporarily allocate additional CPU resources during startup of your application.
+**Applications should be engineered to boot quickly.** Cloud Run can start your containers very quickly, but it is your responsibility to bring up a web server and you should engineer your code to do so quickly. The earlier this happens, the earlier Cloud Run is able to route HTTP requests to the new instance, reduce stress on the older instances and hence scale out effectively. Cloud Run considers the life cycle stage from starting your application to the moment it can serve HTTP requests as 'Startup'. During this time Cloud Run will periodically check if your application has bound the port provided by `$PORT` and if so, Cloud Run considers startup complete and routes live traffic to the new instance. Depending on your application code, you can further cut down startup time by enabling _Startup CPU boost_. When enabled, Cloud Run will temporarily allocate additional CPU resources during startup of your application.
 
-**Applications should ideally be stateless.** Cloud Run will also automatically scale in again, should application traffic decrease. Container instances will be terminated, if Cloud Run determines that too many are active to deal with the current request load. When an instance is scheduled for termination, Cloud Run will change it's lifecycle stage to 'Shutdown'. You can trap the `SIGTERM` signal in your code and begin graceful shutdown of your instance. Requests will no longer be routed to you container and your application has 10 seconds to persist data over the network, flush caches or complete some other remaining write operations.
+**Applications should ideally be stateless.** Cloud Run will also automatically scale in again, should application traffic decrease. Container instances will be terminated, if Cloud Run determines that too many are active to deal with the current request load. When an instance is scheduled for termination, Cloud Run will change it's life cycle stage to 'Shutdown'. You can trap the `SIGTERM` signal in your code and begin graceful shutdown of your instance. Requests will no longer be routed to you container and your application has 10 seconds to persist data over the network, flush caches or complete some other remaining write operations.
 
-**Applications are generally request-driven**. During the 'Startup' and 'Shutdown' stages of each container lifecycle, your application can expect to be able to fully use the allocated CPU. During the 'Serving' lifecycle, the CPU is only available when there is at least one active request being processed on a container instance. If there is no active request on the instance, Cloud Run will throttle the CPU and use it elsewhere. You will not be charged for CPU time if it's throttled. Occasionally, you might create applications that require a CPU to be always available, for instance when running background services. In this scenario, you want to switch from Cloud Run's default _CPU allocated during requests_ to the alternative mode _CPU always allocated_. Note that this will also switch Cloud Run to a [different pricing model](https://cloud.google.com/run/pricing#tables). The following diagram shows the two pricing models and their effect on how CPUs are throttled throughout the lifecycle of a container instance.
+**Applications are generally request-driven**. During the 'Startup' and 'Shutdown' stages of each container life cycle, your application can expect to be able to fully use the allocated CPU. During the 'Serving' life cycle, the CPU is only available when there is at least one active request being processed on a container instance. If there is no active request on the instance, Cloud Run will throttle the CPU and use it elsewhere. You will not be charged for CPU time if it's throttled. Occasionally, you might create applications that require a CPU to be always available, for instance when running background services. In this scenario, you want to switch from Cloud Run's default _CPU allocated during requests_ to the alternative mode _CPU always allocated_. Note that this will also switch Cloud Run to a [different pricing model](https://cloud.google.com/run/pricing#tables). The following diagram shows the two pricing models and their effect on how CPUs are throttled throughout the life cycle of a container instance.
 
-![Cloud Run container lifecycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
+![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
 
 Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/server) and **enable Startup CPU boost**. 
 
