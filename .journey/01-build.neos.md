@@ -1,4 +1,4 @@
-<walkthrough-metadata>
+
   <meta name="title" content="Serverless Journey>: Building and deploying container images with Cloud Build" />
   <meta name="description" content="Learn how to build container images, store them in the registry and deploy them to Cloud Run" />
   <meta name="keywords" content="deploy, containers, console, run" />
@@ -75,7 +75,7 @@ COPY go.* ./
 RUN go mod download
 COPY main.go ./
 RUN CGO_ENABLED=0 go build -v -o server
-CMD ["/app/server"] 
+CMD ["/app/server"]
 ```
 This Dockerfile:
 1. uses Debian Bullseye with Golang 1.19 as base image
@@ -117,9 +117,55 @@ Navigate back to Artifact Registry in the Google Cloud Console and inspect the n
 
 ## Building with a cloudbuild.yaml file
 
-<!-- TODO cloudbuild.yaml: building, tagging, storing -->
+Cloud Build will build, tag and store your container image when you submit a Dockerfile, but it can do a lot more. You can instruct Cloud Build to execute any arbitrary sequence of instructions by specifying and submitting a `cloudbuild.yaml` file. When detected in the build context, this file will take precedence over any other configuration and will ultimately define what your Cloud Build task does.
+
+In a nutshell, you are able to specify a sequence of steps with each step being executed in a container. You can specify which image and process to execute for every individual step. The steps can collaborate and share data via a shared volume that is automatically mounted into the filesystem at `/workspace`.
+
+Go ahead and create a `cloudbuild.yaml` and place it in the same directory as the Dockerfile and the Go application. Add the following contents:
+
+```yaml
+steps:
+- name: 'ubuntu'
+  args: ['echo', 'hi there']
+```
+
+This configuration asks Cloud Build to run a single step: Use the container image provided by [ubuntu](https://hub.docker.com/_/ubuntu) and run `echo`.
+
+While this might not be a terribly useful or sophisticated CI pipeline, it is a useful illustration to understand how versatile Cloud Build is. Let's run it by submitting a new Cloud Build task:
+
+```bash
+gcloud builds submit
+```
+
+OK. Let's modify the `cloudbuild.yaml` to do something that's actually useful. Replace the file contents with the following:
+
+```yaml
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuild']
+```
+
+Pay attention to the `$`-prefixed `$PROJECT_ID` and `$_REGION`. `$PROJECT_ID` is a pseudo-variable which is automatically set by the Cloud Build environment. `$_REGION` is what Cloud Build calls a _substitution_ and it allows users to override otherwise static content of the build definition by injecting configuration during invokation of the build. Let's take a look:
+
+```bash
+gcloud builds submit --substitutions _REGION=$(gcloud config get-value artifacts/location)
+```
+
+This will build, tag and store a container image.
+
+To fully understand what else can go into your `cloudbuild.yaml`, please check out the [schema documentation](https://cloud.google.com/build/docs/build-config-file-schema).
 
 ## Deploying to Cloud Run
+
+Cloud Build is a versatile tool and is suited to run a wide variety of batch-like jobs. Until now, we only used Cloud Build to accomplish Continuous Integration (CI) tasks, but we don need to stop there.
+
+We can extend the `cloudbuild.yaml` definition and automatically deploy the newly created image to Cloud Run like this:
+
+```yaml
+
+```
 
 <!-- TODO extending cloudbuild.yaml, gcloud command, service agent perms in console-->
 

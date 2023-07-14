@@ -86,7 +86,7 @@ The command requires additional information and hence switches to an interactive
 
 We want our application to be publicly available on the internet.
 
-Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoint it created. You should be able to call the endpoint from your browser or by using any other HTTP client like cURL,
+Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoint it created. You should be able to call the endpoint from your browser or by using any other HTTP client like cURL.
 
 ```bash
 # Retrieve auto-generated URL and cURL it.
