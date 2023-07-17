@@ -234,33 +234,46 @@ git remote -v
 
 ### Setting up the Cloud Build triggers
 
+Next, Cloud Build needs to be configured with a trigger resource. The trigger contains everything Cloud Build needs to automatically run new builds whenever the remote repository gets updated.
 
+First, navigate to the [Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers) and click on 'Connect Repository'. Follow the wizard on the right to connect to github.com, authenticate Google's GitHub app, filter repositories based on your user name, find the forked repository called 'serverless', tick the box to accept the policy and connect your repository. Once completed you should see a connection confirmation message displayed. Now it's time to create the trigger.
 
+Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided './cloudbuild.yaml' and **add all the substitutions** you used previously to trigger your build.
 
-navigate to https://console.cloud.google.com/cloud-build/triggers
- - click 'connect repository'
- - follow wizard to connect to github.com
- - select your github account and the newly forekd repo
- - tick the box and connect
- - you should see confirmation of connection
- - click CREATE TRIGGER 
- 
-new trigger creation wizard
- - name trigger 'trigger'
- - leave everything else as default
+### Pushing some changes
 
-Configure git 
- - git config --global user.email "you@example.com"
- - git config --global user.name "Your Name"
+We should now have everything in place to automatically trigger a new build whenever changes are pushed to `main` on the remote repository fork.
 
-Create commit and push
- - git commit --allow-empty -m 'trigger build'
- - git push origin main
+If you haven't done so already, you will need to configure git on your Cloud Shell. To do so, run the following and configure your email and name, so git know who you are.
 
+```bash
+ git config --global user.email "you@example.com"
+ git config --global user.name "Your Name"
+```
+
+Use git to add all the changes to the index and create a commit like this:
+
+```bash
+git add Dockerfile
+git add cloudbuild.yaml
+git commit -m 'add build config'
+```
+
+Finally, push the commit to the remote repossitory:
+
+```bash
+git push origin main
+```
+
+Changes should automatically be detected and trigger a new Cloud Build task. Navigate to the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/dashboard) nad explore the running build.
 
 ## Summary
 
 You now know how Cloud Build can help you automate integrating your artifacts.
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+<walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 When you are ready to proceed to the next chapter to learn more about how to implement Google Cloud APIs from your code, execute the following in the shell:
 

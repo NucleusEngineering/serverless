@@ -149,6 +149,10 @@ While you are in the Google Cloud Console, have a look at [the metrics section o
 
 You now have a good feel for what it means to build and deploy your code to Cloud Run.
 
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+<walkthrough-inline-feedback></walkthrough-inline-feedback>
+
 When you are ready to proceed to the next chapter to learn more about Cloud Build execute the following command in the shell:
 
 ```bash
