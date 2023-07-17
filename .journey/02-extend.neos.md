@@ -10,7 +10,7 @@
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
-Luckliy, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains a Google-built, pre-trained, PaLM model which is a general-purpose, generative LLM that can be query with free-texts prompts to generate all sorts of text-based outputs. In this tutorial we'll implement the `mode:predict` endpoint of Vertex AI to execute this model in order to new dad jokes in a generative matter.
+Luckliy, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains a Google-built, pre-trained, PaLM model which is a general-purpose, generative LLM that can be query with free-texts prompts to generate all sorts of text-based outputs. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to new dad jokes in a generative matter.
 
 Additionally, we'll learn a little bit about custom service accounts, IAM permissions and how to use the principle of least privilege to secure our services on Cloud Run.
 
@@ -26,6 +26,8 @@ To get started, click **Start**.
 First, let's make sure we got the correct project selected. Go ahead and select the provided project ID.
 
 <walkthrough-project-setup billing="true"></walkthrough-project-setup>
+
+Run the following to make sure all required APIs are enabled. Note that `aiplatform.googleapis.com` is added.
 
 <walkthrough-enable-apis apis="cloudbuild.googleapis.com,
 run.googleapis.com,aiplatform.googleapis.com,

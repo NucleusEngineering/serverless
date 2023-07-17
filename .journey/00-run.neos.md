@@ -43,7 +43,7 @@ Once you've understood what's going on, you can try to run that app directly in 
 go run main.go
 ```
 
-This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview at the top right in Cloud Shell.
+This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell.
 
 <walkthrough-editor-spotlight spotlightId="cloud-shell-web-preview-button" target="cloudshell">Web Preview</walkthrough-editor-spotlight>
 
