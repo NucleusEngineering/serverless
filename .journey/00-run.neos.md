@@ -6,14 +6,14 @@
 
 # Serverless Journey: Run a freshly built container image on Cloud Run
 
-![Cloud Run Logo](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
+![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
 
 In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the available options to tweak our service.
 
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
-<walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
 
 To get started, click **Start**.
 

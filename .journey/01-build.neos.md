@@ -6,14 +6,14 @@
 
 # Serverless Journey: Building and deploying container images with Cloud Build
 
-![Cloud Build Logo](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
+![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
 
 In this tutorial we'll learn how to use Cloud Build, the serverless CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
 Estimated time:
-<walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="35"></walkthrough-tutorial-duration>
 
 To get started, click **Start**.
 
