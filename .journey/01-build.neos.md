@@ -189,9 +189,74 @@ gcloud builds submit --substitutions \
     _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
 ```
 
-## Setting up an automatic source triggers from Github
+## Setting up an automatic source triggers from GitHub
 
-<!-- TODO fork on GH, connect repo, create trigger, commit and push code and see it execute -->
+Now that we have successfully created a full build definition on Cloud Build for a simple yet very useful CI/CD pipeline, let's have a look at creating automatic build triggers that execute the pipeline whenever code gets updated on a remote Git repository. In order to put everything in place, we'll now look at how to authenticate with GitHub, fork the code into a new repository, authorize GitHub to connect with Cloud Build and create an automatic build trigger on Cloud Build.
+
+**Note:** This part of the tutorial requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).
+
+### Authenticating with GitHub
+
+First, let's authenticate using `gh`, GitHub's CLI, which comes pre-installed on Cloud Shell. In your terminal begin the authentication handshake and complete the CLI wizard.
+
+We'd like to connect in the following matter:
+ * Connect to `github.com`
+ * Use HTTPS for authentication
+ * Configure `git` to use GitHub credentials
+
+Begin the authentication exchange by running the following:
+
+```bash
+gh auth login
+```
+
+Copy the authentication code, navigate to [GitHub's device authentication page](https://github.com/login/device), paste the token and authorize the application.
+
+Once authentication is complete, you should be able to test access to GitHub by listing all of you repositories, like so:
+
+```bash
+gh repo list
+```
+
+### Creating a fork of the upstream repo
+
+Next, we'll create a fork of the repository we are currently working with, so that we have a separate, remote repository that we can push changes to. Create the fork by running the following:
+
+```bash
+gh repo fork
+```
+
+This will create a fork of the upstream repository from `github.com/nucleusengineering/serverless` and place it at `github.com/YOUR_GITHUB_HANDLE/serverless`. Additionally, the command automatically reconfigures the remotes of the local repository clone. Talk a look the the configured remotes and see how it configured both `upstream` and the new `origin` by running the following:
+
+```bash
+git remote -v
+```
+
+### Setting up the Cloud Build triggers
+
+
+
+
+navigate to https://console.cloud.google.com/cloud-build/triggers
+ - click 'connect repository'
+ - follow wizard to connect to github.com
+ - select your github account and the newly forekd repo
+ - tick the box and connect
+ - you should see confirmation of connection
+ - click CREATE TRIGGER 
+ 
+new trigger creation wizard
+ - name trigger 'trigger'
+ - leave everything else as default
+
+Configure git 
+ - git config --global user.email "you@example.com"
+ - git config --global user.name "Your Name"
+
+Create commit and push
+ - git commit --allow-empty -m 'trigger build'
+ - git push origin main
+
 
 ## Summary
 
