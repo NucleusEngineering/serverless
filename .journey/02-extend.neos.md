@@ -39,3 +39,9 @@ artifactregistry.googleapis.com">
 <!-- TODO change deps to tortuneai -->
 <!-- TODO extending code base (hitme wants params now) -->
 <!-- TODO new SA with perms for model:predict, tightening IAM -->
+
+
+```bash
+cloudshell launch-tutorial .journey/03-operate.neos.md
+```
+

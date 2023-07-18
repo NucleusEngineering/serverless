@@ -1,4 +1,4 @@
-
+<walkthrough-metadata>
   <meta name="title" content="Serverless Journey>: Building and deploying container images with Cloud Build" />
   <meta name="description" content="Learn how to build container images using Cloud Build" />
   <meta name="keywords" content="deploy, containers, console, run" />
@@ -278,5 +278,5 @@ You now know how Cloud Build can help you automate integrating your artifacts.
 When you are ready to proceed to the next chapter to learn more about how to implement Google Cloud APIs from your code, execute the following in the shell:
 
 ```bash
-cloudshell launch-tutorial .journey/03-extend.neos.md
+cloudshell launch-tutorial .journey/02-extend.neos.md
 ```
