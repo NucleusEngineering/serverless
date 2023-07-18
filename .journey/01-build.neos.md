@@ -273,8 +273,6 @@ You now know how Cloud Build can help you automate integrating your artifacts.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-<walkthrough-inline-feedback></walkthrough-inline-feedback>
-
 When you are ready to proceed to the next chapter to learn more about how to implement Google Cloud APIs from your code, execute the following in the shell:
 
 ```bash

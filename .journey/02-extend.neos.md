@@ -36,10 +36,17 @@ artifactregistry.googleapis.com">
 
 ## Extending the code
 
+
+
 <!-- TODO change deps to tortuneai -->
 <!-- TODO extending code base (hitme wants params now) -->
 <!-- TODO new SA with perms for model:predict, tightening IAM -->
 
+## Summary
+
+You now know how to call Google APIs directly from your code and understand how to secure your services with least-privilege service accounts.
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 ```bash
 cloudshell launch-tutorial .journey/03-operate.neos.md

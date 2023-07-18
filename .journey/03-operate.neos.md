@@ -8,7 +8,6 @@
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
 
-<!-- TODO new sync  -->
 <!-- TODO intro text -->
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
@@ -35,4 +34,14 @@ artifactregistry.googleapis.com">
 
 <!-- TODO traffic split -->
 <!-- TODO defining SLO and alerts -->
+
+## Summary
+
+You now know how to call Google APIs directly from your code and understand how to secure your services with least-privilege service accounts.
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+You have completed the Serverless Journey, congratulations! Please take a moment and let us know what you think.
+
+<walkthrough-inline-feedback></walkthrough-inline-feedback>
 
