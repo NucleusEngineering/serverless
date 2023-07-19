@@ -71,11 +71,6 @@ The call also requires other inputs, like the actual text prompt and parameters 
 
 Now, it's time to make some changes to the code.
 
-Open up the main application source file
-<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
-main.go
-</walkthrough-editor-open-file>
-
 You may now attempt to **implement the above code changes yourself** for which you should have a good understanding of the Go programming language. If you choose to do so, you should stop reading now and give it your best shot.
 
 Alternatively, you can **use a prebuilt library** to accomplish the same. If that's more your cup of tea, go hit 'Next' and proceed to the next section.jjourney.svg
@@ -100,16 +95,36 @@ Notice that the signature for `tortuneai.HitMe()` is different from the previous
 
 Here is a possible implementation:
 
-```go 
-joke, err := tortuneai.HitMe()
+```golang 
+joke, err := tortuneai.HitMe("tell me something about the year of the rabbit", "serverless-journey")
 if err != nil {
     fmt.Fprintf(w, "error: %v\n", err)
     return
 }
-fmt.Fprintf(w, joke)
+fmt.Fprint(w, joke)
 ```
 
+Let's check if the modified code compiles by running it:
 
+```bash
+go run main.go
+```
+
+This recompiles and starts the web server. Let's check the application with the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell and see if we can successfully interact with the PaLM 2 model.
+
+<walkthrough-editor-spotlight spotlightId="cloud-shell-web-preview-button" target="cloudshell">Web Preview</walkthrough-editor-spotlight>
+
+If you are satisfied you can focus the terminal again and terminate the web server with `Ctrl-C`.
+
+It's good practice to clean up old dependencies from the `go.mod` file. You can do this automatically my running:
+
+```bash
+go mod tidy
+```
+
+If you like you can stay at this point for a moment, change the prompt (the first argument to `tortuneai.HitMe()`), re-run with `go run main.go` and use the Web Preview to have a look at how the change in prompt affected the model's output.
+
+## Creating a custom service account for the Cloud Run service
 
 <!-- TODO new SA with perms for model:predict, tightening IAM -->
 
