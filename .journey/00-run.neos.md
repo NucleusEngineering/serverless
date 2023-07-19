@@ -66,7 +66,6 @@ You can configure preferred regions and zones in `gcloud` so its invocation get 
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 
 ```
-
 Note that our code is not yet build or containerized, yet Cloud Run requires that.
 The `gcloud` CLI has a convenient short cut for deploying Cloud Run which quickly allows us to do so.
 

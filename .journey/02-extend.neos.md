@@ -71,7 +71,7 @@ The call also requires other inputs, like the actual text prompt and parameters 
 
 Now, it's time to make some changes to the code.
 
-You may now attempt to **implement the above code changes yourself** for which you should have a good understanding of the Go programming language. If you choose to do so, you should stop reading now and give it your best shot.
+<walkthrough-info-message>You may now attempt to **implement the above code changes yourself** for which you should have a good understanding of the Go programming language. If you choose to do so, you should stop reading now and give it your best shot.</walkthrough-info-message>
 
 Alternatively, you can **use a prebuilt library** to accomplish the same. If that's more your cup of tea, go hit 'Next' and proceed to the next section.jjourney.svg
 
@@ -135,7 +135,9 @@ https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.location
 
 When it comes to identifying the correct IAM roles to attach to identities [this reference page on the IAM documentation](https://cloud.google.com/iam/docs/understanding-roles) is an extremely useful resources. On the page you can check the section for [Vertex AI roles](https://cloud.google.com/iam/docs/understanding-roles#vertex-ai-roles) and learn that [_Vertex AI User_](https://cloud.google.com/iam/docs/understanding-roles#aiplatform.user) (`roles/aiplatform.user`) is a suitable role for our Cloud Run service, because this role contains the permission `aiplatform.endpoints.predict`. If you are unsure which permission you require, you can always check the [API reference for the required operation](https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.publishers.models/predict).
 
-**Note**: You could argue that the role _Vertex AI User_ has too many permissions for the Cloud Run service and a security-conscious person would probably agree with you. If you really wanted to make sure that the Cloud Run service only had least amount of privilege to execute the absolutely required permissions, you would have to create a [IAM custom role](https://cloud.google.com/iam/docs/creating-custom-roles) to achieve this. For now, we'll stick with _Vertex AI User_.
+<walkthrough-info-message>**Note**: You could argue that the role _Vertex AI User_ has too many permissions for the Cloud Run service and a security-conscious person would probably agree with you. If you really wanted to make sure that the Cloud Run service only had least amount of privilege to execute the absolutely required permissions, you would have to create a [IAM custom role](https://cloud.google.com/iam/docs/creating-custom-roles) to achieve this.</walkthrough-info-message>
+
+For now, we'll stick with _Vertex AI User_.
 
 Next, let's create a brand new customer IAM service account like this:
 

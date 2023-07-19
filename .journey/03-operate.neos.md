@@ -8,12 +8,16 @@
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
 
-<!-- TODO intro text -->
+In the final part of the Serverless Journey, we are going to look at some basic principles of how to operate your services in production. We'll learn about SRE and define some custom SLOs to keep track of the health of our services.
+
+After that we'll have a look at Cloud Run's traffic splitting capabilities. This allows us to deploy new revisions of a Cloud Run service and the gradually move portion of production traffic over. Cloud Run's programmable network control plane allows you to split traffic between revisions; you can use this built-in feature to implement strategies like blue/green deployments, canaries releases, or rollback to previous revisions in seconds should you ever push a bad release. 
+
+To bring everything to life, we'll be deploying a faulty version as a canary release with some amount of live traffic, get an alert, observe how this will burn through the [error budget](https://cloud.google.com/blog/products/management-tools/sre-error-budgets-and-maintenance-windows) and quickly rollback to a safe state.
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
 Estimated time:
-<walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="35"></walkthrough-tutorial-duration>
 
 To get started, click **Start**.
 
@@ -30,14 +34,36 @@ run.googleapis.com,aiplatform.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
 
-## Part 1
+## The basics of SRE
+
+<walkthrough-panel-category title="Hope is not a strategy"></walkthrough-panel-category>
+
+    _Hope is not a strategy._
+    - Tradional SRE saying
+
+Google's Site Reliability Engineering discipline encompasses... yadda yadda
+
+<!-- TODO basics of SRE -->
+
+## Defining SLOs and alerts
+
+<!-- TODO defining SLO and alerts -->
+
+## Deploying a canary with traffic splitting
 
 <!-- TODO traffic split -->
-<!-- TODO defining SLO and alerts -->
+
+<!-- TODO load test -->
+
+## Responding to the incident
+
+<!-- TODO email alert -->
+
+<!-- TODO roll back -->
 
 ## Summary
 
-You now know how to call Google APIs directly from your code and understand how to secure your services with least-privilege service accounts.
+<!-- TODO Learned about traffic splitting, and SLOs -->
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 

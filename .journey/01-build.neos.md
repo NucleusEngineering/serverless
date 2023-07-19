@@ -193,7 +193,7 @@ gcloud builds submit --substitutions \
 
 Now that we have successfully created a full build definition on Cloud Build for a simple yet very useful CI/CD pipeline, let's have a look at creating automatic build triggers that execute the pipeline whenever code gets updated on a remote Git repository. In order to put everything in place, we'll now look at how to authenticate with GitHub, fork the code into a new repository, authorize GitHub to connect with Cloud Build and create an automatic build trigger on Cloud Build.
 
-**Note:** This part of the tutorial requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).
+<walkthrough-info-message>This part of the tutorial requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).</walkthrough-info-message>
 
 ### Authenticating with GitHub
 
