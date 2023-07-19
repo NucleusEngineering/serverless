@@ -10,14 +10,14 @@
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
-Luckliy, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains a Google-built, pre-trained, PaLM model which is a general-purpose, generative LLM that can be query with free-texts prompts to generate all sorts of text-based outputs. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to new dad jokes in a generative matter.
+Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains a Google-built, pre-trained, PaLM model which is a general-purpose, generative LLM that can be query with free-texts prompts to generate all sorts of text-based outputs. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to new dad jokes in a generative matter.
 
 Additionally, we'll learn a little bit about custom service accounts, IAM permissions and how to use the principle of least privilege to secure our services on Cloud Run.
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
 Estimated time:
-<walkthrough-tutorial-duration duration="15"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="45"></walkthrough-tutorial-duration>
 
 To get started, click **Start**.
 
@@ -40,7 +40,7 @@ In the cloud we often need to implement API calls to interact with other service
 
 There are typically three different ways to interact with Google APIs programmatically and we should choose them in the following order:
 
-1. **Cloud Client Libraries**: These are the recommended option. Cloud Client Libraries are SDK that you can use in a language-native, idiomatic style. They give you a high-level interface to the most important operation and allow you to quickly and comfortably get the job done. An example in the Go eco-system would be the `cloud.google.com/go/storage` package, which implements the most commonly used operations of Google Cloud Storage. Have a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/storage) and see how it respects and implements native language concepts like the `io.Writer` interface of the Go progrogramming language.
+1. **Cloud Client Libraries**: These are the recommended option. Cloud Client Libraries are SDK that you can use in a language-native, idiomatic style. They give you a high-level interface to the most important operation and allow you to quickly and comfortably get the job done. An example in the Go eco-system would be the `cloud.google.com/go/storage` package, which implements the most commonly used operations of Google Cloud Storage. Have a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/storage) and see how it respects and implements native language concepts like the `io.Writer` interface of the Go programming language.
 
 2. **Google API Client Libraries**: Should no Cloud Client Library be available for what you are trying to accomplish you can fall back to using a Google API Client Library. These libraries are auto-generated and should be available for almost all Google APIs.
 
