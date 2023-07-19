@@ -96,11 +96,20 @@ the main application source file main.go
 </walkthrough-editor-open-file>
 and change all references to the previously used package `tortune` with `tortuneai`.
 
-Notice that the signature for `tortuneai.HitMe()` is different from the previous `tortune.HitMe()`. While the original method did not require any parameters, you are required to pass two `string` values into the new one: One with an actual text prompt for the PaLM 2 model and one with your Google Cloud project ID.
+Notice that the signature for `tortuneai.HitMe()` is different from the previous `tortune.HitMe()`. While the original function did not require any parameters, you are required to pass two `string` values into the new one: One with an actual text prompt for the PaLM 2 model and one with your Google Cloud project ID. Additionally, the function now returns multiple return values: a `string` containing the response from the API and an `error`. If everything goes well, the error will be `nil`, if not it will contain information about what went wrong.
+
+Here is a possible implementation:
+
+```go 
+joke, err := tortuneai.HitMe()
+if err != nil {
+    fmt.Fprintf(w, "error: %v\n", err)
+    return
+}
+fmt.Fprintf(w, joke)
+```
 
 
-
-<!-- TODO extending code base (hitme wants params now) -->
 
 <!-- TODO new SA with perms for model:predict, tightening IAM -->
 
