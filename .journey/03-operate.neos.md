@@ -34,12 +34,7 @@ run.googleapis.com,aiplatform.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
 
-## The basics of SRE
-
-<walkthrough-panel-category title="Hope is not a strategy"></walkthrough-panel-category>
-
-    _Hope is not a strategy._
-    - Tradional SRE saying
+## Hope is not a strategy
 
 Google's Site Reliability Engineering discipline encompasses... yadda yadda
 
