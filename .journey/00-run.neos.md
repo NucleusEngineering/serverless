@@ -78,7 +78,7 @@ We can use a single command to easily:
 - route traffic to the new endpoint
 
 ```bash
-gcloud run deploy server --source .
+gcloud run deploy jokes --source .
 ```
 
 The command requires additional information and hence switches to an interactive mode. You can have a look at the `gcloud` CLI [reference](https://cloud.google.com/sdk/gcloud/reference/run/deploy) in case some of the option may be unclear to you.
@@ -90,7 +90,7 @@ Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoin
 ```bash
 # Retrieve auto-generated URL and cURL it.
 
-curl $(gcloud run services describe server --format 'status.url')
+curl $(gcloud run services describe jokes --format 'status.url')
 ```
 
 Cloud Run services consist of one or more revisions. Whenever you update your service or it's configuration, you are creating a new revision. Revisions are immutable.
@@ -127,7 +127,7 @@ Let's put some load on our newly created service and learn about scaling while w
 
 ```bash
 # Use hey to invoke the service 500k times
-hey 500000 $(gcloud run services describe server --format 'status.url')
+hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 In order to build modern, cloud-first applications that scale well horizontally, we need to watch out for some design considerations.

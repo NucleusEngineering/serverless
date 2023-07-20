@@ -156,7 +156,7 @@ gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
 The service account will now be able to use all the permissions in _Vertex AI User_ on all resources in our current project. Finally, we need to deploy a need Cloud Run revision by updating the service configuration so that our Cloud Run service will use the newly-created service account:
 
 ```bash
-gcloud run services update server \
+gcloud run services update jokes \
     --service-account tortune@$(gcloud config get-value project).iam.gserviceaccount.com 
 ```
 
@@ -173,7 +173,7 @@ Navigate to [Cloud Build's dashboard](https://console.cloud.google.com/cloud-bui
 Once completed, you should be able to get fresh generated content by cURLing the endpoint of the Cloud Run Service:
 
 ```bash
-curl $(gcloud run services describe server --format 'status.url')
+curl $(gcloud run services describe jokes --format 'status.url')
 ```
 
 Amazing!

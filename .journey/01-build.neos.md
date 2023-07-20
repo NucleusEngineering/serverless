@@ -175,7 +175,7 @@ steps:
     - 'deploy'
     - '--region=$_RUN_REGION'
     - '--image=$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml'
-    - 'server'
+    - 'jokes'
 ```
 
 In order for this to work, we need to grant some permissions to the service account used by the Cloud Build service agent, so it can interact with Cloud Run resources on our behalf.
