@@ -126,7 +126,7 @@ hey -n 50000 $(gcloud run services describe jokes --format 'value(status.url)')
 
 Eventually, the trajectory with which we will be burning though the error budget will cause an alert to fire.
 
-<walkthrough-info-message>Now is probably a good time to catch a little break, get a snack, get hydrated, maybe take a stroll through the park. Don't forget: **you are still on-call!**</walkthrough-info-message>
+<walkthrough-info-message>Now is probably a good time to catch a little break, get a snack, get hydrated, maybe take a stroll through the park. Don't forget: you are still on-call!</walkthrough-info-message>
 
 Proceed to the next section, once you've received the alert email.
 
