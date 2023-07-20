@@ -34,15 +34,34 @@ run.googleapis.com,aiplatform.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
 
-## Hope is not a strategy
+## SRE: Hope is not a strategy
 
 Google's Site Reliability Engineering discipline encompasses... yadda yadda
 
 <!-- TODO basics of SRE -->
 
+<!-- TODO SLI, SLO -->
+
+<!-- TODO four golden signals -->
+[Read more about the four golden signals](https://sre.google/sre-book/monitoring-distributed-systems/#xref_monitoring_golden-signals)
+
 ## Defining SLOs and alerts
 
-<!-- TODO defining SLO and alerts -->
+Let's begin by defining an SLO for our service that keeps track of it's availability, specifically of it's error rate. A service that is unable to serve requests because requests are errors, are unavailable. We are about to define an objective that says: We aim at serving 95% of all requests without and error. Cloud Run already keeps track of application errors. You can see the log-based metric _Request count_ in the metrics section of your Cloud Run service. You can find it by clicking [into your service in the Cloud Run section](https://console.cloud.google.com/run) of the Google Cloud Console. The metrics counts HTTP status codes and `5xx` status codes are consider to be server-side errors.
+
+Right next to the _Metrics_ tab, you'll find the tab that says _SLOs_. Get in there and start the new SLO creation wizard. Define an SLO, that:
+* uses a **windows-based, availability metric** as SLI
+* this should track the metric `run.googleapis.com/request_count`
+* define **goodness as 95% of requests, trailing over a 5 minute windows**
+* the SLO definition should look at a **rolling 1 day period** with and **objective of 95%**
+
+Finally, also create an alert that will notify you in case a fast-burn of your error budget gets detected. Create an new alert, that:
+* uses a **lookback duration of 5 minutes**
+* breaches with a **fast-burn threshold 10(x baseline)**
+
+<walkthrough-info-message>Create a new alert notification channel in Cloud Monitoring using your email.</walkthrough-info-message>
+
+Done. You should now be immediately notified as soon as the as your service is responding with too many errors in a given moment and your about to burn through your error budget quickly.
 
 ## Deploying a canary with traffic splitting
 
