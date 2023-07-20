@@ -17,7 +17,7 @@ To bring everything to life, we'll be deploying a faulty version as a canary rel
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
 Estimated time:
-<walkthrough-tutorial-duration duration="35"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="45"></walkthrough-tutorial-duration>
 
 To get started, click **Start**.
 
@@ -48,7 +48,7 @@ We also have a direct measurement of a service’s behavior: the frequency of su
 
 ### The four golden signals
 
-SRE defines _four goden signals_ to always keep track of in most systems.
+SRE defines _four golden signals_ to always keep track of in most systems.
 
 **Latency**: The time it takes to service a request. It’s important to distinguish between the latency of successful requests and the latency of failed requests. For example, an HTTP 500 error triggered due to loss of connection to a database or other critical backend might be served very quickly; however, as an HTTP 500 error indicates a failed request, factoring 500s into your overall latency might result in misleading calculations. On the other hand, a slow error is even worse than a fast error! Therefore, it’s important to track error latency, as opposed to just filtering out errors.
 
@@ -75,7 +75,7 @@ Right next to the _Metrics_ tab, you'll find the tab that says _SLOs_. Get in th
 * the SLO definition should look at a **rolling 1 day period** with and **objective of 95%**
 
 Finally, also create an alert that will notify you in case a fast-burn of your error budget gets detected. Create an new alert, that:
-* uses a **lookback duration of 5 minutes**
+* uses a **look back duration of 5 minutes**
 * breaches with a **fast-burn threshold 10(x baseline)**
 * creates a **new alert notification channel using your email** in Cloud Monitoring
 
@@ -83,11 +83,11 @@ Done. You should now be immediately notified as soon as the as your service is r
 
 ## Deploying a canary with traffic splitting
 
-Cloud Run comes with a built-in traffic control plane, which lets operators programmatically assign traffic to individual revisions of the same service. This allows you to deploy new changes to your service with none or only single-digit traffic routed to them. Once you've slowly gained confidence in your new revision you can gradually increased traffic until you reach a 100% of traffic on the new revision and your rollout is complete. This strategy is commonly refered to as a [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
+Cloud Run comes with a built-in traffic control plane, which lets operators programmatically assign traffic to individual revisions of the same service. This allows you to deploy new changes to your service with none or only single-digit traffic routed to them. Once you've slowly gained confidence in your new revision you can gradually increased traffic until you reach a 100% of traffic on the new revision and your rollout is complete. This strategy is commonly referred to as a [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
 
 <walkthrough-info-message>Cloud Run's default deployment strategy is to automatically route all traffic to the new revision if it should pass minimum health checks.</walkthrough-info-message>
 
-In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily refered to by its tag and also get an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
+In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily refereed to by its tag and also get an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
 
 Let's deploy a new revision of the jokes service using a different container image. We've been told that requirements have changed dramatically for this new version. We don't trust the image and decide to implement and canary release strategy. First of all, let's tag the current, good revision, like this:
 
@@ -96,7 +96,7 @@ gcloud run services update jokes \
     --tag good
 ```
 
-Good! The revision is tagged and gets a separate URL that looks something like `https://good---jokes-xxxxxxxxxx-xx.a.run.app`. As long as we keep the tag around we can always direclt reach this revision with this endpoint. You can try it by directly cURLing it:
+Good! The revision is tagged and gets a separate URL that looks something like `https://good---jokes-xxxxxxxxxx-xx.a.run.app`. As long as we keep the tag around we can always directly reach this revision with this endpoint. You can try it by directly cURLing it:
 
 ```bash
 curl $(gcloud run services describe jokes --format 'value(status.traffic[0].url)')
