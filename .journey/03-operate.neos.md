@@ -83,6 +83,17 @@ Done. You should now be immediately notified as soon as the as your service is r
 
 ## Deploying a canary with traffic splitting
 
+Before continuing, make sure `gcloud` configuration is set to our preferences:
+
+```bash
+# Set default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
+
+gcloud config set run/region europe-north1 
+gcloud config set artifacts/location europe-north1 
+```
+
+Okay! Good to go.
+
 Cloud Run comes with a built-in traffic control plane, which lets operators programmatically assign traffic to individual revisions of the same service. This allows you to deploy new changes to your service with none or only single-digit traffic routed to them. Once you've slowly gained confidence in your new revision you can gradually increased traffic until you reach a 100% of traffic on the new revision and your rollout is complete. This strategy is commonly referred to as a [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
 
 <walkthrough-info-message>Cloud Run's default deployment strategy is to automatically route all traffic to the new revision if it should pass minimum health checks.</walkthrough-info-message>
