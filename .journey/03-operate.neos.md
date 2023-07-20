@@ -36,11 +36,15 @@ artifactregistry.googleapis.com">
 
 ## SRE: Hope is not a strategy
 
-Google's Site Reliability Engineering discipline encompasses... yadda yadda
+Google's Site Reliability Engineering is what you get when you treat operations as if it’s a software problem. The mission is to protect, provide for, and progress the software and systems behind all of Google’s public services — Google Search, Ads, Gmail, Android, YouTube, and App Engine, to name just a few — with an ever-watchful eye on their availability, latency, performance, and capacity.
 
-<!-- TODO basics of SRE -->
+Many of the practices and tools of SRE have been integrated into Google Cloud Platform so that everyone running services in production can benefit from what Google learned over decades.
 
-<!-- TODO SLI, SLO -->
+SRE begins with the idea that a prerequisite to success is availability. A system that is unavailable cannot perform its function and will fail by default. Availability, in SRE terms, defines whether a system is able to fulfill its intended function at a point in time. In addition to being used as a reporting tool, the historical availability measurement can also describe the probability that your system will perform as expected in the future.
+
+When we set out to define the terms of SRE, we wanted to set a precise numerical target for system availability. We term this target the availability Service-Level Objective (SLO) of our system. Any discussion we have in the future about whether the system is running sufficiently reliably and what design or architectural changes we should make to it must be framed in terms of our system continuing to meet this SLO.
+
+We also have a direct measurement of a service’s behavior: the frequency of successful probes of our system. This is a Service-Level Indicator (SLI). When we evaluate whether our system has been running within SLO for the past week, we look at the SLI to get the service availability percentage. If it goes below the specified SLO, we have a problem and may need to make the system more available in some way, such as running a second instance of the service in a different city and load-balancing between the two. If you want to know how reliable your service is, you must be able to measure the rates of successful and unsuccessful queries as your SLIs.
 
 ### The four golden signals
 
