@@ -90,12 +90,14 @@ Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoin
 ```bash
 # Retrieve auto-generated URL and cURL it.
 
-curl $(gcloud run services describe jokes --format 'status.url')
+curl $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 Cloud Run services consist of one or more revisions. Whenever you update your service or it's configuration, you are creating a new revision. Revisions are immutable.
 
 Navigate to the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run) to explore the service and its active revision.
+
+Building from `--source` uses Google Cloud Buildpacks. [Learn more about supported languages for Buildpacks](https://cloud.google.com/run/docs/deploying-source-code).
 
 ## Using Cloud Code 
 
