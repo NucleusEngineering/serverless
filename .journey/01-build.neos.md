@@ -78,7 +78,7 @@ RUN CGO_ENABLED=0 go build -v -o server
 CMD ["/app/server"]
 ```
 This Dockerfile:
-1. uses Debian Bullseye with Golang 1.19 as base image
+1. uses Debian Bullseye with Golang 1.20 as base image
 2. copies the definition of the Go module and installs all dependencies
 3. copies the sources and builds the Go application
 4. specifies the application binary to run
