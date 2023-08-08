@@ -240,6 +240,9 @@ First, navigate to the [Cloud Build triggers section of the Google Cloud Console
 
 Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided './cloudbuild.yaml' and **add all the substitutions** you used previously to trigger your build.
 
+**Note:** When using the "Autodetect" configuration option, there is no possibility to add substituiton variables through the UI. So make sure to specify the "Cloud Build configuration file (yaml or json)" option explicitly, and then continue to fill in the substition variables.
+
+
 ### Pushing some changes
 
 We should now have everything in place to automatically trigger a new build whenever changes are pushed to `main` on the remote repository fork.
