@@ -86,8 +86,6 @@ Done. You should now be immediately notified as soon as the as your service is r
 Before continuing, make sure `gcloud` configuration is set to our preferences:
 
 ```bash
-# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
-
 gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 

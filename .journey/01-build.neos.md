@@ -39,19 +39,15 @@ In the previous section of the Serverless journey we saw how to use Cloud Build 
 In order to get started let's set up some configuration:
 
 ```bash
-# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
-
 gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 
 ```
 
-We are building some container images in this tutorial, so let's set up a dedicated Docker image registry using Google Cloud Artifact Registry:
+We are building some container images in this tutorial, so let's set up a dedicated Docker image registry using Google Cloud Artifact Registry and remember it in `gcloud config`:
 
 ```bash
 gcloud artifacts repositories create my-repo --repository-format docker
-
-# Also update config to use this repo
 gcloud config set artifacts/repository my-repo
 ```
 
@@ -251,8 +247,8 @@ We should now have everything in place to automatically trigger a new build when
 If you haven't done so already, you will need to configure git on your Cloud Shell. To do so, run the following and configure your email and name, so git know who you are.
 
 ```bash
- git config --global user.email "you@example.com"
- git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
 ```
 
 Use git to add all the changes to the index and create a commit like this:

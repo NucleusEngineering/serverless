@@ -58,15 +58,14 @@ In the following steps, we'll deploy our app to Cloud Run, which is a compute pl
 
 Cloud Run is available in all Google Cloud Platform regions globally. If you are unsure where to deploy to, you can use the [Region Picker](https://cloud.withgoogle.com/region-picker/) tool to find the most suitable one.
 
-You can configure preferred regions and zones in `gcloud` so its invocation get more convenient.
+You can configure project and preferred regions and zones in `gcloud` so its invocation get more convenient.
 
 ```bash
-# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
-
 gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 
 ```
+
 Note that our code is not yet build or containerized, yet Cloud Run requires that.
 The `gcloud` CLI has a convenient short cut for deploying Cloud Run which quickly allows us to do so.
 
@@ -88,9 +87,9 @@ We want our application to be publicly available on the internet.
 
 Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoint it created. You should be able to call the endpoint from your browser or by using any other HTTP client like cURL.
 
-```bash
-# Retrieve auto-generated URL and cURL it.
+Next, let's use `gcloud` to retrieve the auto-generated service URL and then `curl` it:
 
+```bash
 curl $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
@@ -126,10 +125,9 @@ Take a moment and familiarize yourself with the wizard and explore the previousl
 
 Cloud Run automatically scales your application based how many web requests are coming in via the HTTPS endpoint. Cloud Run's horizontal auto-scaler is extremely fast and can launch 100s of new instances in seconds.
 
-Let's put some load on our newly created service and learn about scaling while we wait:
+Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 500.000 requests using `hey`:
 
 ```bash
-# Use hey to invoke the service 500k times
 hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 

@@ -48,11 +48,9 @@ There are typically three different ways to interact with Google APIs programmat
 
 Have a look at [this page of the Google Cloud documentation](https://cloud.google.com/apis/docs/client-libraries-explained) to learn more about the differences between the available libraries.
 
-Let's configure `gcloud` for the default regions:
+Let's configure `gcloud` for the project and default regions:
 
 ```bash
-# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
-
 gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 
