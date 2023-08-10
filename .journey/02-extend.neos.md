@@ -184,7 +184,7 @@ Navigate to [Cloud Build's dashboard](https://console.cloud.google.com/cloud-bui
 Once completed, you should be able to get fresh generated content by cURLing the endpoint of the Cloud Run Service:
 
 ```bash
-curl $(gcloud run services describe jokes --format 'status.url')
+curl $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 Amazing!
