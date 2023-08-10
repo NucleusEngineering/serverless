@@ -61,8 +61,9 @@ Cloud Run is available in all Google Cloud Platform regions globally. If you are
 You can configure preferred regions and zones in `gcloud` so its invocation get more convenient.
 
 ```bash
-# Set default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
+# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
 
+gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 
 ```

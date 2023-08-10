@@ -51,10 +51,11 @@ Have a look at [this page of the Google Cloud documentation](https://cloud.googl
 Let's configure `gcloud` for the default regions:
 
 ```bash
-# Set default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
+# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
 
+gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
-gcloud config set artifacts/location europe-north1
+gcloud config set artifacts/location europe-north1 
 ```
 
 Okay, all set!

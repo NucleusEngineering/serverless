@@ -39,8 +39,9 @@ In the previous section of the Serverless journey we saw how to use Cloud Build 
 In order to get started let's set up some configuration:
 
 ```bash
-# Set default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
+# Set project and default locations for Cloud Run and Artifact Registry to europe-north1, Finland.
 
+gcloud config set project <walkthrough-project-id/>
 gcloud config set run/region europe-north1 
 gcloud config set artifacts/location europe-north1 
 ```
