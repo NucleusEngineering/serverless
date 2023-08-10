@@ -83,7 +83,7 @@ Now, it's time to make some changes to the code.
 
 <walkthrough-info-message>You may now attempt to **implement the above code changes yourself** for which you should have a good understanding of the Go programming language. If you choose to do so, you should stop reading now and give it your best shot.</walkthrough-info-message>
 
-Alternatively, you can **use a prebuilt library** to accomplish the same. If that's more your cup of tea, go hit 'Next' and proceed to the next section.jjourney.svg
+Alternatively, you can **use a prebuilt library** to accomplish the same. If that's more your cup of tea, go hit 'Next' and proceed to the next section.
 
 ## Using a library to call the PaLM 2 for Text model
 
