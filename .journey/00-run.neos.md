@@ -66,7 +66,7 @@ gcloud config set run/region europe-north1
 gcloud config set artifacts/location europe-north1 
 ```
 
-Note that our code is not yet build or containerized, yet Cloud Run requires that.
+Note that our code is not yet build or containerized, but Cloud Run requires that.
 The `gcloud` CLI has a convenient short cut for deploying Cloud Run which quickly allows us to do so.
 
 We can use a single command to easily:
