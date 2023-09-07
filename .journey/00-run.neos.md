@@ -140,7 +140,7 @@ In order to build modern, cloud-first applications that scale well horizontally,
 
 **Applications are generally request-driven**. During the 'Startup' and 'Shutdown' stages of each container life cycle, your application can expect to be able to fully use the allocated CPU. During the 'Serving' life cycle, the CPU is only available when there is at least one active request being processed on a container instance. If there is no active request on the instance, Cloud Run will throttle the CPU and use it elsewhere. You will not be charged for CPU time if it's throttled. Occasionally, you might create applications that require a CPU to be always available, for instance when running background services. In this scenario, you want to switch from Cloud Run's default _CPU allocated during requests_ to the alternative mode _CPU always allocated_. Note that this will also switch Cloud Run to a [different pricing model](https://cloud.google.com/run/pricing#tables). The following diagram shows the two pricing models and their effect on how CPUs are throttled throughout the life cycle of a container instance.
 
-![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
+[![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
 
 Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and **enable Startup CPU boost**. 
 
