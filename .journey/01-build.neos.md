@@ -34,7 +34,7 @@ Cloud Build is a serverless CI system in Google Cloud. It is a general purpose c
 
 You don't need to provision anything to get started with using Cloud Build, it's serverless: simply enable the API and submit your jobs. Cloud Build manages all the required infrastructure for you. Per default, Cloud Build schedules build jobs on shared infrastructure, but it can be configured to run on a dedicated worker pool that is not shared with other users.
 
-In the previous section of the Serverless journey we saw how to use build and deploy directly to Cloud Run from source code using the magic of Build Packs. Actually, this deployment via *gcloud run deplo* already leverages Cloud Build in the background, as you can see here in the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard) These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
+In the previous section of the Serverless journey we saw how to use build and deploy directly to Cloud Run from source code using the magic of Build Packs. Actually, this deployment via *gcloud run deplo* already leverages Cloud Build in the background, as you can see here in the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard). These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
 
 In order to get started let's set up some configuration:
 
