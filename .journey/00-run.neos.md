@@ -97,7 +97,8 @@ Cloud Run services consist of one or more revisions. Whenever you update your se
 
 Navigate to the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run) to explore the service and its active revision.
 
-Building from `--source` uses Google Cloud Buildpacks. [Learn more about supported languages for Buildpacks](https://cloud.google.com/run/docs/deploying-source-code).
+Building from `--source` uses Google Cloud Buildpacks. Buildpacks are predefined archetypes that take your application source code and transforms it into production-ready container images without any additional boilerplate (e.g. a Dockerfile).
+[Learn more about supported languages for Buildpacks](https://cloud.google.com/run/docs/deploying-source-code).
 
 ## Using Cloud Code 
 
