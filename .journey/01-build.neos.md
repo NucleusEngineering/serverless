@@ -86,7 +86,7 @@ We can now submit the build context to Cloud Build and use the instructions in t
 gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockerbuild .
 ```
 
-Next, let's navigate to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/), find the repository and inspect the image.
+Next, let's navigate first to he [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard) to see the build we just started. As soon as that is finished we go to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/) to find the repository and inspect the image.
 
 Huh, it seems like our image is quite big! We can fix this by running a [multi-stage Docker build](https://docs.docker.com/build/building/multi-stage/). Let's extend the Dockerfile and replace its contents with the following:
 
