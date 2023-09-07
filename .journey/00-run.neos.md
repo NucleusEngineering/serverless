@@ -142,9 +142,9 @@ In order to build modern, cloud-first applications that scale well horizontally,
 
 ![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
 
-Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/server) and **enable Startup CPU boost**. 
+Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and **enable Startup CPU boost**. 
 
-While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/server/metrics) and explore how the previously executed load test affected scaling.
+While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/jokes/metrics) and explore how the previously executed load test affected scaling.
 
 ## Summary
 
