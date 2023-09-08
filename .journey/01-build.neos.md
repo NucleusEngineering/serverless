@@ -34,7 +34,7 @@ Cloud Build is a serverless CI system in Google Cloud. It is a general purpose c
 
 You don't need to provision anything to get started with using Cloud Build, it's serverless: simply enable the API and submit your jobs. Cloud Build manages all the required infrastructure for you. Per default, Cloud Build schedules build jobs on shared infrastructure, but it can be configured to run on a dedicated worker pool that is not shared with other users.
 
-In the previous section of the Serverless journey we saw how to use build and deploy directly to Cloud Run from source code using the magic of Build Packs. Actually, this deployment via *gcloud run deplo* already leverages Cloud Build in the background, as you can see here in the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard). These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
+In the previous section of the Serverless journey we saw how to use build and deploy directly to Cloud Run from source code using the magic of Build Packs. Actually, this deployment via `gcloud run deploy` already leverages Cloud Build in the background, as you can see here in the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard). These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
 
 In order to get started let's set up some configuration:
 
@@ -86,7 +86,7 @@ We can now submit the build context to Cloud Build and use the instructions in t
 gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockerbuild .
 ```
 
-Next, let's navigate first to he [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard) to see the build we just started. As soon as that is finished we go to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/) to find the repository and inspect the image.
+Next, let's navigate first to the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard) to see the build we just started. As soon as that is finished we go to [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker/) to find the repository and inspect the image.
 
 Huh, it seems like our image is quite big! We can fix this by running a [multi-stage Docker build](https://docs.docker.com/build/building/multi-stage/). Let's extend the Dockerfile and replace its contents with the following:
 
