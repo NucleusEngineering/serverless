@@ -45,8 +45,6 @@ go run main.go
 
 This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell.
 
-<walkthrough-editor-spotlight spotlightId="cloud-shell-web-preview-button" target="cloudshell">Web Preview</walkthrough-editor-spotlight>
-
 Finally, focus the terminal again and terminate the web server with `Ctrl-C`.
 
 ## Building and deploying the code
@@ -129,7 +127,7 @@ Cloud Run automatically scales your application based how many web requests are 
 Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 500.000 requests using `hey`:
 
 ```bash
-hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
+hey -n 5000000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 In order to build modern, cloud-first applications that scale well horizontally, we need to watch out for some design considerations.
