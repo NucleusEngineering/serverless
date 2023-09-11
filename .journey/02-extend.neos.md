@@ -77,7 +77,7 @@ Have a look at the [Vertex AI Model Garden](https://console.cloud.google.com/ver
 
 The call also requires other inputs, like the actual text prompt and parameters to tune the output of the model.
 
-4. **Execute the call against the API to run the model prediction**: Finally, we'll use the previously instantiated client to actually send the `aiplatformpb.PredictRequest` and execute the API call. Take a look at the [documentation of the method](https://pkg.go.dev/cloud.google.com/go/aiplatform@v1.45.0/apiv1beta1#PredictionClient.Predict) `Predict` on the client type.
+3. **Execute the call against the API to run the model prediction**: Finally, we'll use the previously instantiated client to actually send the `aiplatformpb.PredictRequest` and execute the API call. Take a look at the [documentation of the method](https://pkg.go.dev/cloud.google.com/go/aiplatform@v1.45.0/apiv1beta1#PredictionClient.Predict) `Predict` on the client type.
 
 Now, it's time to make some changes to the code.
 
