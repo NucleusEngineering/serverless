@@ -10,4 +10,3 @@ WORKDIR /app
 COPY --from=builder /app/server /app/server
 CMD ["/app/server"]
 
-
