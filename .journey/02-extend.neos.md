@@ -10,7 +10,7 @@
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
-Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains a Google-built, pre-trained, PaLM model which is a general-purpose, generative LLM that can be query with free-texts prompts to generate all sorts of text-based outputs. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to new dad jokes in a generative matter.
+Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains a Google-built, pre-trained, PaLM model which is a general-purpose, generative LLM that can be queried with free-text prompts to generate all sorts of text-based outputs. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to new dad jokes in a generative manner.
 
 Additionally, we'll learn a little bit about custom service accounts, IAM permissions and how to use the principle of least privilege to secure our services on Cloud Run.
 

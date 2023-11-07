@@ -97,7 +97,7 @@ Cloud Run comes with a built-in traffic control plane, which lets operators prog
 
 <walkthrough-info-message>Cloud Run's default deployment strategy is to automatically route all traffic to the new revision if it should pass minimum health checks.</walkthrough-info-message>
 
-In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily refereed to by its tag and also get an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
+In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily referred to by its tag and also get an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
 
 Let's deploy a new revision of the jokes service using a different container image. We've been told that requirements have changed dramatically for this new version. We don't trust the image and decide to implement and canary release strategy. First of all, let's tag the current, good revision, like this:
 
@@ -148,7 +148,7 @@ Follow the link in the alert mail or navigate to the [incidents section of Cloud
 
 Also look at the SLOs section of your Cloud Run service in the [Cloud Run section of the Google Cloud Console](https://console.cloud.google.com/run). The page tells you that the percentage of healthy, non-error responses from your service has dropped to 90%, which is below your SLO target of 95%!
 
-Let's investigate a bit further. Head to the _Logs_ tab of the service. Next to your application logs, Cloud Run itself logs system events here. You can see how every invocation of your service produces and event. Most lines are marked with a blue `i` (Loglevel `info`). You see that these are the requests to which the service responded with `HTTP 200 OK`. About 10% of the log lines are marked with a red `!!` (Loglevel `error`), though!
+Let's investigate a bit further. Head to the _Logs_ tab of the service. Next to your application logs, Cloud Run itself logs system events here. You can see how every invocation of your service produces an event. Most lines are marked with a blue `i` (Loglevel `info`). You see that these are the requests to which the service responded with `HTTP 200 OK`. About 10% of the log lines are marked with a red `!!` (Loglevel `error`), though!
 
 Have a closer look at one of each log line and expand into the fields `resource` and further down into `labels`. The structured log message tells you exactly which revision of the service belongs to the message. Turns out that all the errors are caused by the revision we previously marked as `next`.
 

@@ -156,7 +156,7 @@ To fully understand what else can go into your `cloudbuild.yaml`, please check o
 
 ## Deploying to Cloud Run
 
-Cloud Build is a versatile tool and is suited to run a wide variety of batch-like jobs. Until now, we only used Cloud Build to accomplish Continuous Integration (CI) tasks, but we don need to stop there.
+Cloud Build is a versatile tool and is suited to run a wide variety of batch-like jobs. Until now, we only used Cloud Build to accomplish Continuous Integration (CI) tasks, but we don't need to stop there.
 
 We can extend the `cloudbuild.yaml` definition and automatically deploy the newly created image to Cloud Run like this:
 
