@@ -223,11 +223,13 @@ Next, we'll create a fork of the repository we are currently working with, so th
 gh repo fork
 ```
 
-This will create a fork of the upstream repository from `github.com/nucleusengineering/serverless` and place it at `github.com/YOUR_GITHUB_HANDLE/serverless`. Additionally, the command automatically reconfigures the remotes of the local repository clone. Talk a look the the configured remotes and see how it configured both `upstream` and the new `origin` by running the following:
+This will create a fork of the upstream repository from `github.com/nucleusengineering/serverless` and place it at `github.com/YOUR_GITHUB_HANDLE/serverless`. Additionally, the command automatically reconfigures the remotes of the local repository clone. Take a look the the configured remotes and see how it configured both `upstream` and the new `origin` by running the following:
 
 ```bash
 git remote -v
 ```
+
+<walkthrough-info-message>Make sure that your new `origin` points to the work belonging to your own user and push commits to the new `origin` from now on.</walkthrough-info-message>
 
 ### Setting up the Cloud Build triggers
 
