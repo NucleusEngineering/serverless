@@ -63,7 +63,11 @@ Sometimes it is required to exert more control over the Docker build process. Go
 2. Dockerfile: If this file is present, Cloud Build will use it to execute a container build process that is equivalent to running `docker build`. Finally, it will tag and store the resulting image.
 3. Buildpacks: If no explicit build instructions are available, Cloud Build can still be used to integrate by using Google Cloud Buildpacks.
 
-Create a new file called `Dockerfile` and place it in the same directory as the Go application. Let's start with a simple, single-stage build for Go:
+In the 
+<walkthrough-editor-spotlight spotlightId="activity-bar-explorer">
+File Explorer
+</walkthrough-editor-spotlight>
+create a new file called `Dockerfile` and place it in the same directory as the Go application. Let's start with a simple, single-stage build for Go:
 
 ```Dockerfile
 FROM golang:1.20-bullseye
@@ -156,7 +160,7 @@ To fully understand what else can go into your `cloudbuild.yaml`, please check o
 
 ## Deploying to Cloud Run
 
-Cloud Build is a versatile tool and is suited to run a wide variety of batch-like jobs. Until now, we only used Cloud Build to accomplish Continuous Integration (CI) tasks, but we don need to stop there.
+Cloud Build is a versatile tool and is suited to run a wide variety of batch-like jobs. Until now, we only used Cloud Build to accomplish Continuous Integration (CI) tasks, but we don't need to stop there.
 
 We can extend the `cloudbuild.yaml` definition and automatically deploy the newly created image to Cloud Run like this:
 
@@ -237,7 +241,7 @@ Next, Cloud Build needs to be configured with a trigger resource. The trigger co
 
 First, navigate to the [Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers) and click on 'Connect Repository'. Follow the wizard on the right to connect to github.com, authenticate Google's GitHub app, filter repositories based on your user name, find the forked repository called 'serverless', tick the box to accept the policy and connect your repository. Once completed you should see a connection confirmation message displayed. Now it's time to create the trigger.
 
-Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided './cloudbuild.yaml' and **add all the substitutions** you used previously to trigger your build.
+Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided `./cloudbuild.yaml` and **add all the substitutions** you used previously to trigger your build.
 
 <walkthrough-info-message>When using the "Autodetect" configuration option, there is no possibility to add substituiton variables through the UI. So make sure to specify the "Cloud Build configuration file (yaml or json)" option explicitly, and then continue to fill in the substitution variables.</walkthrough-info-message>
 
@@ -267,7 +271,7 @@ Finally, push the commit to the remote repossitory:
 git push origin main
 ```
 
-Changes should automatically be detected and trigger a new Cloud Build task. Navigate to the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/dashboard) nad explore the running build.
+Changes should automatically be detected and trigger a new Cloud Build task. Navigate to the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/dashboard) and explore the running build.
 
 ## Summary
 

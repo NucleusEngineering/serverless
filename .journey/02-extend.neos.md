@@ -81,7 +81,7 @@ To get started, first have a look at the Go module `github.com/helloworlddan/tor
 In order to use the package we need to first get the module like this:
 
 ```bash
-go get github.com/helloworlddan/tortuneai 
+go get github.com/helloworlddan/tortuneai@v0.0.2
 ```
 
 Once that is completed, we can update
@@ -95,13 +95,19 @@ Notice that the signature for `tortuneai.HitMe()` is different from the previous
 Here is a possible implementation:
 
 ```golang 
-joke, err := tortuneai.HitMe("tell me something about the year of the rabbit", "<walkthrough-project-id/>")
+joke, err := tortuneai.HitMe("", "<walkthrough-project-id/>")
 if err != nil {
     fmt.Fprintf(w, "error: %v\n", err)
     return
 }
 fmt.Fprint(w, joke)
 ```
+
+Update the implementation of `http.HandleFunc()` in
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
+the main application source file main.go
+</walkthrough-editor-open-file>
+with the code snippet.
 
 Let's check if the modified code compiles by running it:
 

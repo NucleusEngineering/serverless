@@ -81,7 +81,7 @@ gcloud run deploy jokes --source .
 
 The command requires additional information and hence switches to an interactive mode. You can have a look at the `gcloud` CLI [reference](https://cloud.google.com/sdk/gcloud/reference/run/deploy) in case some of the option may be unclear to you.
 
-We want our application to be publicly available on the internet.
+We want our application to be publicly available on the internet, so we should allow unauthenticated invokations from any client.
 
 Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoint it created. You should be able to call the endpoint from your browser or by using any other HTTP client like cURL.
 
@@ -101,7 +101,6 @@ Building from `--source` uses Google Cloud Buildpacks. Buildpacks are predefined
 ## Using Cloud Code 
 
 Alternatively, you can deploy and otherwise manage the life cycle of your Cloud Run services and other resources using Cloud Code.
-
 Cloud Code is an IDE plugin for both VS Code and Intellj-based IDEs and is designed to make you interaction with Google Cloud more convenient.
 
 Cloud Code is a pre-installed in Cloud Shell.
@@ -127,7 +126,7 @@ Cloud Run automatically scales your application based how many web requests are 
 Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 500.000 requests using `hey`:
 
 ```bash
-hey -n 5000000 $(gcloud run services describe jokes --format 'value(status.url)')
+hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 In order to build modern, cloud-first applications that scale well horizontally, we need to watch out for some design considerations.
