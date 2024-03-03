@@ -28,6 +28,12 @@ run.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
 
+You can use the build in 
+<walkthrough-editor-spotlight spotlightId="menu-terminal-new-terminal">
+Cloud Shell Terminal
+</walkthrough-editor-spotlight>
+to run the gcloud command.
+
 ## Exploring the code
 
 Take some time and 
@@ -69,8 +75,7 @@ The `gcloud` CLI has a convenient short cut for deploying Cloud Run which quickl
 
 We can use a single command to easily:
 - tarball a directory (build context)
-- upload it to Google Cloud Storage
-- use Cloud Build to untar the context, build the app, containerize and store it on Artifact Registry
+- upload it to Cloud Build and use it to untar the context, build the app, containerize and store it on Artifact Registry
 - create a new Cloud Run service with a fresh revision
 - bind an IAM policy to the the service
 - route traffic to the new endpoint
