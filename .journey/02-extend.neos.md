@@ -168,15 +168,10 @@ gcloud run services update jokes \
 Now, that all IAM resources and configurations are in place, we can commit changes and push the to the remote repository to trigger a new Cloud Build execution to deploy changes in a CI/CD fashion, like this:
 
 ```bash
-gcloud builds submit --substitutions \
-    _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
+git add .
+git commit -m 'upgrade to Gemini Pro for generative jokes'
+git push origin main
 ```
-
-<!-- ```bash -->
-<!-- git add . -->
-<!-- git commit -m 'upgrade to Gemini Pro for generative jokes' -->
-<!-- git push origin main -->
-<!-- ``` -->
 
 Navigate to [Cloud Build's dashboard](https://console.cloud.google.com/cloud-build/dashboard) and click into the active build to monitor it's progress.
 
