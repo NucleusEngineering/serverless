@@ -190,88 +190,88 @@ gcloud builds submit --substitutions \
     _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
 ```
 
-## Setting up an automatic source triggers from GitHub
-
-Now that we have successfully created a full build definition on Cloud Build for a simple yet very useful CI/CD pipeline, let's have a look at creating automatic build triggers that execute the pipeline whenever code gets updated on a remote Git repository. In order to put everything in place, we'll now look at how to authenticate with GitHub, fork the code into a new repository, authorize GitHub to connect with Cloud Build and create an automatic build trigger on Cloud Build.
-
-<walkthrough-info-message>This part of the tutorial requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).</walkthrough-info-message>
-
-### Authenticating with GitHub
-
-First, let's authenticate using `gh`, GitHub's CLI, which comes pre-installed on Cloud Shell. In your terminal begin the authentication handshake and complete the CLI wizard.
-
-We'd like to connect in the following matter:
- * Connect to `github.com`
- * Use HTTPS for authentication
- * Configure `git` to use GitHub credentials
-
-Begin the authentication exchange by running the following:
-
-```bash
-gh auth login
-```
-
-Copy the authentication code, navigate to [GitHub's device authentication page](https://github.com/login/device), paste the token and authorize the application.
-
-Once authentication is complete, you should be able to test access to GitHub by listing all of you repositories, like so:
-
-```bash
-gh repo list
-```
-
-### Creating a fork of the upstream repo
-
-Next, we'll create a fork of the repository we are currently working with, so that we have a separate, remote repository that we can push changes to. Create the fork by running the following:
-
-```bash
-gh repo fork
-```
-
-This will create a fork of the upstream repository from `github.com/nucleusengineering/serverless` and place it at `github.com/YOUR_GITHUB_HANDLE/serverless`. Additionally, the command automatically reconfigures the remotes of the local repository clone. Take a look the the configured remotes and see how it configured both `upstream` and the new `origin` by running the following:
-
-```bash
-git remote -v
-```
-
-<walkthrough-info-message>Make sure that your new `origin` points to the work belonging to your own user and push commits to the new `origin` from now on.</walkthrough-info-message>
-
-### Setting up the Cloud Build triggers
-
-Next, Cloud Build needs to be configured with a trigger resource. The trigger contains everything Cloud Build needs to automatically run new builds whenever the remote repository gets updated.
-
-First, navigate to the [Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers) and click on 'Connect Repository'. Follow the wizard on the right to connect to github.com, authenticate Google's GitHub app, filter repositories based on your user name, find the forked repository called 'serverless', tick the box to accept the policy and connect your repository. Once completed you should see a connection confirmation message displayed. Now it's time to create the trigger.
-
-Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided `./cloudbuild.yaml` and **add all the substitutions** you used previously to trigger your build.
-
-<walkthrough-info-message>When using the "Autodetect" configuration option, there is no possibility to add substituiton variables through the UI. So make sure to specify the "Cloud Build configuration file (yaml or json)" option explicitly, and then continue to fill in the substitution variables.</walkthrough-info-message>
-
-
-### Pushing some changes
-
-We should now have everything in place to automatically trigger a new build whenever changes are pushed to `main` on the remote repository fork.
-
-If you haven't done so already, you will need to configure git on your Cloud Shell. To do so, run the following and configure your email and name, so git know who you are.
-
-```bash
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-```
-
-Use git to add all the changes to the index and create a commit like this:
-
-```bash
-git add Dockerfile
-git add cloudbuild.yaml
-git commit -m 'add build config'
-```
-
-Finally, push the commit to the remote repossitory:
-
-```bash
-git push origin main
-```
-
-Changes should automatically be detected and trigger a new Cloud Build task. Navigate to the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/dashboard) and explore the running build.
+<!-- ## Setting up an automatic source triggers from GitHub -->
+<!---->
+<!-- Now that we have successfully created a full build definition on Cloud Build for a simple yet very useful CI/CD pipeline, let's have a look at creating automatic build triggers that execute the pipeline whenever code gets updated on a remote Git repository. In order to put everything in place, we'll now look at how to authenticate with GitHub, fork the code into a new repository, authorize GitHub to connect with Cloud Build and create an automatic build trigger on Cloud Build. -->
+<!---->
+<!-- <walkthrough-info-message>This part of the tutorial requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).</walkthrough-info-message> -->
+<!---->
+<!-- ### Authenticating with GitHub -->
+<!---->
+<!-- First, let's authenticate using `gh`, GitHub's CLI, which comes pre-installed on Cloud Shell. In your terminal begin the authentication handshake and complete the CLI wizard. -->
+<!---->
+<!-- We'd like to connect in the following matter: -->
+<!--  * Connect to `github.com` -->
+<!--  * Use HTTPS for authentication -->
+<!--  * Configure `git` to use GitHub credentials -->
+<!---->
+<!-- Begin the authentication exchange by running the following: -->
+<!---->
+<!-- ```bash -->
+<!-- gh auth login -->
+<!-- ``` -->
+<!---->
+<!-- Copy the authentication code, navigate to [GitHub's device authentication page](https://github.com/login/device), paste the token and authorize the application. -->
+<!---->
+<!-- Once authentication is complete, you should be able to test access to GitHub by listing all of you repositories, like so: -->
+<!---->
+<!-- ```bash -->
+<!-- gh repo list -->
+<!-- ``` -->
+<!---->
+<!-- ### Creating a fork of the upstream repo -->
+<!---->
+<!-- Next, we'll create a fork of the repository we are currently working with, so that we have a separate, remote repository that we can push changes to. Create the fork by running the following: -->
+<!---->
+<!-- ```bash -->
+<!-- gh repo fork -->
+<!-- ``` -->
+<!---->
+<!-- This will create a fork of the upstream repository from `github.com/nucleusengineering/serverless` and place it at `github.com/YOUR_GITHUB_HANDLE/serverless`. Additionally, the command automatically reconfigures the remotes of the local repository clone. Take a look the the configured remotes and see how it configured both `upstream` and the new `origin` by running the following: -->
+<!---->
+<!-- ```bash -->
+<!-- git remote -v -->
+<!-- ``` -->
+<!---->
+<!-- <walkthrough-info-message>Make sure that your new `origin` points to the work belonging to your own user and push commits to the new `origin` from now on.</walkthrough-info-message> -->
+<!---->
+<!-- ### Setting up the Cloud Build triggers -->
+<!---->
+<!-- Next, Cloud Build needs to be configured with a trigger resource. The trigger contains everything Cloud Build needs to automatically run new builds whenever the remote repository gets updated. -->
+<!---->
+<!-- First, navigate to the [Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers) and click on 'Connect Repository'. Follow the wizard on the right to connect to github.com, authenticate Google's GitHub app, filter repositories based on your user name, find the forked repository called 'serverless', tick the box to accept the policy and connect your repository. Once completed you should see a connection confirmation message displayed. Now it's time to create the trigger. -->
+<!---->
+<!-- Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided `./cloudbuild.yaml` and **add all the substitutions** you used previously to trigger your build. -->
+<!---->
+<!-- <walkthrough-info-message>When using the "Autodetect" configuration option, there is no possibility to add substituiton variables through the UI. So make sure to specify the "Cloud Build configuration file (yaml or json)" option explicitly, and then continue to fill in the substitution variables.</walkthrough-info-message> -->
+<!---->
+<!---->
+<!-- ### Pushing some changes -->
+<!---->
+<!-- We should now have everything in place to automatically trigger a new build whenever changes are pushed to `main` on the remote repository fork. -->
+<!---->
+<!-- If you haven't done so already, you will need to configure git on your Cloud Shell. To do so, run the following and configure your email and name, so git know who you are. -->
+<!---->
+<!-- ```bash -->
+<!-- git config --global user.email "you@example.com" -->
+<!-- git config --global user.name "Your Name" -->
+<!-- ``` -->
+<!---->
+<!-- Use git to add all the changes to the index and create a commit like this: -->
+<!---->
+<!-- ```bash -->
+<!-- git add Dockerfile -->
+<!-- git add cloudbuild.yaml -->
+<!-- git commit -m 'add build config' -->
+<!-- ``` -->
+<!---->
+<!-- Finally, push the commit to the remote repossitory: -->
+<!---->
+<!-- ```bash -->
+<!-- git push origin main -->
+<!-- ``` -->
+<!---->
+<!-- Changes should automatically be detected and trigger a new Cloud Build task. Navigate to the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/dashboard) and explore the running build. -->
 
 ## Summary
 
