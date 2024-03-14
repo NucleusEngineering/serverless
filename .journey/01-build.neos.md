@@ -4,9 +4,11 @@
   <meta name="keywords" content="deploy, containers, console, run" />
 </walkthrough-metadata>
 
-# Serverless Journey: Building and deploying container images with Cloud Build
+# Serverless Journey Module 2: Building and deploying container images with Cloud Build
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
+
+<!-- TODO include on-demand clip for module 2 -->
 
 In this tutorial we'll learn how to use Cloud Build, the serverless CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
 
@@ -194,7 +196,7 @@ gcloud builds submit --substitutions \
 
 Now that we have successfully created a full build definition on Cloud Build for a simple yet very useful CI/CD pipeline, let's have a look at creating automatic build triggers that execute the pipeline whenever code gets updated on a remote Git repository. In order to put everything in place, we'll now look at how to authenticate with GitHub, fork the code into a new repository, authorize GitHub to connect with Cloud Build and create an automatic build trigger on Cloud Build.
 
-<walkthrough-info-message>This part of the tutorial requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).</walkthrough-info-message>
+<walkthrough-info-message>This part of the tutorial is **optional**, as it requires you to have a GitHub account. If you don't have one you can [register a new one](https://github.com/signup).</walkthrough-info-message>
 
 ### Authenticating with GitHub
 
@@ -278,6 +280,8 @@ Changes should automatically be detected and trigger a new Cloud Build task. Nav
 You now know how Cloud Build can help you automate integrating your artifacts.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+This completes Module 2. You can now wait for the live session to resume or continue by yourself and on-demand.
 
 When you are ready to proceed to the next chapter to learn more about how to implement Google Cloud APIs from your code, execute the following in the shell:
 

@@ -4,9 +4,11 @@
   <meta name="keywords" content="deploy, containers, console, run" />
 </walkthrough-metadata>
 
-# Serverless Journey: Extend your code to call Cloud APIs
+# Serverless Journey Module 3: Extend your code to call Cloud APIs
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/databases_2022_HTRs5Tr.max-700x700.jpg)
+
+<!-- TODO include on-demand clip for module 3 -->
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
@@ -165,7 +167,14 @@ gcloud run services update jokes \
     --service-account tortune@$(gcloud config get-value project).iam.gserviceaccount.com 
 ```
 
-Now, that all IAM resources and configurations are in place, we can commit changes and push the to the remote repository to trigger a new Cloud Build execution to deploy changes in a CI/CD fashion, like this:
+Now, that all IAM resources and configurations are in place, we can trigger a new Cloud Build execution to deploy changes in a CI/CD fashion, like this:
+
+```bash
+gcloud builds submit --substitutions \
+    _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
+```
+
+If you have previously configured Github, you can achieve the same by committing and pushing your changes, like this:
 
 ```bash
 git add .
@@ -186,6 +195,8 @@ Amazing!
 ## Summary
 
 You now know how to call Google APIs directly from your code and understand how to secure your services with least-privilege service accounts.
+
+This completes Module 3. You can now wait for the live session to resume or continue by yourself and on-demand.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
