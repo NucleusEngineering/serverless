@@ -8,7 +8,7 @@
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
 
-<!-- TODO include on-demand clip for module 1 -->
+Check out this [Overview on Cloud Run](https://images.squarespace-cdn.com/content/v1/65a6226068668c33fe4a4676/670e0f25-6421-44e8-80fc-29a56960e8b5/Chapter01Spread04Figure01.png?format=2500w)
 
 In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the available options to tweak our service.
 
