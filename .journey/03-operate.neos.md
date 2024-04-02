@@ -8,7 +8,9 @@
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
 
-<!-- TODO include on-demand clip for module 3 -->
+Check out this [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
+
+Check out this [Overview on Risks and Error Budgets](https://www.youtube.com/watch?v=y2ILKr8kCJU)
 
 In the final part of the Serverless Journey, we are going to look at some basic principles of how to operate your services in production. We'll learn about SRE and define some custom SLOs to keep track of the health of our services.
 
