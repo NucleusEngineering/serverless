@@ -6,7 +6,7 @@
 
 # Giggle Cloud Platform
 
-	"Your ML models are looking real fit, they must do a lot of weighted training."
+_"Your ML models are looking real fit, they must do a lot of weighted training."_
 
 Welcome to this hands-on tutorial in which you will learn how to build hilarious services on Google Cloud Platform!
 
