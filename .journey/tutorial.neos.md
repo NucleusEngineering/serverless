@@ -4,14 +4,29 @@
   <meta name="keywords" content="cloud, go, containers, console, run, AI, GenAI, APIs, SRE" />
 </walkthrough-metadata>
 
-# Welcome!
+# Giggle Cloud Platform
+
+	"Your ML models are looking real fit, they must do a lot of weighted training."
+
+Welcome to this hands-on tutorial in which you will learn how to build hilarious services on Google Cloud Platform!
 
 ## Overview
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/Google_Blog_Containers_08_Toz0BRc.max-2200x2200.jpg)
 
-<!-- TODO write intro -->
-Lorem ipsum...
+In this interactive tutorial, you will learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices.
+
+The module is split into four modules and follows the typical lifecycle of a service that starts as a local prototype, that moves to the cloud, where it matures through automation and gets enriched with Google Cloud APIs and matures into a production-grade service.
+
+Module 1 will explore Cloud Run, a compute platform for container workloads, which you can use to easily run your services in a scalable, secure, cost-effective and production-grade environment in a matter of minutes.
+
+Module 2 will get you familiar with Cloud Build, a fully-managed container-based build system. In this module you will add more and more automation to your service delivery. Code will be stored on a remote version control system which automatically execute multi-stage Docker builds followed by safe deployments to Cloud Run.
+
+Module 3 shows how to interact with Google Cloud APIs. You'll then use those skills to implement interactions with Gemini, a large language model hosted on Google cloud Vertex AI, to bring Generative AI capabilities to your applications. The module also explores the usage of IAM and service accounts to secure usage of APIs.
+
+In Module 4, we'll look at the practices of Site Reliability Engineering and how you can practically apply these to reliably operate your services and manage how you introduce changes to its functionality.
+
+Hope you're not afraid to get your hands dirty. Make sure you got a beverage and some snacks of your choice, strap in and hit 'Start'.
 
 ## Module 1: Run a freshly built container image on Cloud Run
 
