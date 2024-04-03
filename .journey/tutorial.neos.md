@@ -4,7 +4,14 @@
   <meta name="keywords" content="cloud, go, containers, console, run, AI, GenAI, APIs, SRE" />
 </walkthrough-metadata>
 
-# Module 1: Run a freshly built container image on Cloud Run
+# Welcome!
+
+![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/MLInGSuite-01_1lnS1Y4.max-2200x2200.png)
+
+<!-- TODO write intro -->
+Lorem ipsum...
+
+## Module 1: Run a freshly built container image on Cloud Run
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
 
@@ -158,7 +165,7 @@ You now have a good feel for what it means to build and deploy your code to Clou
 
 This completes Module 1. You can now wait for the live session to resume or continue by yourself and on-demand.
 
-# Module 2: Building and deploying container images with Cloud Build
+## Module 2: Building and deploying container images with Cloud Build
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
 
@@ -437,7 +444,7 @@ You now know how Cloud Build can help you automate integrating your artifacts.
 
 This completes Module 2. You can now wait for the live session to resume or continue by yourself and on-demand.
 
-# Module 3: Extend your code to call Cloud APIs
+## Module 3: Extend your code to call Cloud APIs
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/databases_2022_HTRs5Tr.max-700x700.jpg)
 
@@ -633,7 +640,7 @@ You now know how to call Google APIs directly from your code and understand how 
 
 This completes Module 3. You can now wait for the live session to resume or continue by yourself and on-demand.
 
-# Module 4: Operate your services in production
+## Module 4: Operate your services in production
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
 
