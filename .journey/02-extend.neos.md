@@ -1,18 +1,18 @@
 <walkthrough-metadata>
-  <meta name="title" content="Serverless Journey>: Extend your code to call Cloud APIs" />
+  <meta name="title" content="Module 3: Extend your code to call Cloud APIs" />
   <meta name="description" content="Learn how to call Cloud APIs directly from your code and use service accounts to secure your app." />
   <meta name="keywords" content="deploy, containers, console, run" />
 </walkthrough-metadata>
 
-# Serverless Journey Module 3: Extend your code to call Cloud APIs
+# Module 3: Extend your code to call Cloud APIs
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/databases_2022_HTRs5Tr.max-700x700.jpg)
-
-<!-- TODO include on-demand clip for module 3 -->
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
 Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains the Google-built, pre-trained, Gemini Pro model which is a general-purpose, multi-modal, generative large language model (LLM) that can be queried with text prompts in natual language to generate all sorts of outputs, including text. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to add new dad jokes in a generative matter.
+
+<!-- TODO include on-demand clip for module 3 -->
 
 Additionally, we'll learn a little bit about custom service accounts, IAM permissions and how to use the principle of least privilege to secure our services on Cloud Run.
 

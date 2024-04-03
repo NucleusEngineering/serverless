@@ -1,22 +1,22 @@
 <walkthrough-metadata>
-  <meta name="title" content="Serverless Journey>: Operate your services in production" />
+  <meta name="title" content="Module 4: Operate your services in production" />
   <meta name="description" content="Learn how to safely deploy changes and operate your services in production." />
   <meta name="keywords" content="deploy, containers, console, run" />
 </walkthrough-metadata>
 
-# Serverless Journey Module 4: Operate your services in production
+# Module 4: Operate your services in production
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
 
-Check out this [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
-
-Check out this [Overview on Risks and Error Budgets](https://www.youtube.com/watch?v=y2ILKr8kCJU)
-
 In the final part of the Serverless Journey, we are going to look at some basic principles of how to operate your services in production. We'll learn about SRE and define some custom SLOs to keep track of the health of our services.
+
+Check out this [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
 
 After that we'll have a look at Cloud Run's traffic splitting capabilities. This allows us to deploy new revisions of a Cloud Run service and the gradually move portion of production traffic over. Cloud Run's programmable network control plane allows you to split traffic between revisions; you can use this built-in feature to implement strategies like blue/green deployments, canaries releases, or rollback to previous revisions in seconds should you ever push a bad release. 
 
 To bring everything to life, we'll be deploying a faulty version as a canary release with some amount of live traffic, get an alert, observe how this will burn through the [error budget](https://cloud.google.com/blog/products/management-tools/sre-error-budgets-and-maintenance-windows) and quickly rollback to a safe state.
+
+Check out this [Overview on Risks and Error Budgets](https://www.youtube.com/watch?v=y2ILKr8kCJU)
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
