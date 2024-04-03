@@ -6,7 +6,9 @@
 
 # Welcome!
 
-![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/MLInGSuite-01_1lnS1Y4.max-2200x2200.png)
+## Overview
+
+![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/Google_Blog_Containers_08_Toz0BRc.max-2200x2200.jpg)
 
 <!-- TODO write intro -->
 Lorem ipsum...
