@@ -10,6 +10,8 @@ _"Your ML models are looking real fit, they must do a lot of weighted training."
 
 Welcome to this hands-on tutorial in which you will learn how to build hilarious services on Google Cloud Platform!
 
+<walkthrough-info-message>Google is phasing out 3rd party cookies in Chrome to better protect the privacy of its users. If you are attempting this tutorial on Chrome, please make sure that 3rd party cookies are enabled in Chrome's address bar (the icon that looks like an eye), since the tutorial still requires these. The same is required for any other browser.</walkthrough-info-message>
+
 ## Overview
 
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/Google_Blog_Containers_08_Toz0BRc.max-2200x2200.jpg)
