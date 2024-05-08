@@ -14,8 +14,7 @@ Welcome to this hands-on tutorial in which you will learn how to build hilarious
 
 ## Overview
 
-<!-- TODO replace with local -->
-![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/Google_Blog_Containers_08_Toz0BRc.max-2200x2200.jpg)
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/containers.jpg)
 
 In this interactive tutorial, you will learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices.
 
@@ -33,12 +32,11 @@ Hope you're not afraid to get your hands dirty. Make sure you got a beverage and
 
 ## Module 1: Run a freshly built container image on Cloud Run
 
-<!-- TODO replace with local -->
-![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/run.jpg)
 
 In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the available options to tweak our service.
 
-Check out this [Overview on Cloud Run](https://images.squarespace-cdn.com/content/v1/65a6226068668c33fe4a4676/670e0f25-6421-44e8-80fc-29a56960e8b5/Chapter01Spread04Figure01.png?format=2500w)
+Check out this [Overview on Cloud Run](https://github.com/NucleusEngineering/serverless/blob/main/.images/overview-run.jpg)
 
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
@@ -188,13 +186,11 @@ This completes Module 1. You can now wait for the live session to resume or cont
 
 ## Module 2: Building and deploying container images with Cloud Build
 
-<!-- TODO replace with local -->
-![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/build.jpg)
 
 In this tutorial we'll learn how to use Cloud Build, the fully-managed CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
 
-<!-- TODO replace with local -->
-Check out this [Overview on Cloud Build](https://images.squarespace-cdn.com/content/v1/65a6226068668c33fe4a4676/b21eb739-3638-416c-9356-7ace972f11f4/Chapter05Spread05Figure01.png?format=2500w)
+Check out this [Overview on Cloud Build](https://github.com/NucleusEngineering/serverless/blob/main/.images/overview-build.jpg)
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
@@ -469,8 +465,7 @@ This completes Module 2. You can now wait for the live session to resume or cont
 
 ## Module 3: Extend your code to call Cloud APIs
 
-<!-- TODO replace with local -->
-![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/databases_2022_HTRs5Tr.max-700x700.jpg)
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/apis.jpg)
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
@@ -666,8 +661,7 @@ This completes Module 3. You can now wait for the live session to resume or cont
 
 ## Module 4: Operate your services in production
 
-<!-- TODO replace with local -->
-![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/sre.jpg)
 
 In this part of our journey, we are going to look at some basic principles of how to operate your services in production. We'll learn about SRE and define some custom SLOs to keep track of the health of our services.
 
@@ -842,9 +836,9 @@ This completes Module 4. You can now wait for the live session to resume or cont
 
 ## Module 5: Securing software artifacts
 
-<!-- TODO replace with local -->
-![Tutorial header image](.images/secure.jpg)
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
 
+<!-- TODO write intro -->
 In this part 
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
