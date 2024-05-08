@@ -14,6 +14,7 @@ Welcome to this hands-on tutorial in which you will learn how to build hilarious
 
 ## Overview
 
+<!-- TODO replace with local -->
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/Google_Blog_Containers_08_Toz0BRc.max-2200x2200.jpg)
 
 In this interactive tutorial, you will learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices.
@@ -32,6 +33,7 @@ Hope you're not afraid to get your hands dirty. Make sure you got a beverage and
 
 ## Module 1: Run a freshly built container image on Cloud Run
 
+<!-- TODO replace with local -->
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/retail_2022_XfdMe3d.max-700x700.jpg)
 
 In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the available options to tweak our service.
@@ -186,10 +188,12 @@ This completes Module 1. You can now wait for the live session to resume or cont
 
 ## Module 2: Building and deploying container images with Cloud Build
 
+<!-- TODO replace with local -->
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/finserve_2022_OvLe6x5.max-700x700.jpg)
 
-In this tutorial we'll learn how to use Cloud Build, the serverless CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
+In this tutorial we'll learn how to use Cloud Build, the fully-managed CI system on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and Cloud Builds own declarative configuration to leverage higher flexibility and control over how we build our images. Finally, we'll use Cloud Build to also deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run services.
 
+<!-- TODO replace with local -->
 Check out this [Overview on Cloud Build](https://images.squarespace-cdn.com/content/v1/65a6226068668c33fe4a4676/b21eb739-3638-416c-9356-7ace972f11f4/Chapter05Spread05Figure01.png?format=2500w)
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
@@ -212,11 +216,11 @@ artifactregistry.googleapis.com">
 
 ## Cloud Build
 
-Cloud Build is a serverless CI system in Google Cloud. It is a general purpose compute platform that allows you to execute all sorts of batch workflows. However, it really excels at building code and creating container images.
+Cloud Build is a fully-managed CI system in Google Cloud. It is a general purpose compute platform that allows you to execute all sorts of batch workflows. However, it really excels at building code and creating container images.
 
 You don't need to provision anything to get started with using Cloud Build, it's serverless: simply enable the API and submit your jobs. Cloud Build manages all the required infrastructure for you. Per default, Cloud Build schedules build jobs on shared infrastructure, but it can be configured to run on a dedicated worker pool that is not shared with other users.
 
-In the previous section of the Serverless journey we saw how to use build and deploy directly to Cloud Run from source code using the magic of Build Packs. Actually, this deployment via `gcloud run deploy` already leverages Cloud Build in the background, as you can see here in the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard). These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
+In the previous section of our journey we saw how to use build and deploy directly to Cloud Run from source code using the magic of Build Packs. Actually, this deployment via `gcloud run deploy` already leverages Cloud Build in the background, as you can see here in the [Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard). These are great to get you started quickly. Almost as quickly, you will realize that you need more control over your build process, so you will start writing your own Dockerfiles. Let's see how that works with Cloud Build.
 
 In order to get started let's set up some configuration:
 
@@ -465,6 +469,7 @@ This completes Module 2. You can now wait for the live session to resume or cont
 
 ## Module 3: Extend your code to call Cloud APIs
 
+<!-- TODO replace with local -->
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/databases_2022_HTRs5Tr.max-700x700.jpg)
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
@@ -661,9 +666,10 @@ This completes Module 3. You can now wait for the live session to resume or cont
 
 ## Module 4: Operate your services in production
 
+<!-- TODO replace with local -->
 ![Tutorial header image](https://storage.googleapis.com/gweb-cloudblog-publish/images/web3_2022_7d2BUsw.max-700x700.jpg)
 
-In the final part of the Serverless Journey, we are going to look at some basic principles of how to operate your services in production. We'll learn about SRE and define some custom SLOs to keep track of the health of our services.
+In this part of our journey, we are going to look at some basic principles of how to operate your services in production. We'll learn about SRE and define some custom SLOs to keep track of the health of our services.
 
 Check out this [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
 
@@ -829,6 +835,47 @@ Go back to the _SLOs_ section of your service and observe how the SLI for your e
 ## Summary
 
 Great! You've learned the basic of SRE, defined meaningful SLOs, mastered Cloud Run traffic management and responded to a failing canary release by rolling back to a known good state of the system. 
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+This completes Module 4. You can now wait for the live session to resume or continue by yourself and on-demand.
+
+## Module 5: Securing software artifacts
+
+<!-- TODO replace with local -->
+![Tutorial header image](.images/secure.jpg)
+
+In this part 
+
+<walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
+
+Estimated time:
+<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
+
+To get started, click **Start**.
+
+## Project setup
+
+First, let's make sure we got the correct project selected. Go ahead and select the provided project ID.
+
+<walkthrough-project-setup billing="true"></walkthrough-project-setup>
+
+Run the following to make sure all required APIs are enabled.
+
+<walkthrough-enable-apis apis="cloudbuild.googleapis.com,
+run.googleapis.com,binaryauthorization.googleapis.com,
+artifactregistry.googleapis.com">
+</walkthrough-enable-apis>
+
+## SLSA: Security Levels for Software Artifacts
+
+<!-- TODO begin content -->
+
+
+## Summary
+
+<!-- TODO summarize -->
+Amazing, you've learned how to ..
 
 You are ready to develop, build, deploy and run serverless applications in production!
 
