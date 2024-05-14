@@ -4,7 +4,7 @@
   <meta name="keywords" content="cloud, go, containers, console, run, AI, GenAI, APIs, SRE" />
 </walkthrough-metadata>
 
-# Giggle Cloud Platform
+# From Prototype to Production
 
 _"Your ML models are looking real fit, they must do a lot of weighted training."_
 
@@ -18,15 +18,15 @@ Welcome to this hands-on tutorial in which you will learn how to build hilarious
 
 In this interactive tutorial, you will learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices.
 
-The module is split into four modules and follows the typical lifecycle of a service that starts as a local prototype, that moves to the cloud, where it matures through automation and gets enriched with Google Cloud APIs and matures into a production-grade service.
+The tutorial is split into **four modules**:
 
-Module 1 will explore Cloud Run, a compute platform for container workloads, which you can use to easily run your services in a scalable, secure, cost-effective and production-grade environment in a matter of minutes.
+**Module 1** will explore Cloud Run, a compute platform for container workloads, which you can use to easily run your services in a scalable, secure, cost-effective and production-grade environment in a matter of minutes.
 
-Module 2 will get you familiar with Cloud Build, a fully-managed container-based build system. In this module you will add more and more automation to your service delivery. Code will be stored on a remote version control system which automatically execute multi-stage Docker builds followed by safe deployments to Cloud Run.
+**Module 2** will get you familiar with Cloud Build, a fully-managed container-based build system. In this module you will add more and more automation to your service delivery. Code will be stored on a remote version control system which automatically execute multi-stage Docker builds followed by safe deployments to Cloud Run.
 
-Module 3 shows how to interact with Google Cloud APIs. You'll then use those skills to implement interactions with Gemini, a large language model hosted on Google cloud Vertex AI, to bring Generative AI capabilities to your applications. The module also explores the usage of IAM and service accounts to secure usage of APIs.
+**Module 3** shows how to interact with Google Cloud APIs. You'll then use those skills to implement interactions with Gemini, a large language model hosted on Google cloud Vertex AI, to bring Generative AI capabilities to your applications. The module also explores the usage of IAM and service accounts to secure usage of APIs.
 
-In Module 4, we'll look at the practices of Site Reliability Engineering and how you can practically apply these to reliably operate your services and manage how you introduce changes to its functionality.
+In **module 4**, we'll look at the practices of Site Reliability Engineering and how you can practically apply these to reliably operate your services and manage how you introduce changes to its functionality.
 
 Hope you're not afraid to get your hands dirty. Make sure you got a beverage and some snacks of your choice, strap in and hit 'Start'.
 
@@ -830,6 +830,49 @@ Go back to the _SLOs_ section of your service and observe how the SLI for your e
 
 Great! You've learned the basic of SRE, defined meaningful SLOs, mastered Cloud Run traffic management and responded to a failing canary release by rolling back to a known good state of the system. 
 
+<<<<<<< Updated upstream
+=======
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+This completes Module 4. You can now wait for the live session to resume or continue by yourself and on-demand.
+
+## Module 5: Securing software artifacts
+
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
+
+<!-- TODO write intro -->
+In this part 
+
+<walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
+
+Estimated time:
+<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
+
+To get started, click **Start**.
+
+## Project setup
+
+First, let's make sure we got the correct project selected. Go ahead and select the provided project ID.
+
+<walkthrough-project-setup billing="true"></walkthrough-project-setup>
+
+Run the following to make sure all required APIs are enabled.
+
+<walkthrough-enable-apis apis="cloudbuild.googleapis.com,
+run.googleapis.com,binaryauthorization.googleapis.com,
+artifactregistry.googleapis.com">
+</walkthrough-enable-apis>
+
+## SLSA: Security Levels for Software Artifacts
+
+<!-- TODO begin content -->
+
+## Summary
+
+<!-- TODO summarize -->
+Amazing, you've learned how to ..
+
+>>>>>>> Stashed changes
 You are ready to develop, build, deploy and run serverless applications in production!
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
