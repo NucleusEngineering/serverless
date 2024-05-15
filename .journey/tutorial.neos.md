@@ -56,7 +56,7 @@ run.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
 
-You can use the build in 
+You can use the builtin 
 <walkthrough-editor-spotlight spotlightId="menu-terminal-new-terminal">
 Cloud Shell Terminal
 </walkthrough-editor-spotlight>
@@ -69,7 +69,7 @@ Take some time and
 familiarize yourself with the code.
 </walkthrough-editor-open-file>
 
-Also have a look at the dependencies reference in the GO module. You can navigate to it's [upstream repository](https://github.com/helloworlddan/tortune) to figure out what it does.
+Also have a look at the dependencies reference in the Go module. You can navigate to it's [upstream repository](https://github.com/helloworlddan/tortune) to figure out what it does.
 
 Once you've understood what's going on, you can try to run that app directly in Cloud Shell, running the following in the terminal:
 
@@ -77,7 +77,7 @@ Once you've understood what's going on, you can try to run that app directly in 
 go run main.go
 ```
 
-This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell.
+This downloads dependencies, compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell. If you don't see a response from the web server, try waiting a little longer for the Go compiler to build and start your server.
 
 Finally, focus the terminal again and terminate the web server with `Ctrl-C`.
 
@@ -152,7 +152,7 @@ too, with out the need to use the CLI.
 
 Take a moment and familiarize yourself with the wizard and explore the previously deployed revision. Use the Cloud Code wizard to deploy a new revision of the server and **set the allocated memory to 256m**.
 
-## Scaling you app
+## Scaling your app
 
 Cloud Run automatically scales your application based how many web requests are coming in via the HTTPS endpoint. Cloud Run's horizontal auto-scaler is extremely fast and can launch 100s of new instances in seconds.
 
@@ -172,7 +172,7 @@ In order to build modern, cloud-first applications that scale well horizontally,
 
 [![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
 
-Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and **enable Startup CPU boost**. 
+Take a look at the deployment wizard for your service in the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and make sure **Startup CPU boost** is enabled.
 
 While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/jokes/metrics) and explore how the previously executed load test affected scaling.
 
