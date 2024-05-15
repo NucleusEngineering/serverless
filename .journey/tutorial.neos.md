@@ -159,7 +159,7 @@ Cloud Run automatically scales your application based how many web requests are 
 Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 500.000 requests using `hey`:
 
 ```bash
-hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
+hey -n 50000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 In order to build modern, cloud-first applications that scale well horizontally, we need to watch out for some design considerations.
