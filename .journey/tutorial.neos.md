@@ -150,7 +150,7 @@ you can directly deploy to Cloud Run
 </walkthrough-editor-spotlight>
 too, with out the need to use the CLI.
 
-Take a moment and familiarize yourself with the wizard and explore the previously deployed revision. Use the Cloud Code wizard to deploy a new revision of the server and **set the allocated memory to 256m**.
+Take a moment and familiarize yourself with the wizard. You can also use this wizard to build and deploy directly to Cloud Run.
 
 ## Scaling your app
 
@@ -447,7 +447,7 @@ git add cloudbuild.yaml
 git commit -m 'add build config'
 ```
 
-Finally, push the commit to the remote repossitory:
+Finally, push the commit to the remote repository:
 
 ```bash
 git push origin main
@@ -469,7 +469,7 @@ This completes Module 2. You can now wait for the live session to resume or cont
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
-Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains the Google-built, pre-trained, Gemini Pro model which is a general-purpose, multi-modal, generative large language model (LLM) that can be queried with text prompts in natual language to generate all sorts of outputs, including text. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to add new dad jokes in a generative matter.
+Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains the Google-built, pre-trained, Gemini Pro model which is a general-purpose, multi-modal, generative large language model (LLM) that can be queried with text prompts in natural language to generate all sorts of outputs, including text. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to add new dad jokes in a generative matter.
 
 <!-- TODO include on-demand clip for module 3 -->
 
@@ -667,6 +667,8 @@ In the final part of the Serverless Journey, we are going to look at some basic 
 
 Check out this [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
 
+At first we'll define what reliability means for the service we operate. Using these definitions, we can then proceed and configure service monitoring to keep track of the health of our service over time.
+
 After that we'll have a look at Cloud Run's traffic splitting capabilities. This allows us to deploy new revisions of a Cloud Run service and the gradually move portion of production traffic over. Cloud Run's programmable network control plane allows you to split traffic between revisions; you can use this built-in feature to implement strategies like blue/green deployments, canaries releases, or rollback to previous revisions in seconds should you ever push a bad release. 
 
 To bring everything to life, we'll be deploying a faulty version as a canary release with some amount of live traffic, get an alert, observe how this will burn through the [error budget](https://cloud.google.com/blog/products/management-tools/sre-error-budgets-and-maintenance-windows) and quickly rollback to a safe state.
@@ -756,9 +758,16 @@ Cloud Run comes with a built-in traffic control plane, which lets operators prog
 
 <walkthrough-info-message>Cloud Run's default deployment strategy is to automatically route all traffic to the new revision if it should pass minimum health checks.</walkthrough-info-message>
 
-In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily refereed to by its tag and also get an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
+Let's begin by deploying an image we know works well, in this case the previous version that uses the static tortune library.
 
-Let's deploy a new revision of the jokes service using a different container image. We've been told that requirements have changed dramatically for this new version. We don't trust the image and decide to implement and canary release strategy. First of all, let's tag the current, good revision, like this:
+```bash
+gcloud run deploy jokes \
+    --image europe-north1-docker.pkg.dev/<walkthrough-project-id/>/my-repo/dockermultistage
+```
+
+In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily referenced to by its tag and also gets an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
+
+Let's deploy a new revision of the jokes service using a different container image. We've been told that requirements have changed dramatically for this new version. We don't trust the image and decide to implement and canary release strategy. We begin my marking the current revision as 'good'.
 
 ```bash
 gcloud run services update jokes \
@@ -828,54 +837,11 @@ Go back to the _SLOs_ section of your service and observe how the SLI for your e
 
 ## Summary
 
-Great! You've learned the basic of SRE, defined meaningful SLOs, mastered Cloud Run traffic management and responded to a failing canary release by rolling back to a known good state of the system. 
+Great! You've learned the basic of SRE, defined meaningful SLOs, mastered Cloud Run traffic management and responded to a failing canary release by rolling back to a known good state of the system.
 
-<<<<<<< Updated upstream
-=======
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 This completes Module 4. You can now wait for the live session to resume or continue by yourself and on-demand.
-
-## Module 5: Securing software artifacts
-
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
-
-<!-- TODO write intro -->
-In this part 
-
-<walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
-
-Estimated time:
-<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
-
-To get started, click **Start**.
-
-## Project setup
-
-First, let's make sure we got the correct project selected. Go ahead and select the provided project ID.
-
-<walkthrough-project-setup billing="true"></walkthrough-project-setup>
-
-Run the following to make sure all required APIs are enabled.
-
-<walkthrough-enable-apis apis="cloudbuild.googleapis.com,
-run.googleapis.com,binaryauthorization.googleapis.com,
-artifactregistry.googleapis.com">
-</walkthrough-enable-apis>
-
-## SLSA: Security Levels for Software Artifacts
-
-<!-- TODO begin content -->
-
-## Summary
-
-<!-- TODO summarize -->
-Amazing, you've learned how to ..
-
->>>>>>> Stashed changes
-You are ready to develop, build, deploy and run serverless applications in production!
-
-<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 You have completed the tutorial, congratulations! Please take a moment and let us know what you think.
 
