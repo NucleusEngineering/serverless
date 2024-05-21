@@ -838,46 +838,7 @@ Great! You've learned the basic of SRE, defined meaningful SLOs, mastered Cloud 
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-This completes Module 4. You can now wait for the live session to resume or continue by yourself and on-demand.
-
-## Module 5: Securing software artifacts
-
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
-
-In this part, we'll explore how we can use several tools to strengthen the 
-
-<walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
-
-Estimated time:
-<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
-
-To get started, click **Start**.
-
-## Project setup
-
-First, let's make sure we got the correct project selected. Go ahead and select the provided project ID.
-
-<walkthrough-project-setup billing="true"></walkthrough-project-setup>
-
-Run the following to make sure all required APIs are enabled.
-
-<walkthrough-enable-apis apis="cloudbuild.googleapis.com,
-run.googleapis.com,binaryauthorization.googleapis.com,
-artifactregistry.googleapis.com">
-</walkthrough-enable-apis>
-
-## SLSA: Security Levels for Software Artifacts
-
-<!-- TODO begin content -->
-
-## Summary
-
-<!-- TODO summarize -->
-Amazing, you've learned how to ..
-
-You are ready to develop, build, deploy and run serverless applications in production!
-
-<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+This completes Module 4.
 
 You have completed the tutorial, congratulations! Please take a moment and let us know what you think.
 
