@@ -1,4 +1,6 @@
-# Learn How to Run, Build, Extend and Operate Serverless Apps on Google Cloud
+# From Prototype to Production
+
+Learn How to Run, Build, Extend and Operate AI-enabled Apps on Google Cloud
 
 Welcome to this hands-on tutorial on how to get started with applications on Google Cloud.
 

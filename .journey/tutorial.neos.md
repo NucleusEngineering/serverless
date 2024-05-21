@@ -4,7 +4,7 @@
   <meta name="keywords" content="cloud, go, containers, console, run, AI, GenAI, APIs, SRE" />
 </walkthrough-metadata>
 
-# Giggle Cloud Platform
+# From Prototype to Production
 
 _"Your ML models are looking real fit, they must do a lot of weighted training."_
 
@@ -15,29 +15,27 @@ Welcome to this hands-on tutorial in which you will learn how to build hilarious
 ## Overview
 
 ![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/containers.jpg)
-
 In this interactive tutorial, you will learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices.
 
-The module is split into four modules and follows the typical lifecycle of a service that starts as a local prototype, that moves to the cloud, where it matures through automation and gets enriched with Google Cloud APIs and matures into a production-grade service.
+The tutorial is split into **four modules**:
 
-Module 1 will explore Cloud Run, a compute platform for container workloads, which you can use to easily run your services in a scalable, secure, cost-effective and production-grade environment in a matter of minutes.
+**Module 1** will explore Cloud Run, a compute platform for container workloads, which you can use to easily run your services in a scalable, secure, cost-effective and production-grade environment in a matter of minutes.
 
-Module 2 will get you familiar with Cloud Build, a fully-managed container-based build system. In this module you will add more and more automation to your service delivery. Code will be stored on a remote version control system which automatically execute multi-stage Docker builds followed by safe deployments to Cloud Run.
+**Module 2** will get you familiar with Cloud Build, a fully-managed container-based build system. In this module you will add more and more automation to your service delivery. Code will be stored on a remote version control system which automatically executes multi-stage Docker builds followed by safe deployments to Cloud Run.
 
-Module 3 shows how to interact with Google Cloud APIs. You'll then use those skills to implement interactions with Gemini, a large language model hosted on Google cloud Vertex AI, to bring Generative AI capabilities to your applications. The module also explores the usage of IAM and service accounts to secure usage of APIs.
+**Module 3** shows how to interact with Google Cloud APIs. You'll then use those skills to implement interactions with Gemini, a large language model hosted on Google cloud Vertex AI, to bring Generative AI capabilities to your applications. The module also explores the usage of IAM and service accounts to secure usage of APIs.
 
-In Module 4, we'll look at the practices of Site Reliability Engineering and how you can practically apply these to reliably operate your services and manage how you introduce changes to its functionality.
+In **module 4**, we'll look at the practices of Site Reliability Engineering and how you can practically apply these to reliably operate your services and manage how you introduce changes to its functionality.
 
-Hope you're not afraid to get your hands dirty. Make sure you got a beverage and some snacks of your choice, strap in and hit 'Start'.
+Hope you're not afraid to get your hands dirty. Make sure get a beverage and some snacks of your choice, strap in and hit 'Start'.
 
 ## Module 1: Run a freshly built container image on Cloud Run
 
 ![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/run.jpg)
 
-In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, it's API and explore some of the available options to tweak our service.
+In this tutorial we'll learn how to remotely build a container image from source code, store the image in Artifact Registry and deploy it to Cloud Run. After that, we'll familiarize ourselves with the Cloud Run UI, its API and explore some of the available options to tweak our service.
 
 Check out this [Overview on Cloud Run](https://github.com/NucleusEngineering/serverless/blob/main/.images/overview-run.jpg)
-
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
@@ -56,7 +54,7 @@ run.googleapis.com,
 artifactregistry.googleapis.com">
 </walkthrough-enable-apis>
 
-You can use the build in 
+You can use the builtin 
 <walkthrough-editor-spotlight spotlightId="menu-terminal-new-terminal">
 Cloud Shell Terminal
 </walkthrough-editor-spotlight>
@@ -69,7 +67,7 @@ Take some time and
 familiarize yourself with the code.
 </walkthrough-editor-open-file>
 
-Also have a look at the dependencies reference in the GO module. You can navigate to it's [upstream repository](https://github.com/helloworlddan/tortune) to figure out what it does.
+Also have a look at the dependencies reference in the Go module. You can navigate to its [upstream repository](https://github.com/helloworlddan/tortune) to figure out what it does.
 
 Once you've understood what's going on, you can try to run that app directly in Cloud Shell, running the following in the terminal:
 
@@ -77,20 +75,19 @@ Once you've understood what's going on, you can try to run that app directly in 
 go run main.go
 ```
 
-This compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell.
+This downloads dependencies, compiles and starts the web server. You can now use Cloud Shell Web Preview on port 8080 to check out your application. You can find the Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the top right in Cloud Shell. If you don't see a response from the web server, try waiting a little longer for the Go compiler to build and start your server.
 
 Finally, focus the terminal again and terminate the web server with `Ctrl-C`.
 
 ## Building and deploying the code
 
-We established that our code runs locally, great! Let's put in on the cloud.
+We established that our code runs locally, great! Let's put on the cloud.
 
-<!-- TODO, verify OCI -->
-In the following steps, we'll deploy our app to Cloud Run, which is a compute platform for running modern, cloud-first, containerized applications. Cloud Run schedules and runs container images that expose services over HTTP. You can use any programming language or framework, as long as you can bind an HTTP server on a port provided by the `$PORT` environment variable.  Please note, that container images must be in Docker or OCI format and will be run on Linux x86_64.
+In the following steps, we'll deploy our app to Cloud Run, which is a compute platform for running modern, cloud-first, containerized applications. Cloud Run schedules and runs container images that expose services over HTTP. You can use any programming language or framework, as long as you can bind an HTTP server on a port provided by the `$PORT` environment variable. Please note that container images must be in Docker or OCI format and will be run on Linux x86_64.
 
 Cloud Run is available in all Google Cloud Platform regions globally. If you are unsure where to deploy to, you can use the [Region Picker](https://cloud.withgoogle.com/region-picker/) tool to find the most suitable one.
 
-You can configure project and preferred regions and zones in `gcloud` so its invocation get more convenient.
+You can configure your project and preferred regions and zones in `gcloud` so its invocation becomes more convenient.
 
 ```bash
 gcloud config set project <walkthrough-project-id/>
@@ -98,8 +95,8 @@ gcloud config set run/region europe-north1
 gcloud config set artifacts/location europe-north1 
 ```
 
-Note that our code is not yet build or containerized, but Cloud Run requires that.
-The `gcloud` CLI has a convenient short cut for deploying Cloud Run which quickly allows us to do so.
+Note that our code is not yet built or containerized, but Cloud Run requires that.
+The `gcloud` CLI has a convenient shortcut for deploying Cloud Run which quickly allows us to do so.
 
 We can use a single command to easily:
 - tarball a directory (build context)
@@ -112,9 +109,9 @@ We can use a single command to easily:
 gcloud run deploy jokes --source .
 ```
 
-The command requires additional information and hence switches to an interactive mode. You can have a look at the `gcloud` CLI [reference](https://cloud.google.com/sdk/gcloud/reference/run/deploy) in case some of the option may be unclear to you.
+The command requires additional information and hence switches to an interactive mode. You can have a look at the `gcloud` CLI [reference](https://cloud.google.com/sdk/gcloud/reference/run/deploy) in case some of the options may be unclear to you.
 
-We want our application to be publicly available on the internet, so we should allow unauthenticated invokations from any client.
+We want our application to be publicly available on the internet, so we should allow unauthenticated invocations from any client.
 
 Wait for the deployment to finish and then navigate to the `*.a.run.app` endpoint it created. You should be able to call the endpoint from your browser or by using any other HTTP client like cURL.
 
@@ -124,7 +121,7 @@ Next, let's use `gcloud` to retrieve the auto-generated service URL and then `cu
 curl $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
-Cloud Run services consist of one or more revisions. Whenever you update your service or it's configuration, you are creating a new revision. Revisions are immutable.
+Cloud Run services consist of one or more revisions. Whenever you update your service or its configuration, you are creating a new revision. Revisions are immutable.
 
 Navigate to the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run) to explore the service and its active revision.
 
@@ -134,9 +131,9 @@ Building from `--source` uses Google Cloud Buildpacks. Buildpacks are predefined
 ## Using Cloud Code 
 
 Alternatively, you can deploy and otherwise manage the life cycle of your Cloud Run services and other resources using Cloud Code.
-Cloud Code is an IDE plugin for both VS Code and Intellj-based IDEs and is designed to make you interaction with Google Cloud more convenient.
+Cloud Code is an IDE plugin for both VS Code and Intellj-based IDEs and is designed to make interaction with Google Cloud more convenient.
 
-Cloud Code is a pre-installed in Cloud Shell.
+Cloud Code is pre-installed in Cloud Shell.
 
 Click the
 <walkthrough-editor-spotlight spotlightId="activity-bar-cloud-code">
@@ -148,31 +145,30 @@ Within the activity bar
 <walkthrough-editor-spotlight spotlightId="cloud-code-cloud-run-deploy">
 you can directly deploy to Cloud Run
 </walkthrough-editor-spotlight>
-too, with out the need to use the CLI.
+too, without the need to use the CLI.
 
-Take a moment and familiarize yourself with the wizard and explore the previously deployed revision. Use the Cloud Code wizard to deploy a new revision of the server and **set the allocated memory to 256m**.
+Take a moment and familiarize yourself with the wizard. You can also use this wizard to build and deploy directly to Cloud Run.
 
-## Scaling you app
+## Scaling your app
 
-Cloud Run automatically scales your application based how many web requests are coming in via the HTTPS endpoint. Cloud Run's horizontal auto-scaler is extremely fast and can launch 100s of new instances in seconds.
+Cloud Run automatically scales your application based on how many web requests are coming in via the HTTPS endpoint. Cloud Run's horizontal auto-scaler is extremely fast and can launch 100s of new instances in seconds.
 
 Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 500.000 requests using `hey`:
 
 ```bash
-hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
+hey -n 50000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 In order to build modern, cloud-first applications that scale well horizontally, we need to watch out for some design considerations.
 
 **Applications should be engineered to boot quickly.** Cloud Run can start your containers very quickly, but it is your responsibility to bring up a web server and you should engineer your code to do so quickly. The earlier this happens, the earlier Cloud Run is able to route HTTP requests to the new instance, reduce stress on the older instances and hence scale out effectively. Cloud Run considers the life cycle stage from starting your application to the moment it can serve HTTP requests as 'Startup'. During this time Cloud Run will periodically check if your application has bound the port provided by `$PORT` and if so, Cloud Run considers startup complete and routes live traffic to the new instance. Depending on your application code, you can further cut down startup time by enabling _Startup CPU boost_. When enabled, Cloud Run will temporarily allocate additional CPU resources during startup of your application.
 
-**Applications should ideally be stateless.** Cloud Run will also automatically scale in again, should application traffic decrease. Container instances will be terminated, if Cloud Run determines that too many are active to deal with the current request load. When an instance is scheduled for termination, Cloud Run will change it's life cycle stage to 'Shutdown'. You can trap the `SIGTERM` signal in your code and begin graceful shutdown of your instance. Requests will no longer be routed to you container and your application has 10 seconds to persist data over the network, flush caches or complete some other remaining write operations.
+**Applications should ideally be stateless.** Cloud Run will also automatically scale in again, should application traffic decrease. Container instances will be terminated, if Cloud Run determines that too many are active to deal with the current request load. When an instance is scheduled for termination, Cloud Run will change its life cycle stage to 'Shutdown'. You can trap the `SIGTERM` signal in your code and begin a graceful shutdown of your instance. Requests will no longer be routed to your container and your application has 10 seconds to persist data over the network, flush caches or complete some other remaining write operations.
 
 **Applications are generally request-driven**. During the 'Startup' and 'Shutdown' stages of each container life cycle, your application can expect to be able to fully use the allocated CPU. During the 'Serving' life cycle, the CPU is only available when there is at least one active request being processed on a container instance. If there is no active request on the instance, Cloud Run will throttle the CPU and use it elsewhere. You will not be charged for CPU time if it's throttled. Occasionally, you might create applications that require a CPU to be always available, for instance when running background services. In this scenario, you want to switch from Cloud Run's default _CPU allocated during requests_ to the alternative mode _CPU always allocated_. Note that this will also switch Cloud Run to a [different pricing model](https://cloud.google.com/run/pricing#tables). The following diagram shows the two pricing models and their effect on how CPUs are throttled throughout the life cycle of a container instance.
 
 [![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
-
-Deploy a new revision using the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and **enable Startup CPU boost**. 
+Take a look at the deployment wizard for your service in the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and make sure **Startup CPU boost** is enabled.
 
 While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/jokes/metrics) and explore how the previously executed load test affected scaling.
 
@@ -237,11 +233,11 @@ Great! Let's get started.
 
 ## Building with Dockerfiles
 
-Previously, we build our container images by specifying the `--source` flag, which will cause Cloud Build to use [Google Cloud Buildpacks](https://cloud.google.com/docs/buildpacks/overview) to automatically determine the tool chain of our application. It then uses templated container build instructions which are based on best practices to build and containerize the application.
+Previously, we built our container images by specifying the `--source` flag, which will cause Cloud Build to use [Google Cloud Buildpacks](https://cloud.google.com/docs/buildpacks/overview) to automatically determine the tool chain of our application. It then uses templated container build instructions which are based on best practices to build and containerize the application.
 
 Sometimes it is required to exert more control over the Docker build process. Google Cloud Build also understands Dockerfiles. With Dockerfiles it is possible to precisely specify which instructions to execute in order to create the container image. Cloud Build typically inspects the build context and looks for build instructions in the following order:
 
-1. cloudbuild.yaml: If this file is present, Cloud Build will execute the instructions define in it. We'll learn about cloudbuild.yaml files later in this tutorial.
+1. cloudbuild.yaml: If this file is present, Cloud Build will execute the instructions defined in it. We'll learn about cloudbuild.yaml files later in this tutorial.
 2. Dockerfile: If this file is present, Cloud Build will use it to execute a container build process that is equivalent to running `docker build`. Finally, it will tag and store the resulting image.
 3. Buildpacks: If no explicit build instructions are available, Cloud Build can still be used to integrate by using Google Cloud Buildpacks.
 
@@ -290,7 +286,7 @@ COPY --from=builder /app/server /app/server
 CMD ["/app/server"]
 ```
 
-Great! We'll keep the first stage as build stage. Once the statically-linked Go binary is built, it is copied to a fresh stage that is based on `gcr.io/distroless/static-debian11`. The _distroless_ images are Google-provided base images that are very small. That means there is less to store and images typically have a much smaller attack surfaces. Let's build again:
+Great! We'll keep the first stage as the build stage. Once the statically-linked Go binary is built, it is copied to a fresh stage that is based on `gcr.io/distroless/static-debian11`. The _distroless_ images are Google-provided base images that are very small. That means there is less to store and images typically have much smaller attack surfaces. Let's build again:
 
 ```bash
 gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockermultistage .
@@ -425,7 +421,7 @@ First, navigate to the [Cloud Build triggers section of the Google Cloud Console
 
 Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that the trigger should read configuration from the provided `./cloudbuild.yaml` and **add all the substitutions** you used previously to trigger your build.
 
-<walkthrough-info-message>When using the "Autodetect" configuration option, there is no possibility to add substituiton variables through the UI. So make sure to specify the "Cloud Build configuration file (yaml or json)" option explicitly, and then continue to fill in the substitution variables.</walkthrough-info-message>
+<walkthrough-info-message>When using the "Autodetect" configuration option, there is no possibility to add substitution variables through the UI. So make sure to specify the "Cloud Build configuration file (yaml or json)" option explicitly, and then continue to fill in the substitution variables.</walkthrough-info-message>
 
 
 ### Pushing some changes
@@ -447,7 +443,7 @@ git add cloudbuild.yaml
 git commit -m 'add build config'
 ```
 
-Finally, push the commit to the remote repossitory:
+Finally, push the commit to the remote repository:
 
 ```bash
 git push origin main
@@ -469,7 +465,7 @@ This completes Module 2. You can now wait for the live session to resume or cont
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs directly. Currently, the deployed application uses a library which contains a static set of jokes. Whenever the library is used it randomly selects a joke and returns it. After a while we will surely start to see the same jokes again and the only way to see new jokes is when a human would actually implement them in the library.
 
-Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains the Google-built, pre-trained, Gemini Pro model which is a general-purpose, multi-modal, generative large language model (LLM) that can be queried with text prompts in natual language to generate all sorts of outputs, including text. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to add new dad jokes in a generative matter.
+Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI contains the Google-built, pre-trained, Gemini Pro model which is a general-purpose, multimodal, generative large language model (LLM) that can be queried with text prompts in natural language to generate all sorts of outputs, including text. In this tutorial we'll implement the `model:predict` endpoint of Vertex AI to execute this model in order to add new dad jokes in a generative manner.
 
 <!-- TODO include on-demand clip for module 3 -->
 
@@ -501,7 +497,7 @@ In the cloud we often need to implement API calls to interact with other service
 
 There are typically three different ways to interact with Google APIs programmatically and we should choose them in the following order:
 
-1. **Cloud Client Libraries**: These are the recommended option. Cloud Client Libraries are SDK that you can use in a language-native, idiomatic style. They give you a high-level interface to the most important operation and allow you to quickly and comfortably get the job done. An example in the Go eco-system would be the `cloud.google.com/go/storage` package, which implements the most commonly used operations of Google Cloud Storage. Have a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/storage) and see how it respects and implements native language concepts like the `io.Writer` interface of the Go programming language.
+1. **Cloud Client Libraries**: These are the recommended options. Cloud Client Libraries are SDK that you can use in a language-native, idiomatic style. They give you a high-level interface to the most important operation and allow you to quickly and comfortably get the job done. An example in the Go ecosystem would be the `cloud.google.com/go/storage` package, which implements the most commonly used operations of Google Cloud Storage. Have a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/storage) and see how it respects and implements native language concepts like the `io.Writer` interface of the Go programming language.
 
 2. **Google API Client Libraries**: Should no Cloud Client Library be available for what you are trying to accomplish you can fall back to using a Google API Client Library. These libraries are auto-generated and should be available for almost all Google APIs.
 
@@ -523,7 +519,7 @@ Okay, all set!
 
 In order to be able to replace the statically created jokes with jokes generated by Vertex AI, the code needs to be extended in the following ways:
 
-1. **Create a client to execute the remote model**: The first steps is to safely instantiate the correct client type, that we are going to use later on to interact with the API. This type holds all the configuration for endpoints and handles authentication, too. Have a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/vertexai/genai#NewClient) for `genai.Client`. The client will automatically look for credentials according to the rules of [Google's Application Default Credentials scheme](https://cloud.google.com/docs/authentication/application-default-credentials).
+1. **Create a client to execute the remote model**: The first step is to safely instantiate the correct client type, that we are going to use later on to interact with the API. This type holds all the configuration for endpoints and handles authentication, too. Have a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/vertexai/genai#NewClient) for `genai.Client`. The client will automatically look for credentials according to the rules of [Google's Application Default Credentials scheme](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 2. **Execute the call against the API to run the model prediction**: Next, we'll use the previously instantiated client to actually invoke the remote model with `[]genai.Parts` containing the prompt and execute the API by calling `genai.GenerateContent` [as described in the docs](https://pkg.go.dev/cloud.google.com/go/vertexai/genai#GenerativeModel.GenerateContent). Take a look at the [documentation of the package](https://pkg.go.dev/cloud.google.com/go/vertexai/genai#GenerativeModel) to see what else can be done with `genai.GenerativeModel`.
 
@@ -592,14 +588,14 @@ If you like you can stay at this point for a moment, change the prompt (the firs
 
 Good! The code changes we made seem to work, now it's time to deploy the changes to the cloud. 
 
-When running the the code from Cloud Shell, the underlying implementation used Google ADC to find credentials. In this case it was using the credentials of the Cloud Shell user identity (yours).
+When running the code from Cloud Shell, the underlying implementation used Google ADC to find credentials. In this case it was using the credentials of the Cloud Shell user identity (yours).
 
 Cloud Run can be configured to use a service account, which exposes credentials to the code running in your container. Your application can then make authenticated requests against Google APIs.
 
 Per default, Cloud Run uses the [Compute Engine default service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account). This service account has wide permissions and should generally be replaced by a service account with the least amount of permissions required to do whatever your service needs to do. The Compute Engine default service has a lot of permissions, but it does not have the required permissions to execute [the API call](
 https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.publishers.models/predict).
 
-When it comes to identifying the correct IAM roles to attach to identities [this reference page on the IAM documentation](https://cloud.google.com/iam/docs/understanding-roles) is an extremely useful resources. On the page you can check the section for [Vertex AI roles](https://cloud.google.com/iam/docs/understanding-roles#vertex-ai-roles) and learn that [_Vertex AI User_](https://cloud.google.com/iam/docs/understanding-roles#aiplatform.user) (`roles/aiplatform.user`) is a suitable role for our Cloud Run service, because this role contains the permission `aiplatform.endpoints.predict`. If you are unsure which permission you require, you can always check the [API reference for the required operation](https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.publishers.models/predict).
+When it comes to identifying the correct IAM roles to attach to identities [this reference page on the IAM documentation](https://cloud.google.com/iam/docs/understanding-roles) is an extremely useful resource. On the page you can check the section for [Vertex AI roles](https://cloud.google.com/iam/docs/understanding-roles#vertex-ai-roles) and learn that [_Vertex AI User_](https://cloud.google.com/iam/docs/understanding-roles#aiplatform.user) (`roles/aiplatform.user`) is a suitable role for our Cloud Run service, because this role contains the permission `aiplatform.endpoints.predict`. If you are unsure which permission you require, you can always check the [API reference for the required operation](https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.publishers.models/predict).
 
 <walkthrough-info-message>**Note**: You could argue that the role _Vertex AI User_ has too many permissions for the Cloud Run service and a security-conscious person would probably agree with you. If you really wanted to make sure that the Cloud Run service only had least amount of privilege to execute the absolutely required permissions, you would have to create a [IAM custom role](https://cloud.google.com/iam/docs/creating-custom-roles) to achieve this.</walkthrough-info-message>
 
@@ -667,6 +663,8 @@ In this part of our journey, we are going to look at some basic principles of ho
 
 Check out this [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
 
+At first we'll define what reliability means for the service we operate. Using these definitions, we can then proceed and configure service monitoring to keep track of the health of our service over time.
+
 After that we'll have a look at Cloud Run's traffic splitting capabilities. This allows us to deploy new revisions of a Cloud Run service and the gradually move portion of production traffic over. Cloud Run's programmable network control plane allows you to split traffic between revisions; you can use this built-in feature to implement strategies like blue/green deployments, canaries releases, or rollback to previous revisions in seconds should you ever push a bad release. 
 
 To bring everything to life, we'll be deploying a faulty version as a canary release with some amount of live traffic, get an alert, observe how this will burn through the [error budget](https://cloud.google.com/blog/products/management-tools/sre-error-budgets-and-maintenance-windows) and quickly rollback to a safe state.
@@ -725,7 +723,7 @@ You can [read more about the four golden signals](https://sre.google/sre-book/mo
 
 ## Defining SLOs and alerts
 
-Let's begin by defining an SLO for our service that keeps track of it's availability, specifically of it's error rate. A service that is unable to serve requests because requests are errors, are unavailable. We are about to define an objective that says: We aim at serving 95% of all requests without and error. Cloud Run already keeps track of application errors. You can see the log-based metric _Request count_ in the metrics section of your Cloud Run service. You can find it by clicking [into your service in the Cloud Run section](https://console.cloud.google.com/run) of the Google Cloud Console. The metrics counts HTTP status codes and `5xx` status codes are consider to be server-side errors.
+Let's begin by defining an SLO for our service that keeps track of its availability, specifically of its error rate. A service that is unable to serve requests because requests are errors, are unavailable. We are about to define an objective that says: We aim at serving 95% of all requests without any error. Cloud Run already keeps track of application errors. You can see the log-based metric _Request count_ in the metrics section of your Cloud Run service. You can find it by clicking [into your service in the Cloud Run section](https://console.cloud.google.com/run) of the Google Cloud Console. The metrics counts HTTP status codes and `5xx` status codes are considered to be server-side errors.
 
 Right next to the _Metrics_ tab, you'll find the tab that says _SLOs_. Get in there and start the new SLO creation wizard. Define an SLO, that:
 * uses a **windows-based, availability metric** as SLI
@@ -738,7 +736,7 @@ Finally, also create an alert that will notify you in case a fast-burn of your e
 * breaches with a **fast-burn threshold 10(x baseline)**
 * creates a **new alert notification channel using your email** in Cloud Monitoring
 
-Done. You should now be immediately notified as soon as the as your service is responding with too many errors in a given moment and your about to burn through your error budget quickly.
+Done. You should now be immediately notified as soon as your service is responding with too many errors in a given moment and you're about to burn through your error budget quickly.
 
 ## Deploying a canary with traffic splitting
 
@@ -752,13 +750,20 @@ gcloud config set artifacts/location europe-north1
 
 Okay! Good to go.
 
-Cloud Run comes with a built-in traffic control plane, which lets operators programmatically assign traffic to individual revisions of the same service. This allows you to deploy new changes to your service with none or only single-digit traffic routed to them. Once you've slowly gained confidence in your new revision you can gradually increased traffic until you reach a 100% of traffic on the new revision and your rollout is complete. This strategy is commonly referred to as a [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
+Cloud Run comes with a built-in traffic control plane, which lets operators programmatically assign traffic to individual revisions of the same service. This allows you to deploy new changes to your service with none or only single-digit traffic routed to them. Once you've slowly gained confidence in your new revision you can gradually increase traffic until you reach 100% of traffic on the new revision and your rollout is complete. This strategy is commonly referred to as a [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
 
 <walkthrough-info-message>Cloud Run's default deployment strategy is to automatically route all traffic to the new revision if it should pass minimum health checks.</walkthrough-info-message>
 
-In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily refereed to by its tag and also get an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
+Let's begin by deploying an image we know works well, in this case the previous version that uses the static tortune library.
 
-Let's deploy a new revision of the jokes service using a different container image. We've been told that requirements have changed dramatically for this new version. We don't trust the image and decide to implement and canary release strategy. First of all, let's tag the current, good revision, like this:
+```bash
+gcloud run deploy jokes \
+    --image europe-north1-docker.pkg.dev/<walkthrough-project-id/>/my-repo/dockermultistage
+```
+
+In Cloud Run, you can tag your individual revisions. Each tagged revision can be easily referenced to by its tag and also gets an individual endpoint, just for itself. That means we can preview the revision even without assigning production traffic to it.
+
+Let's deploy a new revision of the jokes service using a different container image. We've been told that requirements have changed dramatically for this new version. We don't trust the image and decide to implement a canary release strategy. We begin by marking the current revision as 'good'.
 
 ```bash
 gcloud run services update jokes \
@@ -803,15 +808,15 @@ Proceed to the next section, once you've received the alert email.
 
 Oh, no! We have an active incident!
 
-Follow the link in the alert mail or navigate to the [incidents section of Cloud Monitoring](https://console.cloud.google.com/monitoring/alerting/incidents). You should you the active incident marked in red, explore it. Notice how the rate at which we are burning error budget is way past threshold.
+Follow the link in the alert mail or navigate to the [incidents section of Cloud Monitoring](https://console.cloud.google.com/monitoring/alerting/incidents). You should see the active incident marked in red: go ahead and explore it. Notice how the rate at which we are burning error budget is way past the threshold.
 
 Also look at the SLOs section of your Cloud Run service in the [Cloud Run section of the Google Cloud Console](https://console.cloud.google.com/run). The page tells you that the percentage of healthy, non-error responses from your service has dropped to 90%, which is below your SLO target of 95%!
 
-Let's investigate a bit further. Head to the _Logs_ tab of the service. Next to your application logs, Cloud Run itself logs system events here. You can see how every invocation of your service produces and event. Most lines are marked with a blue `i` (Loglevel `info`). You see that these are the requests to which the service responded with `HTTP 200 OK`. About 10% of the log lines are marked with a red `!!` (Loglevel `error`), though!
+Let's investigate a bit further. Head to the _Logs_ tab of the service. Next to your application logs, Cloud Run itself logs system events here. You can see how every invocation of your service produces an event. Most lines are marked with a blue `i` (Loglevel `info`). You see that these are the requests to which the service responded with `HTTP 200 OK`. About 10% of the log lines are marked with a red `!!` (Loglevel `error`), though!
 
 Have a closer look at one of each log line and expand into the fields `resource` and further down into `labels`. The structured log message tells you exactly which revision of the service belongs to the message. Turns out that all the errors are caused by the revision we previously marked as `next`.
 
-Now, before we tell the engineering team about the problem, we first keep calm and a remember Cloud Run traffic management. To bring the system back to a safe state, let's rollback to the previous revision, the one we tagged with `good`. To do so, simply reconfigured the traffic pattern on the service like this:
+Now, before we tell the engineering team about the problem, we first keep calm and remember Cloud Run traffic management. To bring the system back to a safe state, let's rollback to the previous revision, the one we tagged with `good`. To do so, simply reconfigured the traffic pattern on the service like this:
 
 ```bash
 gcloud run services update-traffic jokes \
