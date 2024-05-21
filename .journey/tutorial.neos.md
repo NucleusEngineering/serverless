@@ -17,7 +17,7 @@ Welcome to this hands-on tutorial in which you will learn how to build hilarious
 ![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/containers.jpg)
 In this interactive tutorial, you will learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices.
 
-The tutorial is split into **four modules**:
+The tutorial is split into **five modules**:
 
 **Module 1** will explore Cloud Run, a compute platform for container workloads, which you can use to easily run your services in a scalable, secure, cost-effective and production-grade environment in a matter of minutes.
 
@@ -26,6 +26,8 @@ The tutorial is split into **four modules**:
 **Module 3** shows how to interact with Google Cloud APIs. You'll then use those skills to implement interactions with Gemini, a large language model hosted on Google cloud Vertex AI, to bring Generative AI capabilities to your applications. The module also explores the usage of IAM and service accounts to secure usage of APIs.
 
 In **module 4**, we'll look at the practices of Site Reliability Engineering and how you can practically apply these to reliably operate your services and manage how you introduce changes to its functionality.
+
+In **module 5**, explores how to strengthen the security posture of our software delivery process by applying best practices for dependency management, leveraging container analysis tools and signing produce images. Additionally, we'll learn about the SLSA framework to better understand how to improve supply chain security of our software delivery processes and subsequently gain more confidence in the integrity and correctness of the artifacts we build, deploy and operate.
 
 Hope you're not afraid to get your hands dirty. Make sure get a beverage and some snacks of your choice, strap in and hit 'Start'.
 
@@ -844,7 +846,8 @@ This completes Module 4. You can now wait for the live session to resume or cont
 
 ![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
 
-In this part, we'll explore how we can use several tools to strengthen the 
+<!-- TODO begin intro -->
+In this part, we'll explore how we can use several tools to strengthen the
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
@@ -869,11 +872,12 @@ artifactregistry.googleapis.com">
 ## SLSA: Security Levels for Software Artifacts
 
 <!-- TODO begin content -->
+SLSA is a framework
 
 ## Summary
 
 <!-- TODO summarize -->
-Amazing, you've learned how to ..
+Amazing, you've learned how to
 
 You are ready to develop, build, deploy and run serverless applications in production!
 
