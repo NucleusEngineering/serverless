@@ -153,7 +153,7 @@ Take a moment and familiarize yourself with the wizard. You can also use this wi
 
 Cloud Run automatically scales your application based on how many web requests are coming in via the HTTPS endpoint. Cloud Run's horizontal auto-scaler is extremely fast and can launch 100s of new instances in seconds.
 
-Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 500.000 requests using `hey`:
+Let's put some load on our newly created service and learn about scaling while we wait. We'll start by pushing 50.000 requests using `hey`:
 
 ```bash
 hey -n 50000 $(gcloud run services describe jokes --format 'value(status.url)')
@@ -167,7 +167,8 @@ In order to build modern, cloud-first applications that scale well horizontally,
 
 **Applications are generally request-driven**. During the 'Startup' and 'Shutdown' stages of each container life cycle, your application can expect to be able to fully use the allocated CPU. During the 'Serving' life cycle, the CPU is only available when there is at least one active request being processed on a container instance. If there is no active request on the instance, Cloud Run will throttle the CPU and use it elsewhere. You will not be charged for CPU time if it's throttled. Occasionally, you might create applications that require a CPU to be always available, for instance when running background services. In this scenario, you want to switch from Cloud Run's default _CPU allocated during requests_ to the alternative mode _CPU always allocated_. Note that this will also switch Cloud Run to a [different pricing model](https://cloud.google.com/run/pricing#tables). The following diagram shows the two pricing models and their effect on how CPUs are throttled throughout the life cycle of a container instance.
 
-[![Cloud Run container life cycle and CPU throttling](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)](https://cloud.google.com/static/run/docs/images/run-cpu-allocation.svg)
+![Cloud Run container life cycle and CPU throttling](https://github.com/NucleusEngineering/serverless/blob/main/.images/lifecycle.png)
+
 Take a look at the deployment wizard for your service in the [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes) and make sure **Startup CPU boost** is enabled.
 
 While you are in the Google Cloud Console, have a look at [the metrics section of your service](https://console.cloud.google.com/run/detail/europe-north1/jokes/metrics) and explore how the previously executed load test affected scaling.
@@ -843,8 +844,7 @@ This completes Module 4. You can now wait for the live session to resume or cont
 
 ![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
 
-<!-- TODO write intro -->
-In this part 
+In this part, we'll explore how we can use several tools to strengthen the 
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
@@ -869,7 +869,6 @@ artifactregistry.googleapis.com">
 ## SLSA: Security Levels for Software Artifacts
 
 <!-- TODO begin content -->
-
 
 ## Summary
 
