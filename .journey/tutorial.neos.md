@@ -1528,7 +1528,8 @@ Another best practice is to not only be specific about the dependencies we need
 to produce an artifact, but also be specific about what we produce. We can
 explicitly tag images at the end of our <walkthrough-editor-open-file
   filePath="cloudshell_open/serverless/cloudbuild.yaml">
-`cloudbuild.yaml`</walkthrough-editor-open-file> file, like this:
+`cloudbuild.yaml`</walkthrough-editor-open-file> file. Let's update the contents
+like this:
 
 ```yaml
 steps:
