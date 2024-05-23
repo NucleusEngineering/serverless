@@ -1,4 +1,4 @@
-<!--markdownlint-disable MD024 MD033 MD041 -->
+<!--markdownlint-disable MD024 MD033 MD036 MD041 -->
 <walkthrough-metadata>
   <meta name="title" content="Giggle Cloud Platform" />
   <meta name="description" content="Learn how to build and run containerized
@@ -1427,9 +1427,57 @@ artifactregistry.googleapis.com"> </walkthrough-enable-apis>
 
 ## SLSA: Security Levels for Software Artifacts
 
-<!-- TODO begin content -->
+_It is pronounced "sal-sa" 🌶️🥑 🍅_
 
-SLSA is a framework
+Think of [SLSA](https://slsa.dev/) as a security checklist or framework designed
+to protect the integrity of software throughout its entire lifecycle. From the
+moment code is written to when it's running in production, SLSA provides
+guidelines and best practices to prevent tampering, boost integrity, and secure
+both the software packages themselves and the infrastructure they run on.
+
+SLSA is an open-source project backed by Google and other organizations,
+fostering industry collaboration and promoting best practices. It is by all
+means am evolving framework: SLSA is still under development, with ongoing
+efforts to refine the requirements and make it easier to adopt. A growing
+ecosystem of tools is emerging to help you implement SLSA practices, from build
+systems to vulnerability scanners.
+
+Cloud Build is one of those already integrated build systems that automatically
+attempts to give a SLSA rating and proactively surfaces relevant information.
+
+SLSA defines four levels of increasing security maturity:
+
+1. **SLSA 1**: Requires basic build practices like using a version control
+   system and generating provenance (a record of how the software was built).
+2. **SLSA 2**: Adds requirements for a more controlled build environment, like
+   using a build service and tracking dependencies.
+3. **SLSA 3**: Demands a higher level of security for the build process,
+   including using a hardened build service and auditing build configurations.
+4. **SLSA 4**: Represents the most stringent level, requiring practices like
+   two-person review for code changes and hermetic builds (where the build
+   environment is isolated from external influences).
+
+<!-- TODO explore SLSA in Cloud Build -->
+
+## Precisely loading software dependencies
+
+<!-- TODO docker version pinning and SHA sums -->
+
+<!-- TODO explain how Go does it out of the box -->
+
+## Binary Authorization
+
+<!-- TODO enable add binary authorization to cloudbuild.yaml -->
+
+<!-- NOTE attempt to deploy a local build?  -->
+
+## Inspecting problematic container images
+
+<!-- TODO build bad log4shell java app on debian -->
+
+<!-- TODO explore SLSA in Cloud Build -->
+
+<!-- TODO explore CVEs -->
 
 ## Summary
 
