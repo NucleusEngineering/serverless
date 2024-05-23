@@ -1379,18 +1379,19 @@ security threat: attacks on our software supply chain.
 In this **module 5**, we'll explore how we can use several tools to strengthen
 the overall security posture of our software delivery process.
 
-We'll have a look at the open framework _Security Levels for Software Artifacts_
-(SLSA), which can be used to rate how secure our software delivery process is at
-any given time. Based on a rating we can then leverage it to improve the
-security posture of our process and increase our own confidence in the container
-images we run.
+Let's start by applying some general best practices around pinning specific
+versions of all the dependencies in use by our application. Additionally, we
+will also leverage both the Go and the Docker tool chains to enforce integrity
+checks of every software package loaded as dependency by explicitly tagging
+their check sums. This exercise will bring us closer to achieving almost
+completely hermetic builds and will prevent loading dependencies that have been
+tampered with.
 
-Next, we will apply some general best practices around pinning specific versions
-of all the dependencies in use by our application. Additionally, we will also
-leverage both the Go and the Docker tool chains to enforce integrity checks of
-every software package loaded as dependency by explicitly tagging their check
-sums. This exercise will bring us closer to achieving almost completely hermetic
-builds and will prevent loading dependencies that have been tampered with.
+Next, we'll have a look at the open framework _Security Levels for Software
+Artifacts_ (SLSA), which can be used to rate how secure our software delivery
+process is at any given time. Based on a rating we can then leverage it to
+improve the security posture of our process and increase our own confidence in
+the container images we run.
 
 After that, we will setup a policy for Binary Authorization on Cloud Run. This
 will cause Cloud Run to check for a cryptographic signature to be present on all
@@ -1425,9 +1426,78 @@ containerscanning.googleapis.com,
 containeranalysis.googleapis.com,
 artifactregistry.googleapis.com"> </walkthrough-enable-apis>
 
+## Precisely loading software dependencies
+
+As a developer, you likely understand the importance of stability, security, and
+predictability in software development. Version pinning is a powerful tool to
+achieve these goals, especially in large, complex projects. By explicitly
+defining the software versions you rely on, you create a more robust and
+maintainable codebase.
+
+In the previously created Dockerfile, we have already been slightly specific
+about which base images we would like to use during both the build as well as
+the runtime stage. We note only want the `golang` image, but we want the one
+that is using Go 1.20 based on Debian Bullseye `golang:1.20-bullseye`. Let's
+inspect the image we mean on
+[Dockerhub](https://hub.docker.com/layers/library/golang/1.20-bullseye/images/sha256-8fd44351d719dbf3f86ad095f9056040c33ccdeac9a18b54dec81fd152a31853).
+The hosting registry Dockerhub provides us with the precise SHA256 checksum of
+the image. We can use the chec sum in our Dockerfile to instruct the building
+container daemon to verify all the contents of the pulled container image file
+system layers to ensure that absolutely every single bit of the image in use has
+not changed in the meantime.
+
+Let's modify our existing Dockerfile to include the SHA256 checksum like this:
+
+<!-- markdownlint-disable MD013 -->
+
+```Dockerfile
+FROM golang:1.20-bullseye@sha256:a393b941c42b0fae8beb0e5bc033cd6499563e2f1b8d2ccf00d395e8c2ccc0ce as builder
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -v -o server
+
+FROM gcr.io/distroless/static-debian11
+WORKDIR /app
+COPY --from=builder /app/server /app/server
+CMD ["/app/server"]
+```
+
+<!-- markdownlint-enable MD013 -->
+
+Let's do the same for the runtime images. The image
+`gcr.io/distroless/static-debian11` is hosted
+[here](https://console.cloud.google.com/gcr/images/distroless/global/static-debian11@sha256:d27f8df264c425579aaf8d996ddbf65db6c6dc1ef8deeea8c1b7b69b2ebddf02/details).
+Have a look and copy the SHA256 checksum to then also explicitly pin it in the
+`FROM` directive for the final runtime stage in the Dockerfile.
+
+<!-- markdownlint-disable MD013 -->
+
+```Dockerfile
+FROM golang:1.20-bullseye@sha256:a393b941c42b0fae8beb0e5bc033cd6499563e2f1b8d2ccf00d395e8c2ccc0ce as builder
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -v -o server
+
+FROM gcr.io/distroless/static-debian11@sha256:d27f8df264c425579aaf8d996ddbf65db6c6dc1ef8deeea8c1b7b69b2ebddf02
+WORKDIR /app
+COPY --from=builder /app/server /app/server
+CMD ["/app/server"]
+```
+
+<!-- markdownlint-enable MD013 -->
+
+Perfect! We have now ensured that the building container daemon checks the
+integrity of the images it downloads when the docker build is run.
+
+<!-- TODO explain how Go does it out of the box -->
+
 ## SLSA: Security Levels for Software Artifacts
 
-_It is pronounced "sal-sa" 🌶️🥑 🍅_
+_It is pronounced like 'salsa' (/ˈsɑːl.sə/) 🌶️🥑 🍅_
 
 Think of [SLSA](https://slsa.dev/) as a security checklist or framework designed
 to protect the integrity of software throughout its entire lifecycle. From the
@@ -1458,12 +1528,6 @@ SLSA defines four levels of increasing security maturity:
    environment is isolated from external influences).
 
 <!-- TODO explore SLSA in Cloud Build -->
-
-## Precisely loading software dependencies
-
-<!-- TODO docker version pinning and SHA sums -->
-
-<!-- TODO explain how Go does it out of the box -->
 
 ## Binary Authorization
 
