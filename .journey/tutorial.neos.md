@@ -1493,7 +1493,46 @@ CMD ["/app/server"]
 Perfect! We have now ensured that the building container daemon checks the
 integrity of the images it downloads when the docker build is run.
 
-<!-- TODO explain how Go does it out of the box -->
+The base images for the docker stages are not the only software dependencies
+that are being pulled into scope during the build of our application: we are
+also using various Go dependencies.
+
+Luckily, Go already has us covered. Since our application is using Go Modules,
+Go automatically keeps track of it's dependencies. Take a look at the
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
+`go.mod`</walkthrough-editor-open-file> file. This file list all the
+dependencies our application requires and also pins their specific versions.
+
+Furthermore, Go Modules uses a second automatically generated file which keeps
+note of versions and checksums for all transitive dependencies used. Have a look
+at the
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
+`go.sum`</walkthrough-editor-open-file> file.
+
+It is highly recommended, that you add both files to your version control system
+so that they are available to Cloud Build or any other remote build after
+cloning the repository. Some of the first instructions in the Dockerfile only
+copy these two files into the build file system and instruct Go Modules to
+download all required dependencies using their specific versions and verify
+their integrity using the supplied checksums. This is where it happens:
+
+```Dockerfile
+COPY go.* ./
+RUN go mod download
+```
+
+Good. We have finally made sure that every dependency required is explicitly
+pinned with it's version number and also checked against remote tampering by
+verifying checksums.
+
+Let's issue another build:
+
+```bash
+LOCATION="$(gcloud config get-value artifacts/location)"
+REGION="$(gcloud config get-value run/region)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
+```
 
 ## SLSA: Security Levels for Software Artifacts
 
