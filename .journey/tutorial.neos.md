@@ -482,7 +482,9 @@ the Dockerfile and the Go application. Add the following contents:
 ```yaml
 steps:
   - name: "ubuntu"
-    args: ["echo", "hi there"]
+    args:
+      - "echo"
+      - "hi there"
 ```
 
 This configuration asks Cloud Build to run a single step: Use the container
@@ -503,18 +505,14 @@ Replace the file contents with the following:
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "build",
-        "-t",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
+      - "."
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "push",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-      ]
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
 ```
 
 Pay attention to the `$`-prefixed `$PROJECT_ID` and `$_ARTIFACT_REGION`.
@@ -548,24 +546,22 @@ newly created image to Cloud Run like this:
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "build",
-        "-t",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
+      - "."
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "push",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-      ]
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
       - "deploy"
-      - "--region=$_RUN_REGION"
-      - "--image=$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
+      - "--region"
+      - "$_RUN_REGION"
+      - "--image"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
       - "jokes"
 ```
 
@@ -1441,12 +1437,15 @@ that is using Go 1.20 based on Debian Bullseye `golang:1.20-bullseye`. Let's
 inspect the image we mean on
 [Dockerhub](https://hub.docker.com/layers/library/golang/1.20-bullseye/images/sha256-8fd44351d719dbf3f86ad095f9056040c33ccdeac9a18b54dec81fd152a31853).
 The hosting registry Dockerhub provides us with the precise SHA256 checksum of
-the image. We can use the chec sum in our Dockerfile to instruct the building
+the image. We can use the check sum in our Dockerfile to instruct the building
 container daemon to verify all the contents of the pulled container image file
 system layers to ensure that absolutely every single bit of the image in use has
 not changed in the meantime.
 
-Let's modify our existing Dockerfile to include the SHA256 checksum like this:
+Let's modify our existing
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/Dockerfile">
+`Dockerfile`</walkthrough-editor-open-file> to include the SHA256 checksum like
+this:
 
 <!-- markdownlint-disable MD013 -->
 
@@ -1499,14 +1498,14 @@ also using various Go dependencies.
 
 Luckily, Go already has us covered. Since our application is using Go Modules,
 Go automatically keeps track of it's dependencies. Take a look at the
-<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/go.mod">
 `go.mod`</walkthrough-editor-open-file> file. This file list all the
 dependencies our application requires and also pins their specific versions.
 
 Furthermore, Go Modules uses a second automatically generated file which keeps
 note of versions and checksums for all transitive dependencies used. Have a look
 at the
-<walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go">
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/go.sum">
 `go.sum`</walkthrough-editor-open-file> file.
 
 It is highly recommended, that you add both files to your version control system
@@ -1524,6 +1523,56 @@ RUN go mod download
 Good. We have finally made sure that every dependency required is explicitly
 pinned with it's version number and also checked against remote tampering by
 verifying checksums.
+
+Another best practice is to not only be specific about the dependencies we need
+to produce an artifact, but also be specific about what we produce. We can
+explicitly tag images at the end of our <walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/cloudbuild.yaml">
+`cloudbuild.yaml`</walkthrough-editor-open-file> file, like this:
+
+```yaml
+steps:
+  - id: "Building image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "."
+  - id: "Tagging image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "tag"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+  - id: "Pushing image:build-id"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+  - id: "Pushing image:latest"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+  - id: "Deploying to Cloud Run"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "--region"
+      - "$_RUN_REGION"
+      - "--image"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "jokes"
+
+images:
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+```
+
+Note, how we're also adding an ID to every step of the build to make it easier
+to digest for the reader.
 
 Let's issue another build:
 
@@ -1566,7 +1615,21 @@ SLSA defines four levels of increasing security maturity:
    two-person review for code changes and hermetic builds (where the build
    environment is isolated from external influences).
 
-<!-- TODO explore SLSA in Cloud Build -->
+Navigate to the
+[Cloud Build section in the Google Cloud Console](https://console.cloud.google.com/cloud-build/builds)
+to and explore the most recent build at the top of the list. Click into the
+build and familiarize yourself with the build details view. The right section of
+the screen shows the _Build Log_ tab.
+
+Switch to the _Build Artifacts_ tab and make sure that the step "Build Summary"
+is selected.
+
+Cloud Build lists the artifacts created by this build. _View_ the _Security
+Insights_ for one of the image tags. Cloud Build automatically rates our
+pipeline with a SLSA level and shows relevant details on vulnerabilities,
+software dependencies and all sorts of other relevant metadata about the build.
+
+Right now there are not many issues to report. Good.
 
 ## Binary Authorization
 
