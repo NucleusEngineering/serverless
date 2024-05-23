@@ -333,10 +333,10 @@ workflows. However, it really excels at building code and creating container
 images.
 
 You don't need to provision anything to get started with using Cloud Build, it's
-serverless: simply enable the API and submit your jobs. Cloud Build manages all
-the required infrastructure for you. Per default, Cloud Build schedules build
-jobs on shared infrastructure, but it can be configured to run on a dedicated
-worker pool that is not shared with other users.
+fully-managed: simply enable the API and submit your jobs. Cloud Build manages
+all the required infrastructure for you. Per default, Cloud Build schedules
+build jobs on shared infrastructure, but it can be configured to run on a
+dedicated worker pool that is not shared with other users.
 
 In the previous section of our journey we saw how to use build and deploy
 directly to Cloud Run from source code using the magic of Build Packs. Actually,
@@ -1362,16 +1362,48 @@ to a known good state of the system.
 This completes Module 4. You can now wait for the live session to resume or
 continue by yourself and on-demand.
 
-## Module 5: Securing software artifacts
+## Module 5: Securing the delivery process of our software artifacts
 
 ![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
+Our application is already running in a scalable fashion adapting to user
+demand. It is automatically built and we can dynamically deploy new versions
+after safely testing them in the same environment with full parity. Cloud Run's
+nimble programmable network plane allows us to gradually phase in the new
+version or roll back in case our monitoring setup reports spikes in errors
+caused by the introduced changes.
 
-<!-- TODO begin intro -->
+Although we have limited the permissions on the service account in use by the
+Cloud Run service itself, we have almost completely ignored and emerging
+security threat: attacks on our software supply chain.
 
-In this part, we'll explore how we can use several tools to strengthen the
-overall security posture of our software delivery process.
+In this **module 5**, we'll explore how we can use several tools to strengthen
+the overall security posture of our software delivery process.
 
-<walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
+We'll have a look at the open framework _Security Levels for Software Artifacts_
+(SLSA), which can be used to rate how secure our software delivery process is at
+any given time. Based on a rating we can then leverage it to improve the
+security posture of our process and increase our own confidence in the container
+images we run.
+
+Next, we will apply some general best practices around pinning specific versions
+of all the dependencies in use by our application. Additionally, we will also
+leverage both the Go and the Docker tool chains to enforce integrity checks of
+every software package loaded as dependency by explicitly tagging their check
+sums. This exercise will bring us closer to achieving almost completely hermetic
+builds and will prevent loading dependencies that have been tampered with.
+
+After that, we will setup a policy for Binary Authorization on Cloud Run. This
+will cause Cloud Run to check for a cryptographic signature to be present on all
+deployed container images or reject them. We can use this technique to make sure
+that all deployed software artifacts have been integrated and packaged by our
+trusted CI system, in this case Cloud Build.
+
+Finally, we'll have some fun by building a completely different container image
+based on a vulnerable Java application running on an outdated Debian base. We
+can then use the Google Cloud Console to explore the various vulnerabilities
+present in the image.
+
+<walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
 <walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
@@ -1389,6 +1421,8 @@ Run the following to make sure all required APIs are enabled.
 
 <walkthrough-enable-apis apis="cloudbuild.googleapis.com,
 run.googleapis.com,binaryauthorization.googleapis.com,
+containerscanning.googleapis.com,
+containeranalysis.googleapis.com,
 artifactregistry.googleapis.com"> </walkthrough-enable-apis>
 
 ## SLSA: Security Levels for Software Artifacts
