@@ -396,7 +396,7 @@ and place it in the same directory as the Go application. Let's start with a
 simple, single-stage build for Go:
 
 ```Dockerfile
-FROM golang:1.20-bullseye
+FROM golang:1.22-bookworm
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
@@ -407,7 +407,7 @@ CMD ["/app/server"]
 
 This Dockerfile:
 
-1. uses Debian Bullseye with Golang 1.20 as base image
+1. uses Debian bookworm with Golang 1.22 as base image
 2. copies the definition of the Go module and installs all dependencies
 3. copies the sources and builds the Go application
 4. specifies the application binary to run
@@ -433,7 +433,7 @@ Huh, it seems like our image is quite big! We can fix this by running a
 Let's extend the Dockerfile and replace its contents with the following:
 
 ```Dockerfile
-FROM golang:1.20-bullseye as builder
+FROM golang:1.22-bookworm as builder
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
@@ -859,7 +859,7 @@ interact with the API.
 In order to use the package we need to first get the module like this:
 
 ```bash
-go get github.com/helloworlddan/tortuneai@v0.0.3
+go get github.com/helloworlddan/tortuneai@v0.0.4
 ```
 
 Once that is completed, we can update
@@ -1433,9 +1433,9 @@ maintainable codebase.
 In the previously created Dockerfile, we have already been slightly specific
 about which base images we would like to use during both the build as well as
 the runtime stage. We note only want the `golang` image, but we want the one
-that is using Go 1.20 based on Debian Bullseye `golang:1.20-bullseye`. Let's
+that is using Go 1.22 based on Debian bookworm `golang:1.22-bookworm`. Let's
 inspect the image we mean on
-[Dockerhub](https://hub.docker.com/layers/library/golang/1.20-bullseye/images/sha256-8fd44351d719dbf3f86ad095f9056040c33ccdeac9a18b54dec81fd152a31853).
+[Dockerhub](https://hub.docker.com/layers/library/golang/1.22-bookworm/images/sha256-4304d944c421bb279ad1faada14d03ac7e7edca61793d2f6a7ad94681c457887).
 The hosting registry Dockerhub provides us with the precise SHA256 checksum of
 the image. We can use the check sum in our Dockerfile to instruct the building
 container daemon to verify all the contents of the pulled container image file
@@ -1450,7 +1450,7 @@ this:
 <!-- markdownlint-disable MD013 -->
 
 ```Dockerfile
-FROM golang:1.20-bullseye@sha256:a393b941c42b0fae8beb0e5bc033cd6499563e2f1b8d2ccf00d395e8c2ccc0ce as builder
+FROM golang:1.22-bookworm@sha256:5c56bd47228dd572d8a82971cf1f946cd8bb1862a8ec6dc9f3d387cc94136976 as builder
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
@@ -1474,7 +1474,7 @@ Have a look and copy the SHA256 checksum to then also explicitly pin it in the
 <!-- markdownlint-disable MD013 -->
 
 ```Dockerfile
-FROM golang:1.20-bullseye@sha256:a393b941c42b0fae8beb0e5bc033cd6499563e2f1b8d2ccf00d395e8c2ccc0ce as builder
+FROM golang:1.22-bookworm@sha256:5c56bd47228dd572d8a82971cf1f946cd8bb1862a8ec6dc9f3d387cc94136976 as builder
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
