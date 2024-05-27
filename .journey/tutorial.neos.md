@@ -144,7 +144,7 @@ We can use a single command to easily:
 - upload it to Cloud Build and use it to untar the context, build the app,
   containerize and store it on Artifact Registry
 - create a new Cloud Run service with a fresh revision
-- bind an IAM policy to the the service
+- bind an IAM policy to the service
 - route traffic to the new endpoint
 
 ```bash
