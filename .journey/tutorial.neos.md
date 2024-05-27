@@ -61,7 +61,7 @@ that, we'll familiarize ourselves with the Cloud Run UI, its API and explore
 some of the available options to tweak our service.
 
 Check out this
-[Overview on Cloud Run](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-run.jpg)
+[Overview on Cloud Run](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-run.png)
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
