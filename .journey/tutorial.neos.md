@@ -711,12 +711,12 @@ the only way to see new jokes is when a human would actually implement them in
 the library.
 
 Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI
-contains the Google-built, pre-trained, Gemini Pro model which is a
-general-purpose, multimodal, generative large language model (LLM) that can be
-queried with text prompts in natural language to generate all sorts of outputs,
-including text. In this tutorial we'll implement the `model:predict` endpoint of
-Vertex AI to execute this model in order to add new dad jokes in a generative
-manner.
+contains the Google-built, pre-trained, Gemini 1.5 Flash model which is a
+general-purpose, multimodal, speed-optimized, generative large language model
+(LLM) that can be queried with text prompts in natural language to generate all
+sorts of outputs, including text. In this tutorial we'll implement the
+`model:predict` endpoint of Vertex AI to execute this model in order to add new
+dad jokes in a generative manner.
 
 <!-- TODO include on-demand clip for module 3 -->
 
@@ -824,15 +824,15 @@ Alternatively, you can **use a prebuilt library** to accomplish the same. If
 that's more your cup of tea, go hit 'Next' and proceed to the next section.
 
 Have a look at the
-[Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemini-pro)
-to learn more about Gemini Pro and other available models.
+[Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemini-1.5-flash-preview-0514)
+to learn more about Gemini Flash and other available models.
 
-## Using a library to call the Gemini Pro model
+## Using a library to call the Gemini Flash model
 
 To get started, first have a look at the Go module
 `github.com/helloworlddan/tortuneai`. The module provides the package
 `github.com/helloworlddan/tortuneai/tortuneai` which implements the Cloud Client
-Library for Vertex AI to call the _Gemini Pro_ model.
+Library for Vertex AI to call the _Gemini Flash_ model.
 [Read through the code](https://github.com/helloworlddan/tortuneai/blob/main/tortuneai/tortuneai.go)
 of `tortuneai.HitMe` and see how it implements the aforementioned steps to
 interact with the API.
@@ -840,7 +840,7 @@ interact with the API.
 In order to use the package we need to first get the module like this:
 
 ```bash
-go get github.com/helloworlddan/tortuneai@v0.0.2
+go get github.com/helloworlddan/tortuneai@v0.0.3
 ```
 
 Once that is completed, we can update
@@ -851,7 +851,7 @@ all references to the previously used package `tortune` with `tortuneai`.
 Notice that the signature for `tortuneai.HitMe()` is different from the previous
 `tortune.HitMe()`. While the original function did not require any parameters,
 you are required to pass two `string` values into the new one: One with an
-actual text prompt for the Gemini Pro model and one with your Google Cloud
+actual text prompt for the Gemini Flash model and one with your Google Cloud
 project ID. Additionally, the function now returns multiple return values: a
 `string` containing the response from the API and an `error`. If everything goes
 well, the error will be `nil`, if not it will contain information about what
@@ -882,7 +882,7 @@ go run main.go
 This recompiles and starts the web server. Let's check the application with the
 Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the
 top right in Cloud Shell and see if we can successfully interact with the Gemini
-Pro model.
+Flash model.
 
 If you are satisfied you can focus the terminal again and terminate the web
 server with `Ctrl-C`.
@@ -979,7 +979,7 @@ and pushing your changes, like this:
 
 ```bash
 git add .
-git commit -m 'upgrade to Gemini Pro for generative jokes'
+git commit -m 'upgrade to Gemini Flash for generative jokes'
 git push origin main
 ```
 
