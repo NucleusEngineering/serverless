@@ -25,7 +25,8 @@ The same is required for any other browser.</walkthrough-info-message>
 
 ## Overview
 
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/containers.jpg)
+![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/containers.jpg)
+
 In this interactive tutorial, you will learn how to build and run containerized
 services, use automated build and deployment tools, implement Google Cloud APIs
 to leverage GenAI capabilities and operate your service in production using SRE
@@ -66,15 +67,15 @@ some snacks of your choice, strap in and hit 'Start'.
 
 ## Module 1: Run a freshly built container image on Cloud Run
 
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/run.jpg)
+![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/run.jpg)
 
 In this tutorial we'll learn how to remotely build a container image from source
 code, store the image in Artifact Registry and deploy it to Cloud Run. After
 that, we'll familiarize ourselves with the Cloud Run UI, its API and explore
 some of the available options to tweak our service.
 
-Check out this
-[Overview on Cloud Run](https://github.com/NucleusEngineering/serverless/blob/main/.images/overview-run.jpg)
+[Overview on Cloud Run](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-run.png)
+
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
@@ -157,7 +158,7 @@ We can use a single command to easily:
 - upload it to Cloud Build and use it to untar the context, build the app,
   containerize and store it on Artifact Registry
 - create a new Cloud Run service with a fresh revision
-- bind an IAM policy to the the service
+- bind an IAM policy to the service
 - route traffic to the new endpoint
 
 ```bash
@@ -273,7 +274,7 @@ also switch Cloud Run to a
 following diagram shows the two pricing models and their effect on how CPUs are
 throttled throughout the life cycle of a container instance.
 
-![Cloud Run container life cycle and CPU throttling](https://github.com/NucleusEngineering/serverless/blob/main/.images/lifecycle.png)
+![Cloud Run container life cycle and CPU throttling](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/lifecycle.png)
 
 Take a look at the deployment wizard for your service in the
 [Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run/deploy/europe-north1/jokes)
@@ -295,7 +296,7 @@ continue by yourself and on-demand.
 
 ## Module 2: Building and deploying container images with Cloud Build
 
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/build.jpg)
+![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/build.jpg)
 
 In this tutorial we'll learn how to use Cloud Build, the fully-managed CI system
 on Google Cloud. Instead of using Build Packs, we'll be using Dockerfiles and
@@ -304,8 +305,7 @@ control over how we build our images. Finally, we'll use Cloud Build to also
 deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run
 services.
 
-Check out this
-[Overview on Cloud Build](https://github.com/NucleusEngineering/serverless/blob/main/.images/overview-build.jpg)
+[Overview on Cloud Build](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-build.jpg)
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
@@ -720,7 +720,7 @@ continue by yourself and on-demand.
 
 ## Module 3: Extend your code to call Cloud APIs
 
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/apis.jpg)
+![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/apis.jpg)
 
 In this tutorial we'll learn how to extend the existing code to call Cloud APIs
 directly. Currently, the deployed application uses a library which contains a
@@ -730,12 +730,12 @@ the only way to see new jokes is when a human would actually implement them in
 the library.
 
 Luckily, there is a thing called _generative AI_ now. Google Cloud Vertex AI
-contains the Google-built, pre-trained, Gemini Pro model which is a
-general-purpose, multimodal, generative large language model (LLM) that can be
-queried with text prompts in natural language to generate all sorts of outputs,
-including text. In this tutorial we'll implement the `model:predict` endpoint of
-Vertex AI to execute this model in order to add new dad jokes in a generative
-manner.
+contains the Google-built, pre-trained, Gemini 1.5 Flash model which is a
+general-purpose, multimodal, speed-optimized, generative large language model
+(LLM) that can be queried with text prompts in natural language to generate all
+sorts of outputs, including text. In this tutorial we'll implement the
+`model:predict` endpoint of Vertex AI to execute this model in order to add new
+dad jokes in a generative manner.
 
 <!-- TODO include on-demand clip for module 3 -->
 
@@ -843,15 +843,15 @@ Alternatively, you can **use a prebuilt library** to accomplish the same. If
 that's more your cup of tea, go hit 'Next' and proceed to the next section.
 
 Have a look at the
-[Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemini-pro)
-to learn more about Gemini Pro and other available models.
+[Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemini-1.5-flash-preview-0514)
+to learn more about Gemini Flash and other available models.
 
-## Using a library to call the Gemini Pro model
+## Using a library to call the Gemini Flash model
 
 To get started, first have a look at the Go module
 `github.com/helloworlddan/tortuneai`. The module provides the package
 `github.com/helloworlddan/tortuneai/tortuneai` which implements the Cloud Client
-Library for Vertex AI to call the _Gemini Pro_ model.
+Library for Vertex AI to call the _Gemini Flash_ model.
 [Read through the code](https://github.com/helloworlddan/tortuneai/blob/main/tortuneai/tortuneai.go)
 of `tortuneai.HitMe` and see how it implements the aforementioned steps to
 interact with the API.
@@ -859,7 +859,7 @@ interact with the API.
 In order to use the package we need to first get the module like this:
 
 ```bash
-go get github.com/helloworlddan/tortuneai@v0.0.2
+go get github.com/helloworlddan/tortuneai@v0.0.3
 ```
 
 Once that is completed, we can update
@@ -870,7 +870,7 @@ all references to the previously used package `tortune` with `tortuneai`.
 Notice that the signature for `tortuneai.HitMe()` is different from the previous
 `tortune.HitMe()`. While the original function did not require any parameters,
 you are required to pass two `string` values into the new one: One with an
-actual text prompt for the Gemini Pro model and one with your Google Cloud
+actual text prompt for the Gemini Flash model and one with your Google Cloud
 project ID. Additionally, the function now returns multiple return values: a
 `string` containing the response from the API and an `error`. If everything goes
 well, the error will be `nil`, if not it will contain information about what
@@ -901,7 +901,7 @@ go run main.go
 This recompiles and starts the web server. Let's check the application with the
 Web Preview <walkthrough-web-preview-icon></walkthrough-web-preview-icon> at the
 top right in Cloud Shell and see if we can successfully interact with the Gemini
-Pro model.
+Flash model.
 
 If you are satisfied you can focus the terminal again and terminate the web
 server with `Ctrl-C`.
@@ -1004,7 +1004,7 @@ and pushing your changes, like this:
 
 ```bash
 git add .
-git commit -m 'upgrade to Gemini Pro for generative jokes'
+git commit -m 'upgrade to Gemini Flash for generative jokes'
 git push origin main
 ```
 
@@ -1033,7 +1033,7 @@ continue by yourself and on-demand.
 
 ## Module 4: Operate your services in production
 
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/sre.jpg)
+![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/sre.jpg)
 
 In this part of our journey, we are going to look at some basic principles of
 how to operate your services in production. We'll learn about SRE and define
