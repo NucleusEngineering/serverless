@@ -1422,6 +1422,14 @@ containerscanning.googleapis.com,
 containeranalysis.googleapis.com,
 artifactregistry.googleapis.com"> </walkthrough-enable-apis>
 
+Let's also make sure our gcloud configuration is present by running:
+
+```bash
+gcloud config set project <walkthrough-project-id/>
+gcloud config set run/region europe-north1
+gcloud config set artifacts/location europe-north1
+```
+
 ## Precisely loading software dependencies
 
 As a developer, you likely understand the importance of stability, security, and
@@ -1572,8 +1580,8 @@ images:
   - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
 ```
 
-Note, how we're also adding an ID to every step of the build to make it easier
-to digest for the reader.
+Note how we're also adding an ID to every step of the build to make it easier to
+digest for the reader.
 
 Let's issue another build:
 
@@ -1583,6 +1591,8 @@ REGION="$(gcloud config get-value run/region)"
 gcloud builds submit \
   --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
 ```
+
+Good, let's move on.
 
 ## SLSA: Security Levels for Software Artifacts
 
@@ -1693,64 +1703,16 @@ Let's replace the remote default policy definition with the local
 gcloud container binauthz policy import binauthz_policy.yaml
 ```
 
-We know need to specify the _default_ policy by explicitly adding it as an
-option to all Cloud Run deployments. Let's add the option
-`--binary-authorization default` to the deployment step in the
-<walkthrough-editor-open-file
-  filePath="cloudshell_open/serverless/cloudbuild.yaml">
-`cloudbuild.yaml`</walkthrough-editor-open-file> file. Let's update the contents
-like this:
-
-```yaml
-steps:
-  - id: "Building image"
-    name: "gcr.io/cloud-builders/docker"
-    args:
-      - "build"
-      - "-t"
-      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
-      - "."
-  - id: "Tagging image"
-    name: "gcr.io/cloud-builders/docker"
-    args:
-      - "tag"
-      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
-      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
-  - id: "Pushing image:build-id"
-    name: "gcr.io/cloud-builders/docker"
-    args:
-      - "push"
-      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
-  - id: "Pushing image:latest"
-    name: "gcr.io/cloud-builders/docker"
-    args:
-      - "push"
-      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
-  - id: "Deploying to Cloud Run"
-    name: "gcr.io/cloud-builders/gcloud"
-    args:
-      - "run"
-      - "deploy"
-      - "--region"
-      - "$_RUN_REGION"
-      - "--binary-authorization"
-      - "default"
-      - "--image"
-      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
-      - "jokes"
-
-images:
-  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
-  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
-```
-
-Let's issue another build to see it in action:
+We know need to specify using the _default_ policy by explicitly adding it as an
+option to all Cloud Run deployments. Let's deploy the previously built image:
 
 ```bash
 LOCATION="$(gcloud config get-value artifacts/location)"
-REGION="$(gcloud config get-value run/region)"
-gcloud builds submit \
-  --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
+PROJECT="$(gcloud config get-value project)"
+
+gcloud run deploy jokes \
+  --binary-authorization default \
+  --image "${LOCATION}-docker.pkg.dev/${PROJECT}/my-repo/dockercloudbuildyaml"
 ```
 
 Navigate to the
@@ -1760,15 +1722,28 @@ tell you the Binary Authorization is enabled and the _default_ policy is being
 enforced.
 
 <walkthrough-info-message>Did you know that you can also enforce the use of
-certain Binary Authorization policies?
-
-Using Organization Policies you can enforce the usage of policies at the level
-of an organization, a folder or individual projects in Resource Manager. You can
-allow-list with policies should be used by setting up the
+certain Binary Authorization policies? Using Organization Policies you can
+enforce the usage of policies at the level of an organization, a folder or
+individual projects in Resource Manager. You can allow-list with policies should
+be used by setting up the
 [`run.allowedBinaryAuthorizationPolicies`](https://cloud.google.com/binary-authorization/docs/run/requiring-binauthz-cloud-run#gcloud)
-policy. </walkthrough-info-message>
+policy.</walkthrough-info-message>
 
-<!-- NOTE attempt to deploy a local build?  -->
+Binary Authorization is now enabled and protects our services _jokes_. It
+doesn't allow any image that has not been built by Cloud Build in our project.
+
+Let's verify this by attempting to deploy a different image, the failing one
+from Module 4:
+
+```bash
+gcloud run deploy jokes \
+  --binary-authorization default \
+  --image gcr.io/serverless-journey/failing
+```
+
+This step _fails_, because the provided image is not signed by our project local
+Cloud Build. Perfect. We are now blocking images that have not gone through our
+vetted CI pipeline.
 
 ## Inspecting problematic container images
 
