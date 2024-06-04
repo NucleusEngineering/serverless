@@ -1634,7 +1634,139 @@ Right now there are not many issues to report. Good.
 
 ## Binary Authorization
 
-<!-- TODO enable add binary authorization to cloudbuild.yaml -->
+At its core, binary authorization is a security mechanism that ensures only
+trusted software is deployed and executed in your environment. It's like a
+bouncer at a club, but instead of checking IDs, it verifies the authenticity and
+integrity of software artifacts before they're allowed to run.
+
+Here's how it typically works:
+
+1. Signing: Before deployment, trusted parties (developers, build systems, etc.)
+   digitally sign the software artifact (container image, executable, etc.)
+   using cryptographic keys. This signature is like a seal of approval.
+2. Policy Enforcement: A policy engine is configured to define what signatures
+   are considered valid. This could be based on specific signers, signing keys,
+   or even attributes of the software itself.
+3. Verification: When the software is about to be deployed or executed, the
+   system checks if it has a valid signature that matches the policy. If not,
+   it's blocked.
+
+For our pipeline, we'd have Cloud Build as the trusted party that will sign the
+container artifacts it creates. We can then setup a policy in Binary
+Authorization, which says something like: "only trust and deploy images built by
+Cloud Build". Finally, the policy is enforced my Cloud Run, so every time a new
+image gets deployed as a part of a new Cloud Run revision, the presence and
+validity of a signature created by Cloud Build will be checked.
+
+Now, Cloud Build already automatically signs every container image it produces,
+so the signatures are already present.
+
+Next, Binary Authorization comes with a _default_ policy. The default policy
+doesn't enforce anything as this policy states: _"allow all images"_. Let's have
+a look at what the policy looks like:
+
+```bash
+gcloud container binauthz policy export
+```
+
+We need to update this policy to that it requires an attestation, namely the
+attestation called
+`projects/<walkthrough-project-id />/attestors/built-by-cloud-build`. This will
+enforce checking for a valid Cloud Build signature on any image being deployed.
+
+Create a new file called `binauthz_policy.yaml` and add the following contents
+to it:
+
+```yaml
+defaultAdmissionRule:
+  evaluationMode: REQUIRE_ATTESTATION
+  enforcementMode: ENFORCED_BLOCK_AND_AUDIT_LOG
+  requireAttestationsBy:
+    - projects/<walkthrough-project-id />/attestors/built-by-cloud-build
+name: projects/<walkthrough-project-id />/policy
+```
+
+Let's replace the remote default policy definition with the local
+`binauthz_policy.yaml` by running the following command:
+
+```bash
+gcloud container binauthz policy import binauthz_policy.yaml
+```
+
+We know need to specify the _default_ policy by explicitly adding it as an
+option to all Cloud Run deployments. Let's add the option
+`--binary-authorization default` to the deployment step in the
+<walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/cloudbuild.yaml">
+`cloudbuild.yaml`</walkthrough-editor-open-file> file. Let's update the contents
+like this:
+
+```yaml
+steps:
+  - id: "Building image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "."
+  - id: "Tagging image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "tag"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+  - id: "Pushing image:build-id"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+  - id: "Pushing image:latest"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+  - id: "Deploying to Cloud Run"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "--region"
+      - "$_RUN_REGION"
+      - "--binary-authorization"
+      - "default"
+      - "--image"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "jokes"
+
+images:
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+```
+
+Let's issue another build to see it in action:
+
+```bash
+LOCATION="$(gcloud config get-value artifacts/location)"
+REGION="$(gcloud config get-value run/region)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
+```
+
+Navigate to the
+[Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run)
+select the `jokes` services and have a look at the _Security_ tab. It should
+tell you the Binary Authorization is enabled and the _default_ policy is being
+enforced.
+
+<walkthrough-info-message>Did you know that you can also enforce the use of
+certain Binary Authorization policies?
+
+Using Organization Policies you can enforce the usage of policies at the level
+of an organization, a folder or individual projects in Resource Manager. You can
+allow-list with policies should be used by setting up the
+[`run.allowedBinaryAuthorizationPolicies`](https://cloud.google.com/binary-authorization/docs/run/requiring-binauthz-cloud-run#gcloud)
+policy. </walkthrough-info-message>
 
 <!-- NOTE attempt to deploy a local build?  -->
 
