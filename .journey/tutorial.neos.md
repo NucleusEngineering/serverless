@@ -1,7 +1,12 @@
+<!--markdownlint-disable MD024 MD033 MD036 MD041 -->
 <walkthrough-metadata>
   <meta name="title" content="Giggle Cloud Platform" />
-  <meta name="description" content="Learn how to build and run containerized services, use automated build and deployment tools, implement Google Cloud APIs to leverage GenAI capabilities and operate your service in production using SRE practices." />
-  <meta name="keywords" content="cloud, go, containers, console, run, AI, GenAI, APIs, SRE" />
+  <meta name="description" content="Learn how to build and run containerized
+  services, use automated build and deployment tools, implement Google Cloud
+  APIs to leverage GenAI capabilities and operate your service in production
+  using SRE practices." />
+  <meta name="keywords" content="cloud, go, containers, console, run, AI,
+  GenAI, APIs, SRE" />
 </walkthrough-metadata>
 
 # From Prototype to Production
@@ -21,12 +26,13 @@ The same is required for any other browser.</walkthrough-info-message>
 ## Overview
 
 ![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/containers.jpg)
+
 In this interactive tutorial, you will learn how to build and run containerized
 services, use automated build and deployment tools, implement Google Cloud APIs
 to leverage GenAI capabilities and operate your service in production using SRE
 practices.
 
-The tutorial is split into **four modules**:
+The tutorial is split into **five modules**:
 
 **Module 1** will explore Cloud Run, a compute platform for container workloads,
 which you can use to easily run your services in a scalable, secure,
@@ -48,6 +54,14 @@ In **module 4**, we'll look at the practices of Site Reliability Engineering and
 how you can practically apply these to reliably operate your services and manage
 how you introduce changes to its functionality.
 
+In **module 5**, explores how to strengthen the security posture of our software
+delivery process by applying best practices for dependency management,
+leveraging container analysis tools and signing produce images. Additionally,
+we'll learn about the SLSA framework to better understand how to improve supply
+chain security of our software delivery processes and subsequently gain more
+confidence in the integrity and correctness of the artifacts we build, deploy
+and operate.
+
 Hope you're not afraid to get your hands dirty. Make sure get a beverage and
 some snacks of your choice, strap in and hit 'Start'.
 
@@ -60,8 +74,8 @@ code, store the image in Artifact Registry and deploy it to Cloud Run. After
 that, we'll familiarize ourselves with the Cloud Run UI, its API and explore
 some of the available options to tweak our service.
 
-Check out this
 [Overview on Cloud Run](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-run.png)
+
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
@@ -291,7 +305,6 @@ control over how we build our images. Finally, we'll use Cloud Build to also
 deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run
 services.
 
-Check out this
 [Overview on Cloud Build](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-build.jpg)
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
@@ -320,10 +333,10 @@ workflows. However, it really excels at building code and creating container
 images.
 
 You don't need to provision anything to get started with using Cloud Build, it's
-serverless: simply enable the API and submit your jobs. Cloud Build manages all
-the required infrastructure for you. Per default, Cloud Build schedules build
-jobs on shared infrastructure, but it can be configured to run on a [dedicated
-worker pool](https://cloud.google.com/build/docs/private-pools/private-pools-overview)
+fully-managed: simply enable the API and submit your jobs. Cloud Build manages
+all the required infrastructure for you. Per default, Cloud Build schedules
+build jobs on shared infrastructure, but it can be configured to run on a
+[dedicated worker pool](https://cloud.google.com/build/docs/private-pools/private-pools-overview)
 that is not shared with other users.
 
 In the previous section of our journey we saw how to use build and deploy
@@ -384,7 +397,7 @@ and place it in the same directory as the Go application. Let's start with a
 simple, single-stage build for Go:
 
 ```Dockerfile
-FROM golang:1.20-bullseye
+FROM golang:1.22-bookworm
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
@@ -395,7 +408,7 @@ CMD ["/app/server"]
 
 This Dockerfile:
 
-1. uses Debian Bullseye with Golang 1.20 as base image
+1. uses Debian bookworm with Golang 1.22 as base image
 2. copies the definition of the Go module and installs all dependencies
 3. copies the sources and builds the Go application
 4. specifies the application binary to run
@@ -404,7 +417,10 @@ We can now submit the build context to Cloud Build and use the instructions in
 the Dockerfile to create a new image by running:
 
 ```bash
-gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockerbuild .
+LOCATION="$(gcloud config get-value artifacts/location)"
+PROJECT="$(gcloud config get-value project)"
+gcloud builds submit . \
+  --tag ${LOCATION}-docker.pkg.dev/${PROJECT}/my-repo/dockerbuild
 ```
 
 Next, let's navigate first to the
@@ -418,7 +434,7 @@ Huh, it seems like our image is quite big! We can fix this by running a
 Let's extend the Dockerfile and replace its contents with the following:
 
 ```Dockerfile
-FROM golang:1.20-bullseye as builder
+FROM golang:1.22-bookworm as builder
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
@@ -435,10 +451,14 @@ Great! We'll keep the first stage as the build stage. Once the statically-linked
 Go binary is built, it is copied to a fresh stage that is based on
 `gcr.io/distroless/static-debian11`. The _distroless_ images are Google-provided
 base images that are very small. That means there is less to store and images
-typically have much smaller attack surfaces and improved start-up time. Let's build again:
+typically have much smaller attack surfaces and improved start-up time. Let's
+build again:
 
 ```bash
-gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockermultistage .
+LOCATION="$(gcloud config get-value artifacts/location)"
+PROJECT="$(gcloud config get-value project)"
+gcloud builds submit . \
+  --tag ${LOCATION}-docker.pkg.dev/${PROJECT}/my-repo/dockermultistage
 ```
 
 Navigate back to Artifact Registry in the Google Cloud Console and inspect the
@@ -464,7 +484,9 @@ the Dockerfile and the Go application. Add the following contents:
 ```yaml
 steps:
   - name: "ubuntu"
-    args: ["echo", "hi there"]
+    args:
+      - "echo"
+      - "hi there"
 ```
 
 This configuration asks Cloud Build to run a single step: Use the container
@@ -485,18 +507,14 @@ Replace the file contents with the following:
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "build",
-        "-t",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
+      - "."
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "push",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-      ]
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
 ```
 
 Pay attention to the `$`-prefixed `$PROJECT_ID` and `$_ARTIFACT_REGION`.
@@ -506,7 +524,9 @@ it allows users to override otherwise static content of the build definition by
 injecting configuration during invocation of the build. Let's take a look:
 
 ```bash
-gcloud builds submit --substitutions _ARTIFACT_REGION=$(gcloud config get-value artifacts/location)
+LOCATION="$(gcloud config get-value artifacts/location)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION}
 ```
 
 This will build, tag and store a container image.
@@ -528,24 +548,22 @@ newly created image to Cloud Run like this:
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "build",
-        "-t",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
+      - "."
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "push",
-        "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml",
-      ]
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
       - "deploy"
-      - "--region=$_RUN_REGION"
-      - "--image=$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
+      - "--region"
+      - "$_RUN_REGION"
+      - "--image"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml"
       - "jokes"
 ```
 
@@ -562,8 +580,10 @@ Finally, let's supply all the substitutions and invoke Cloud Build once again to
 execute a fresh build and deploy to Cloud Run automatically.
 
 ```bash
-gcloud builds submit --substitutions \
-    _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
+LOCATION="$(gcloud config get-value artifacts/location)"
+REGION="$(gcloud config get-value run/region)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
 ```
 
 ## Setting up an automatic source triggers from GitHub
@@ -640,21 +660,22 @@ Next, Cloud Build needs to be configured with a trigger resource. The trigger
 contains everything Cloud Build needs to automatically run new builds whenever
 the remote repository gets updated.
 
-* Navigate to the
-[Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers)
-and click on 'Connect Repository'.
-* Follow the wizard on the right to connect to
-github.com, authenticate Google's GitHub app.
-* Filter repositories based on your user name.
-* Find the forked repository called 'serverless'.
-* Tick the box to accept the policy and connect your repository.
+- Navigate to the
+  [Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers)
+  and click on 'Connect Repository'.
+- Follow the wizard on the right to connect to github.com, authenticate Google's
+  GitHub app.
+- Filter repositories based on your user name.
+- Find the forked repository called 'serverless'.
+- Tick the box to accept the policy and connect your repository.
 
-Once completed you should see a
-connection confirmation message displayed. Now it's time to create the trigger.
+Once completed you should see a connection confirmation message displayed. Now
+it's time to create the trigger.
 
-* Hit 'Create Trigger' and create a new trigger.
-* In the wizard, specify that the trigger should read configuration from the provided `./cloudbuild.yaml` and
-**add all the substitutions** you used previously to trigger your build.
+- Hit 'Create Trigger' and create a new trigger.
+- In the wizard, specify that the trigger should read configuration from the
+  provided `./cloudbuild.yaml` and **add all the substitutions** you used
+  previously to trigger your build.
 
 <walkthrough-info-message>When using the "Autodetect" configuration option,
 there is no possibility to add substitution variables through the UI. So make
@@ -845,7 +866,7 @@ interact with the API.
 In order to use the package we need to first get the module like this:
 
 ```bash
-go get github.com/helloworlddan/tortuneai@v0.0.3
+go get github.com/helloworlddan/tortuneai@v0.0.4
 ```
 
 Once that is completed, we can update
@@ -956,8 +977,10 @@ We can bind the identified role to the various resource levels. For the sake of
 simplicity, let's attach it at the project level by executing:
 
 ```bash
-gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
-    --member serviceAccount:tortune@$(gcloud config get-value project).iam.gserviceaccount.com  \
+PROJECT=$(gcloud config get-value project)
+ACCOUNT=tortune@${PROJECT}.iam.gserviceaccount.com
+gcloud projects add-iam-policy-binding ${PROJECT} \
+    --member serviceAccount:${ACCOUNT} \
     --role "roles/aiplatform.user"
 ```
 
@@ -967,16 +990,20 @@ Cloud Run revision by updating the service configuration so that our Cloud Run
 service will use the newly-created service account:
 
 ```bash
+PROJECT=$(gcloud config get-value project)
+ACCOUNT=tortune@${PROJECT}.iam.gserviceaccount.com
 gcloud run services update jokes \
-    --service-account tortune@$(gcloud config get-value project).iam.gserviceaccount.com
+    --service-account ${ACCOUNT}
 ```
 
 Now, that all IAM resources and configurations are in place, we can trigger a
 new Cloud Build execution to deploy changes in a CI/CD fashion, like this:
 
 ```bash
-gcloud builds submit --substitutions \
-    _ARTIFACT_REGION=$(gcloud config get-value artifacts/location),_RUN_REGION=$(gcloud config get-value run/region)
+LOCATION="$(gcloud config get-value artifacts/location)"
+REGION="$(gcloud config get-value run/region)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
 ```
 
 If you have previously configured Github, you can achieve the same by committing
@@ -1335,7 +1362,506 @@ to a known good state of the system.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-This completes Module 4.
+This completes Module 4. You can now wait for the live session to resume or
+continue by yourself and on-demand.
+
+## Module 5: Securing the delivery process of our software artifacts
+
+![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
+Our application is already running in a scalable fashion adapting to user
+demand. It is automatically built and we can dynamically deploy new versions
+after safely testing them in the same environment with full parity. Cloud Run's
+nimble programmable network plane allows us to gradually phase in the new
+version or roll back in case our monitoring setup reports spikes in errors
+caused by the introduced changes.
+
+Although we have limited the permissions on the service account in use by the
+Cloud Run service itself, we have almost completely ignored and emerging
+security threat: attacks on our software supply chain.
+
+In this **module 5**, we'll explore how we can use several tools to strengthen
+the overall security posture of our software delivery process.
+
+Let's start by applying some general best practices around pinning specific
+versions of all the dependencies in use by our application. Additionally, we
+will also leverage both the Go and the Docker tool chains to enforce integrity
+checks of every software package loaded as dependency by explicitly tagging
+their check sums. This exercise will bring us closer to achieving almost
+completely hermetic builds and will prevent loading dependencies that have been
+tampered with.
+
+Next, we'll have a look at the open framework _Security Levels for Software
+Artifacts_ (SLSA), which can be used to rate how secure our software delivery
+process is at any given time. Based on a rating we can then leverage it to
+improve the security posture of our process and increase our own confidence in
+the container images we run.
+
+After that, we will setup a policy for Binary Authorization on Cloud Run. This
+will cause Cloud Run to check for a cryptographic signature to be present on all
+deployed container images or reject them. We can use this technique to make sure
+that all deployed software artifacts have been integrated and packaged by our
+trusted CI system, in this case Cloud Build.
+
+Finally, we'll have some fun by building a completely different container image
+based on a vulnerable Java application running on an outdated Debian base. We
+can then use the Google Cloud Console to explore the various vulnerabilities
+present in the image.
+
+<walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
+
+Estimated time:
+<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
+
+To get started, click **Start**.
+
+## Project setup
+
+First, let's make sure we got the correct project selected. Go ahead and select
+the provided project ID.
+
+<walkthrough-project-setup billing="true"></walkthrough-project-setup>
+
+Run the following to make sure all required APIs are enabled.
+
+<walkthrough-enable-apis apis="cloudbuild.googleapis.com,
+run.googleapis.com,binaryauthorization.googleapis.com,
+containerscanning.googleapis.com,
+containeranalysis.googleapis.com,
+artifactregistry.googleapis.com"> </walkthrough-enable-apis>
+
+Let's also make sure our gcloud configuration is present by running:
+
+```bash
+gcloud config set project <walkthrough-project-id/>
+gcloud config set run/region europe-north1
+gcloud config set artifacts/location europe-north1
+```
+
+## Precisely loading software dependencies
+
+As a developer, you likely understand the importance of stability, security, and
+predictability in software development. Version pinning is a powerful tool to
+achieve these goals, especially in large, complex projects. By explicitly
+defining the software versions you rely on, you create a more robust and
+maintainable codebase.
+
+In the previously created Dockerfile, we have already been slightly specific
+about which base images we would like to use during both the build as well as
+the runtime stage. We note only want the `golang` image, but we want the one
+that is using Go 1.22 based on Debian bookworm `golang:1.22-bookworm`. Let's
+inspect the image we mean on
+[Dockerhub](https://hub.docker.com/layers/library/golang/1.22-bookworm/images/sha256-4304d944c421bb279ad1faada14d03ac7e7edca61793d2f6a7ad94681c457887).
+The hosting registry Dockerhub provides us with the precise SHA256 checksum of
+the image. We can use the check sum in our Dockerfile to instruct the building
+container daemon to verify all the contents of the pulled container image file
+system layers to ensure that absolutely every single bit of the image in use has
+not changed in the meantime.
+
+Let's modify our existing
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/Dockerfile">
+`Dockerfile`</walkthrough-editor-open-file> to include the SHA256 checksum like
+this:
+
+<!-- markdownlint-disable MD013 -->
+
+```Dockerfile
+FROM golang:1.22-bookworm@sha256:5c56bd47228dd572d8a82971cf1f946cd8bb1862a8ec6dc9f3d387cc94136976 as builder
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -v -o server
+
+FROM gcr.io/distroless/static-debian11
+WORKDIR /app
+COPY --from=builder /app/server /app/server
+CMD ["/app/server"]
+```
+
+<!-- markdownlint-enable MD013 -->
+
+Let's do the same for the runtime images. The image
+`gcr.io/distroless/static-debian11` is hosted
+[here](https://console.cloud.google.com/gcr/images/distroless/global/static-debian11@sha256:d27f8df264c425579aaf8d996ddbf65db6c6dc1ef8deeea8c1b7b69b2ebddf02/details).
+Have a look and copy the SHA256 checksum to then also explicitly pin it in the
+`FROM` directive for the final runtime stage in the Dockerfile.
+
+<!-- markdownlint-disable MD013 -->
+
+```Dockerfile
+FROM golang:1.22-bookworm@sha256:5c56bd47228dd572d8a82971cf1f946cd8bb1862a8ec6dc9f3d387cc94136976 as builder
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -v -o server
+
+FROM gcr.io/distroless/static-debian11@sha256:d27f8df264c425579aaf8d996ddbf65db6c6dc1ef8deeea8c1b7b69b2ebddf02
+WORKDIR /app
+COPY --from=builder /app/server /app/server
+CMD ["/app/server"]
+```
+
+<!-- markdownlint-enable MD013 -->
+
+Perfect! We have now ensured that the building container daemon checks the
+integrity of the images it downloads when the docker build is run.
+
+The base images for the docker stages are not the only software dependencies
+that are being pulled into scope during the build of our application: we are
+also using various Go dependencies.
+
+Luckily, Go already has us covered. Since our application is using Go Modules,
+Go automatically keeps track of it's dependencies. Take a look at the
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/go.mod">
+`go.mod`</walkthrough-editor-open-file> file. This file list all the
+dependencies our application requires and also pins their specific versions.
+
+Furthermore, Go Modules uses a second automatically generated file which keeps
+note of versions and checksums for all transitive dependencies used. Have a look
+at the
+<walkthrough-editor-open-file filePath="cloudshell_open/serverless/go.sum">
+`go.sum`</walkthrough-editor-open-file> file.
+
+It is highly recommended, that you add both files to your version control system
+so that they are available to Cloud Build or any other remote build after
+cloning the repository. Some of the first instructions in the Dockerfile only
+copy these two files into the build file system and instruct Go Modules to
+download all required dependencies using their specific versions and verify
+their integrity using the supplied checksums. This is where it happens:
+
+```Dockerfile
+COPY go.* ./
+RUN go mod download
+```
+
+Good. We have finally made sure that every dependency required is explicitly
+pinned with it's version number and also checked against remote tampering by
+verifying checksums.
+
+Another best practice is to not only be specific about the dependencies we need
+to produce an artifact, but also be specific about what we produce. We can
+explicitly tag images at the end of our <walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/cloudbuild.yaml">
+`cloudbuild.yaml`</walkthrough-editor-open-file> file. Let's update the contents
+like this:
+
+```yaml
+steps:
+  - id: "Building image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "."
+  - id: "Tagging image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "tag"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+  - id: "Pushing image:build-id"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+  - id: "Pushing image:latest"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+  - id: "Deploying to Cloud Run"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "--region"
+      - "$_RUN_REGION"
+      - "--image"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+      - "jokes"
+
+images:
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:build-$BUILD_ID"
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockercloudbuildyaml:latest"
+```
+
+Note how we're also adding an ID to every step of the build to make it easier to
+digest for the reader.
+
+Let's issue another build:
+
+```bash
+LOCATION="$(gcloud config get-value artifacts/location)"
+REGION="$(gcloud config get-value run/region)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION},_RUN_REGION=${REGION}
+```
+
+Good, let's move on.
+
+## SLSA: Security Levels for Software Artifacts
+
+_It is pronounced 'salsa' (/ˈsɑːl.sə/) 🌶️🥑 🍅_
+
+Think of [SLSA](https://slsa.dev/) as a security checklist or framework designed
+to protect the integrity of software throughout its entire lifecycle. From the
+moment code is written to when it's running in production, SLSA provides
+guidelines and best practices to prevent tampering, boost integrity, and secure
+both the software packages themselves and the infrastructure they run on.
+
+SLSA is an open-source project backed by Google and other organizations,
+fostering industry collaboration and promoting best practices. It is by all
+means am evolving framework: SLSA is still under development, with ongoing
+efforts to refine the requirements and make it easier to adopt. A growing
+ecosystem of tools is emerging to help you implement SLSA practices, from build
+systems to vulnerability scanners.
+
+Cloud Build is one of those already integrated build systems that automatically
+attempts to give a SLSA rating and proactively surfaces relevant information.
+
+SLSA defines four levels of increasing security maturity:
+
+1. **SLSA 1**: Requires basic build practices like using a version control
+   system and generating provenance (a record of how the software was built).
+2. **SLSA 2**: Adds requirements for a more controlled build environment, like
+   using a build service and tracking dependencies.
+3. **SLSA 3**: Demands a higher level of security for the build process,
+   including using a hardened build service and auditing build configurations.
+4. **SLSA 4**: Represents the most stringent level, requiring practices like
+   two-person review for code changes and hermetic builds (where the build
+   environment is isolated from external influences).
+
+Navigate to the
+[Cloud Build section in the Google Cloud Console](https://console.cloud.google.com/cloud-build/builds)
+to and explore the most recent build at the top of the list. Click into the
+build and familiarize yourself with the build details view. The right section of
+the screen shows the _Build Log_ tab.
+
+Switch to the _Build Artifacts_ tab and make sure that the step "Build Summary"
+is selected.
+
+Cloud Build lists the artifacts created by this build. _View_ the _Security
+Insights_ for one of the image tags. Cloud Build automatically rates our
+pipeline with a SLSA level and shows relevant details on vulnerabilities,
+software dependencies and all sorts of other relevant metadata about the build.
+
+Right now there are not many issues to report. Good.
+
+## Binary Authorization
+
+At its core, binary authorization is a security mechanism that ensures only
+trusted software is deployed and executed in your environment. It's like a
+bouncer at a club, but instead of checking IDs, it verifies the authenticity and
+integrity of software artifacts before they're allowed to run.
+
+Here's how it typically works:
+
+1. Signing: Before deployment, trusted parties (developers, build systems, etc.)
+   digitally sign the software artifact (container image, executable, etc.)
+   using cryptographic keys. This signature is like a seal of approval.
+2. Policy Enforcement: A policy engine is configured to define what signatures
+   are considered valid. This could be based on specific signers, signing keys,
+   or even attributes of the software itself.
+3. Verification: When the software is about to be deployed or executed, the
+   system checks if it has a valid signature that matches the policy. If not,
+   it's blocked.
+
+For our pipeline, we'd have Cloud Build as the trusted party that will sign the
+container artifacts it creates. We can then setup a policy in Binary
+Authorization, which says something like: "only trust and deploy images built by
+Cloud Build". Finally, the policy is enforced my Cloud Run, so every time a new
+image gets deployed as a part of a new Cloud Run revision, the presence and
+validity of a signature created by Cloud Build will be checked.
+
+Now, Cloud Build already automatically signs every container image it produces,
+so the signatures are already present.
+
+Next, Binary Authorization comes with a _default_ policy. The default policy
+doesn't enforce anything as this policy states: _"allow all images"_. Let's have
+a look at what the policy looks like:
+
+```bash
+gcloud container binauthz policy export
+```
+
+We need to update this policy to that it requires an attestation, namely the
+attestation called
+`projects/<walkthrough-project-id />/attestors/built-by-cloud-build`. This will
+enforce checking for a valid Cloud Build signature on any image being deployed.
+
+Create a new file called <walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/binauthz_policy.yaml">
+`binauthz_policy.yaml`</walkthrough-editor-open-file> file. Let's put in the
+following contents:
+
+```yaml
+defaultAdmissionRule:
+  evaluationMode: REQUIRE_ATTESTATION
+  enforcementMode: ENFORCED_BLOCK_AND_AUDIT_LOG
+  requireAttestationsBy:
+    - projects/<walkthrough-project-id />/attestors/built-by-cloud-build
+name: projects/<walkthrough-project-id />/policy
+```
+
+Let's replace the remote default policy definition with the local
+`binauthz_policy.yaml` by running the following command:
+
+```bash
+gcloud container binauthz policy import binauthz_policy.yaml
+```
+
+We know need to specify using the _default_ policy by explicitly adding it as an
+option to all Cloud Run deployments. Let's deploy the previously built image:
+
+```bash
+LOCATION="$(gcloud config get-value artifacts/location)"
+PROJECT="$(gcloud config get-value project)"
+
+gcloud run deploy jokes \
+  --binary-authorization default \
+  --image "${LOCATION}-docker.pkg.dev/${PROJECT}/my-repo/dockercloudbuildyaml"
+```
+
+Navigate to the
+[Cloud Run section in the Google Cloud Console](https://console.cloud.google.com/run)
+select the `jokes` services and have a look at the _Security_ tab. It should
+tell you the Binary Authorization is enabled and the _default_ policy is being
+enforced.
+
+<walkthrough-info-message>Did you know that you can also enforce the use of
+certain Binary Authorization policies? Using Organization Policies you can
+enforce the usage of policies at the level of an organization, a folder or
+individual projects in Resource Manager. You can allow-list with policies should
+be used by setting up the
+[`run.allowedBinaryAuthorizationPolicies`](https://cloud.google.com/binary-authorization/docs/run/requiring-binauthz-cloud-run#gcloud)
+policy.</walkthrough-info-message>
+
+Binary Authorization is now enabled and protects our services _jokes_. It
+doesn't allow any image that has not been built by Cloud Build in our project.
+
+Let's verify this by attempting to deploy a different image, the failing one
+from Module 4:
+
+```bash
+gcloud run deploy jokes \
+  --binary-authorization default \
+  --image gcr.io/serverless-journey/failing
+```
+
+This step _fails_, because the provided image is not signed by our project local
+Cloud Build. Perfect. We are now blocking images that have not gone through our
+vetted CI pipeline.
+
+## Inspecting problematic container images
+
+With Binary Authorization enabled we are now certain that only images built by
+the build system we trust, like Cloud Build, end up in production on our compute
+infrastructure, such as Cloud Run.
+
+We have also made sure that our build processes are very precise in explicitly
+specifying which dependencies to load and to reject.
+
+However, we haven't yet really discussed dealing with vulnerabilities in our
+stack. So let's address this quickly.
+
+In the beginning of this Module, we've enabled the
+[Container Scanning and Analysis APIs](https://cloud.google.com/artifact-registry/docs/analysis)
+which will conveniently scan container images and other artifacts for known
+vulnerabilities and surface the results in the Google Cloud Console.
+
+Let's demo this by building a vulnerable image on purpose.
+
+Create a new file called <walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/cloudbuild-insecure.yaml">
+`cloudbuild-insecure.yaml`</walkthrough-editor-open-file> file. Let's put in the
+following contents:
+
+```yaml
+steps:
+  - id: "Pulling image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "pull"
+      - "gcr.io/serverless-journey/insecure"
+  - id: "Tagging image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "tag"
+      - "gcr.io/serverless-journey/insecure"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockerinsecure:latest"
+  - id: "Pushing image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockerinsecure:latest"
+images:
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockerinsecure:latest"
+```
+
+Take a look at the file and see what it does...
+
+Apparently, it just pulls in a foreign image, applies a local name and stores it
+in the project-local artifact registry. Let's execute the build by running:
+
+```bash
+LOCATION="$(gcloud config get-value artifacts/location)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION} \
+  --config cloudbuild-insecure.yaml \
+  --no-source
+```
+
+Once the build completes take a look at the
+[the top build in Cloud Build](https://console.cloud.google.com/cloud-build/builds;region=global).
+Click into the build, select the build summary and view the _Security Insights_
+of the build artifact
+`europe-north1-docker.pkg.dev/<walkthrough-project-id />/my-repo/dockerinsecure:latest`.
+
+You'll immediately see many vulnerabilities detected with actionable fixes
+listed as well.
+
+Go to [Artifact Registry](https://console.cloud.google.com/artifacts) and find
+the image
+`europe-north1-docker.pkg.dev/<walkthrough-project-id />/my-repo/dockerinsecure@sha256:8b3934e38ea64021c4323060150cbc877511fd8d52c81165d9f8ea1e189b0a06`.
+
+First, let's take a closer look at all the dependencies used by our image. The
+complete list of dependencies is the most crucial component of our artifact's
+software bill-of-materials (SBOM). You can explore it by clicking on the
+_Dependencies_ tab.
+
+It seems the container images we built is a Java application using Maven
+dependencies running on an Ubuntu base.
+
+Next, let's take a look at the detected list of vulnerabilities by clicking on
+the _Vulnerabilities_ tab.
+
+Oh oh! There seem to be quite some serious vulnerabilities, including two with
+critical severity. As it turns out, the application is using a quite outdated
+version of the Spring framework.
+
+Explore the top vulnerabilities for a bit and have a look at the fixes. Note how
+the Container Scanning APIs also provides you with insights around
+vulnerabilities detected at the OS level as well as many other programming
+language tool chains, such as Go, Python, JavaScript NPM, C# NuGet, Ruby Gems,
+PHP Composer and Rust Crates.
+
+In general, most fixes will require you to patch dependencies in your
+application by upgrading the to newer versions.
+
+## Summary
+
+Amazing, you've learned how you can increase the security posture of your
+software delivery process by understanding and applying the SLSA framework,
+following best practices around explicitly specifying which software
+dependencies your application requires and continuously scanning and analyzing
+produced software artifact to proactively patch vulnerabilities.
+
+Congratulations! You are ready to develop, build, deploy, operate and secure
+serverless applications in production!
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 You have completed the tutorial, congratulations! Please take a moment and let
 us know what you think.
