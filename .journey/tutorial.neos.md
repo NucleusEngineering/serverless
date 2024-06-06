@@ -1814,7 +1814,7 @@ gcloud builds submit \
 ```
 
 Once the build completes take a look at the
-[the top build in Cloud Build](https://console.cloud.google.com/cloud-build/builds;region=global).
+[top build in Cloud Build](https://console.cloud.google.com/cloud-build/builds;region=global).
 Click into the build, select the build summary and view the _Security Insights_
 of the build artifact
 `europe-north1-docker.pkg.dev/<walkthrough-project-id />/my-repo/dockerinsecure:latest`.
