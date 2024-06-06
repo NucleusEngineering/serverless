@@ -1596,7 +1596,7 @@ Good, let's move on.
 
 ## SLSA: Security Levels for Software Artifacts
 
-_It is pronounced like 'salsa' (/ˈsɑːl.sə/) 🌶️🥑 🍅_
+_It is pronounced 'salsa' (/ˈsɑːl.sə/) 🌶️🥑 🍅_
 
 Think of [SLSA](https://slsa.dev/) as a security checklist or framework designed
 to protect the integrity of software throughout its entire lifecycle. From the
@@ -1815,22 +1815,20 @@ of the build artifact
 You'll immediately see many vulnerabilities detected with actionable fixes
 listed as well.
 
-<!-- markdownlint-disable MD013 MD034 -->
+Go to [Artifact Registry](https://console.cloud.google.com/artifacts) and find
+the image
+`europe-north1-docker.pkg.dev/<walkthrough-project-id />/my-repo/dockerinsecure@sha256:8b3934e38ea64021c4323060150cbc877511fd8d52c81165d9f8ea1e189b0a06`.
 
-First, let's take a closer let's take a closer look all the dependencies used by
-our image. The complete list of dependencies is the most crucial component of
-our artifact's software bill-of-materials (SBOM). You can explore it by clicking
-on the [_Dependencies_ tab in Artifact
-Registry](https://console.cloud.google.com/artifacts/docker/<walkthrough-project-id />/europe-north1/my-repo/dockerinsecure/sha256:8b3934e38ea64021c4323060150cbc877511fd8d52c81165d9f8ea1e189b0a06;tab=dependencies).
+First, let's take a closer look at all the dependencies used by our image. The
+complete list of dependencies is the most crucial component of our artifact's
+software bill-of-materials (SBOM). You can explore it by clicking on the
+_Dependencies_ tab.
 
 It seems the container images we built is a Java application using Maven
-dependencies running on a Ubuntu base.
+dependencies running on an Ubuntu base.
 
 Next, let's take a look at the detected list of vulnerabilities by clicking on
-the [_Vulnerabilities_ tab in Artifact
-Registry](https://console.cloud.google.com/artifacts/docker/<walkthrough-project-id />/europe-north1/my-repo/dockerinsecure/sha256:8b3934e38ea64021c4323060150cbc877511fd8d52c81165d9f8ea1e189b0a06;tab=vulnerabilities).
-
-<!-- markdownlint-enable MD013 MD034 -->
+the _Vulnerabilities_ tab.
 
 Oh oh! There seem to be quite some serious vulnerabilities, including two with
 critical severity. As it turns out, the application is using a quite outdated
@@ -1847,12 +1845,14 @@ application by upgrading the to newer versions.
 
 ## Summary
 
-<!-- TODO summarize -->
+Amazing, you've learned how you can increase the security posture of your
+software delivery process by understanding and applying the SLSA framework,
+following best practices around explicitly specifying which software
+dependencies your application requires and continuously scanning and analyzing
+produced software artifact to proactively patch vulnerabilities.
 
-Amazing, you've learned how to
-
-You are ready to develop, build, deploy, operate and secure serverless
-applications in production!
+Congratulations! You are ready to develop, build, deploy, operate and secure
+serverless applications in production!
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
