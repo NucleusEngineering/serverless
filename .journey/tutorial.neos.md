@@ -111,7 +111,7 @@ Finally, focus the terminal again and terminate the web server with `Ctrl-C`.
 
 ## Building and deploying the code
 
-We established that our code runs locally, great! Let's put on the cloud.
+We established that our code runs locally, great! Let's put it on the cloud.
 
 In the following steps, we'll deploy our app to Cloud Run, which is a compute
 platform for running modern, cloud-first, containerized applications. Cloud Run
@@ -322,14 +322,15 @@ images.
 You don't need to provision anything to get started with using Cloud Build, it's
 serverless: simply enable the API and submit your jobs. Cloud Build manages all
 the required infrastructure for you. Per default, Cloud Build schedules build
-jobs on shared infrastructure, but it can be configured to run on a dedicated
-worker pool that is not shared with other users.
+jobs on shared infrastructure, but it can be configured to run on a [dedicated
+worker pool](https://cloud.google.com/build/docs/private-pools/private-pools-overview)
+that is not shared with other users.
 
 In the previous section of our journey we saw how to use build and deploy
 directly to Cloud Run from source code using the magic of Build Packs. Actually,
 this deployment via `gcloud run deploy` already leverages Cloud Build in the
 background, as you can see here in the
-[Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard).
+[Cloud Build History](https://console.cloud.google.com/cloud-build/builds;region=global).
 These are great to get you started quickly. Almost as quickly, you will realize
 that you need more control over your build process, so you will start writing
 your own Dockerfiles. Let's see how that works with Cloud Build.
@@ -407,7 +408,7 @@ gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg
 ```
 
 Next, let's navigate first to the
-[Cloud Build Dashboard](https://console.cloud.google.com/cloud-build/dashboard)
+[Cloud Build History](https://console.cloud.google.com/cloud-build/builds;region=global)
 to see the build we just started. As soon as that is finished we go to
 [Artifact Registry in the Google cloud Console](https://console.cloud.google.com/artifacts/docker?project=<walkthrough-project-id/>)
 to find the repository and inspect the image.
@@ -434,14 +435,14 @@ Great! We'll keep the first stage as the build stage. Once the statically-linked
 Go binary is built, it is copied to a fresh stage that is based on
 `gcr.io/distroless/static-debian11`. The _distroless_ images are Google-provided
 base images that are very small. That means there is less to store and images
-typically have much smaller attack surfaces. Let's build again:
+typically have much smaller attack surfaces and improved start-up time. Let's build again:
 
 ```bash
 gcloud builds submit -t $(gcloud config get-value artifacts/location)-docker.pkg.dev/$(gcloud config get-value project)/my-repo/dockermultistage .
 ```
 
 Navigate back to Artifact Registry in the Google Cloud Console and inspect the
-new image `dockermultistage`. The resulting image is much smaller.
+new image `dockermultistage`. The resulting image is much (70x) smaller.
 
 ## Building with a cloudbuild.yaml file
 
@@ -602,7 +603,7 @@ Copy the authentication code, navigate to
 the token and authorize the application.
 
 Once authentication is complete, you should be able to test access to GitHub by
-listing all of you repositories, like so:
+listing all of your repositories, like so:
 
 ```bash
 gh repo list
@@ -639,16 +640,20 @@ Next, Cloud Build needs to be configured with a trigger resource. The trigger
 contains everything Cloud Build needs to automatically run new builds whenever
 the remote repository gets updated.
 
-First, navigate to the
+* Navigate to the
 [Cloud Build triggers section of the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers)
-and click on 'Connect Repository'. Follow the wizard on the right to connect to
-github.com, authenticate Google's GitHub app, filter repositories based on your
-user name, find the forked repository called 'serverless', tick the box to
-accept the policy and connect your repository. Once completed you should see a
+and click on 'Connect Repository'.
+* Follow the wizard on the right to connect to
+github.com, authenticate Google's GitHub app.
+* Filter repositories based on your user name.
+* Find the forked repository called 'serverless'.
+* Tick the box to accept the policy and connect your repository.
+
+Once completed you should see a
 connection confirmation message displayed. Now it's time to create the trigger.
 
-Now, hit 'Create Trigger' and create a new trigger. In the wizard, specify that
-the trigger should read configuration from the provided `./cloudbuild.yaml` and
+* Hit 'Create Trigger' and create a new trigger.
+* In the wizard, specify that the trigger should read configuration from the provided `./cloudbuild.yaml` and
 **add all the substitutions** you used previously to trigger your build.
 
 <walkthrough-info-message>When using the "Autodetect" configuration option,
