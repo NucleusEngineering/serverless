@@ -1684,8 +1684,10 @@ attestation called
 `projects/<walkthrough-project-id />/attestors/built-by-cloud-build`. This will
 enforce checking for a valid Cloud Build signature on any image being deployed.
 
-Create a new file called `binauthz_policy.yaml` and add the following contents
-to it:
+Create a new file called <walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/binauthz_policy.yaml">
+`binauthz_policy.yaml`</walkthrough-editor-open-file> file. Let's put in the
+following contents:
 
 ```yaml
 defaultAdmissionRule:
@@ -1747,11 +1749,101 @@ vetted CI pipeline.
 
 ## Inspecting problematic container images
 
-<!-- TODO build bad log4shell java app on debian -->
+With Binary Authorization enabled we are now certain that only images built by
+the build system we trust, like Cloud Build, end up in production on our compute
+infrastructure, such as Cloud Run.
 
-<!-- TODO explore SLSA in Cloud Build -->
+We have also made sure that our build processes are very precise in explicitly
+specifying which dependencies to load and to reject.
 
-<!-- TODO explore CVEs -->
+However, we haven't yet really discussed dealing with vulnerabilities in our
+stack. So let's address this quickly.
+
+In the beginning of this Module, we've enabled the
+[Container Scanning and Analysis APIs](https://cloud.google.com/artifact-registry/docs/analysis)
+which will conveniently scan container images and other artifacts for known
+vulnerabilities and surface the results in the Google Cloud Console.
+
+Let's demo this by building a vulnerable image on purpose.
+
+Create a new file called <walkthrough-editor-open-file
+  filePath="cloudshell_open/serverless/cloudbuild-insecure.yaml">
+`cloudbuild-insecure.yaml`</walkthrough-editor-open-file> file. Let's put in the
+following contents:
+
+```yaml
+steps:
+  - id: "Pulling image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "pull"
+      - "gcr.io/serverless-journey/insecure"
+  - id: "Tagging image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "tag"
+      - "gcr.io/serverless-journey/insecure"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockerinsecure:latest"
+  - id: "Pushing image"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockerinsecure:latest"
+images:
+  - "$_ARTIFACT_REGION-docker.pkg.dev/$PROJECT_ID/my-repo/dockerinsecure:latest"
+```
+
+Take a look at the file and see what it does...
+
+Apparently, it just pulls in a foreign image, applies a local name and stores it
+in the project-local artifact registry. Let's execute the build by running:
+
+```bash
+LOCATION="$(gcloud config get-value artifacts/location)"
+gcloud builds submit \
+  --substitutions _ARTIFACT_REGION=${LOCATION} \
+  --config cloudbuild-insecure.yaml \
+  --no-source
+```
+
+Once the build completes take a look at the
+[the top build in Cloud Build](https://console.cloud.google.com/cloud-build/builds;region=global).
+Click into the build, select the build summary and view the _Security Insights_
+of the build artifact
+`europe-north1-docker.pkg.dev/<walkthrough-project-id />/my-repo/dockerinsecure:latest`.
+
+You'll immediately see many vulnerabilities detected with actionable fixes
+listed as well.
+
+<!-- markdownlint-disable MD013 MD034 -->
+
+First, let's take a closer let's take a closer look all the dependencies used by
+our image. The complete list of dependencies is the most crucial component of
+our artifact's software bill-of-materials (SBOM). You can explore it by clicking
+on the [_Dependencies_ tab in Artifact
+Registry](https://console.cloud.google.com/artifacts/docker/<walkthrough-project-id />/europe-north1/my-repo/dockerinsecure/sha256:8b3934e38ea64021c4323060150cbc877511fd8d52c81165d9f8ea1e189b0a06;tab=dependencies).
+
+It seems the container images we built is a Java application using Maven
+dependencies running on a Ubuntu base.
+
+Next, let's take a look at the detected list of vulnerabilities by clicking on
+the [_Vulnerabilities_ tab in Artifact
+Registry](https://console.cloud.google.com/artifacts/docker/<walkthrough-project-id />/europe-north1/my-repo/dockerinsecure/sha256:8b3934e38ea64021c4323060150cbc877511fd8d52c81165d9f8ea1e189b0a06;tab=vulnerabilities).
+
+<!-- markdownlint-enable MD013 MD034 -->
+
+Oh oh! There seem to be quite some serious vulnerabilities, including two with
+critical severity. As it turns out, the application is using a quite outdated
+version of the Spring framework.
+
+Explore the top vulnerabilities for a bit and have a look at the fixes. Note how
+the Container Scanning APIs also provides you with insights around
+vulnerabilities detected at the OS level as well as many other programming
+language tool chains, such as Go, Python, JavaScript NPM, C# NuGet, Ruby Gems,
+PHP Composer and Rust Crates.
+
+In general, most fixes will require you to patch dependencies in your
+application by upgrading the to newer versions.
 
 ## Summary
 
@@ -1759,8 +1851,8 @@ vetted CI pipeline.
 
 Amazing, you've learned how to
 
-You are ready to develop, build, deploy and run serverless applications in
-production!
+You are ready to develop, build, deploy, operate and secure serverless
+applications in production!
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
