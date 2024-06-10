@@ -744,7 +744,7 @@ sorts of outputs, including text. In this tutorial we'll implement the
 `model:predict` endpoint of Vertex AI to execute this model in order to add new
 dad jokes in a generative manner.
 
-<!-- TODO include on-demand clip for module 3 -->
+<!-- TODO: include on-demand clip for module 3 -->
 
 Additionally, we'll learn a little bit about custom service accounts, IAM
 permissions and how to use the principle of least privilege to secure our
@@ -1367,7 +1367,7 @@ continue by yourself and on-demand.
 
 ## Module 5: Securing the delivery process of our software artifacts
 
-![Tutorial header image](https://github.com/NucleusEngineering/serverless/blob/main/.images/secure.jpg)
+![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/secure.jpg)
 Our application is already running in a scalable fashion adapting to user
 demand. It is automatically built and we can dynamically deploy new versions
 after safely testing them in the same environment with full parity. Cloud Run's
