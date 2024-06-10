@@ -931,8 +931,10 @@ Good! The code changes we made seem to work, now it's time to deploy the changes
 to the cloud.
 
 When running the code from Cloud Shell, the underlying implementation used
-Google ADC to find credentials. In this case it was using the credentials of the
-Cloud Shell user identity (yours).
+Google [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/provide-credentials-adc) 
+to find credentials. In this case it was using the credentials of the Cloud Shell 
+user identity (yours).ADC to find credentials. In this case it was using the c
+redentials of the Cloud Shell user identity (yours).
 
 Cloud Run can be configured to use a service account, which exposes credentials
 to the code running in your container. Your application can then make
@@ -985,7 +987,7 @@ gcloud projects add-iam-policy-binding ${PROJECT} \
 ```
 
 The service account will now be able to use all the permissions in _Vertex AI
-User_ on all resources in our current project. Finally, we need to deploy a need
+User_ on all resources in our current project. Finally, we need to deploy a neew
 Cloud Run revision by updating the service configuration so that our Cloud Run
 service will use the newly-created service account:
 
@@ -1043,21 +1045,32 @@ continue by yourself and on-demand.
 ![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/sre.jpg)
 
 In this part of our journey, we are going to look at some basic principles of
-how to operate your services in production. We'll learn about SRE and define
-some custom SLOs to keep track of the health of our services.
+how to operate your services in production. We'll learn about [Site Reliability 
+Engineering (SRE)](https://sre.google/sre-book/introduction/) and define some 
+custom Service Level Objectives (SLOs) to keep track of the health of our services.
 
 Check out this
 [Overview on SLOs, SLIs and SLAs](https://www.youtube.com/watch?v=tEylFyxbDLE)
+
+Before you continue let's load your CloudRun service with traffic to ensure that 
+historic metrics data is available for later exercises. Use [`hey`](https://github.com/rakyll/hey) 
+again to do this, which will send 180 requests per minute for the next 15 minutes 
+to generate a base load without triggering [quota limits](https://cloud.google.com/vertex-ai/generative-ai/docs/quotas) 
+of the Gemini API.:
+
+```bash
+hey -z 15m -c 3 -q 1 $(gcloud run services describe jokes --format 'value(status.url)')
+```
 
 At first we'll define what reliability means for the service we operate. Using
 these definitions, we can then proceed and configure service monitoring to keep
 track of the health of our service over time.
 
 After that we'll have a look at Cloud Run's traffic splitting capabilities. This
-allows us to deploy new revisions of a Cloud Run service and the gradually move
+allows us to deploy new revisions of a Cloud Run service and then gradually move
 portion of production traffic over. Cloud Run's programmable network control
 plane allows you to split traffic between revisions; you can use this built-in
-feature to implement strategies like blue/green deployments, canaries releases,
+feature to implement strategies like blue/green deployments, canary releases,
 or rollback to previous revisions in seconds should you ever push a bad release.
 
 To bring everything to life, we'll be deploying a faulty version as a canary
@@ -1094,41 +1107,43 @@ artifactregistry.googleapis.com"> </walkthrough-enable-apis>
 Google's Site Reliability Engineering is what you get when you treat operations
 as if it’s a software problem. The mission is to protect, provide for, and
 progress the software and systems behind all of Google’s public services —
-Google Search, Ads, Gmail, Android, YouTube, and App Engine, to name just a few
-— with an ever-watchful eye on their availability, latency, performance, and
+Google Search, Ads, Gmail, Android, YouTube and many Cloud Services, to name just 
+a few — with an ever-watchful eye on their availability, latency, performance, and
 capacity.
 
 Many of the practices and tools of SRE have been integrated into Google Cloud
 Platform so that everyone running services in production can benefit from what
 Google learned over decades.
 
-SRE begins with the idea that a prerequisite to success is availability. A
-system that is unavailable cannot perform its function and will fail by default.
-Availability, in SRE terms, defines whether a system is able to fulfill its
-intended function at a point in time. In addition to being used as a reporting
-tool, the historical availability measurement can also describe the probability
-that your system will perform as expected in the future.
+SRE begins with the idea that a prerequisite to success is reliability. A
+system that is reliable cannot perform its function and will fail by default.
+Reliabilty can be measured in many dimensions like latency, freshness, correctness etc.
+Availability, in SRE terms, is one of the most important measurements, it defines 
+whether a system is able to fulfill its intended function at a point in time. 
+In addition to being used as a reporting tool, the historical availability 
+measurement can also describe the probability that your system will perform 
+as expected in the future.
 
 When we set out to define the terms of SRE, we wanted to set a precise numerical
 target for system availability. We term this target the availability
-Service-Level Objective (SLO) of our system. Any discussion we have in the
-future about whether the system is running sufficiently reliably and what design
-or architectural changes we should make to it must be framed in terms of our
-system continuing to meet this SLO.
+SLO of our system. Any discussion we have in the future about whether the system
+is running sufficiently reliably and what design or architectural changes we should
+make to it must be framed in terms of our system continuing to meet this SLO.
 
-We also have a direct measurement of a service’s behavior: the frequency of
-successful probes of our system. This is a Service-Level Indicator (SLI). When
+e also have a direct measurement of a service’s behavior: the proportion of
+successful responses of our system. This is a Service-Level Indicator (SLI). When
 we evaluate whether our system has been running within SLO for the past week, we
 look at the SLI to get the service availability percentage. If it goes below the
 specified SLO, we have a problem and may need to make the system more available
-in some way, such as running a second instance of the service in a different
-city and load-balancing between the two. If you want to know how reliable your
-service is, you must be able to measure the rates of successful and unsuccessful
-queries as your SLIs.
+in some way, such as rolling back to a previous (good) revision or running a second
+instance of the service in a different city and load-balancing between the two. 
+If you want to know how reliable your service is, you must be able to measure the
+rates of successful and unsuccessful queries as your SLIs.
 
 ### The four golden signals
 
-SRE defines _four golden signals_ to always keep track of in most systems.
+SRE defines _four golden signals_ as a good starting point for measuring relevant 
+metrics of your systems.
 
 **Latency**: The time it takes to service a request. It’s important to
 distinguish between the latency of successful requests and the latency of failed
@@ -1181,12 +1196,15 @@ such as "It looks like your database will fill its hard drive in 4 hours."
 You can
 [read more about the four golden signals](https://sre.google/sre-book/monitoring-distributed-systems/#xref_monitoring_golden-signals).
 
+A more precise and nuanced approach for measuring reliability however are SLIs 
+and their SLOs. Let's define one!
+
 ## Defining SLOs and alerts
 
 Let's begin by defining an SLO for our service that keeps track of its
 availability, specifically of its error rate. A service that is unable to serve
 requests because requests are errors, are unavailable. We are about to define an
-objective that says: We aim at serving 95% of all requests without any error.
+objective that says: We aim at serving 99% of all requests without any error.
 Cloud Run already keeps track of application errors. You can see the log-based
 metric _Request count_ in the metrics section of your Cloud Run service. You can
 find it by clicking
@@ -1197,11 +1215,14 @@ status codes are considered to be server-side errors.
 Right next to the _Metrics_ tab, you'll find the tab that says _SLOs_. Get in
 there and start the new SLO creation wizard. Define an SLO, that:
 
-- uses a **windows-based, availability metric** as SLI
+- uses a **Request-based, availability metric** as SLI
 - this should track the metric `run.googleapis.com/request_count`
-- define **goodness as 95% of requests, trailing over a 5 minute windows**
+- Observe the definition for **goodness** being response codes 200-299 while bad
+  requests are constituted from the 500-599 range.
 - the SLO definition should look at a **rolling 1 day period** with and
-  **objective of 95%**
+  **objective of 99%**
+- This means that your error budget is 1% of all requests or 14 minutes per day if
+  your traffic is equally distributed throughout the day.
 
 Finally, also create an alert that will notify you in case a fast-burn of your
 error budget gets detected. Create an new alert, that:
@@ -1230,11 +1251,10 @@ Okay! Good to go.
 Cloud Run comes with a built-in traffic control plane, which lets operators
 programmatically assign traffic to individual revisions of the same service.
 This allows you to deploy new changes to your service with none or only
-single-digit traffic routed to them. Once you've slowly gained confidence in
-your new revision you can gradually increase traffic until you reach 100% of
-traffic on the new revision and your rollout is complete. This strategy is
-commonly referred to as a
-[canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
+single-digit percentage traffic routed to them. Once you've slowly gained 
+confidence in your new revision you can gradually increase traffic until you r
+each 100% of traffic on the new revision and your rollout is complete. This 
+strategy is commonly referred to as a [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
 
 <walkthrough-info-message>Cloud Run's default deployment strategy is to
 automatically route all traffic to the new revision if it should pass minimum
@@ -1295,7 +1315,7 @@ pattern. It's time to simulate some traffic to see how the canary behaves under
 traffic. Use `hey` again to do this:
 
 ```bash
-hey -n 50000 $(gcloud run services describe jokes --format 'value(status.url)')
+hey -n 500000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 Eventually, the trajectory with which we will be burning though the error budget
@@ -1313,14 +1333,14 @@ Oh, no! We have an active incident!
 
 Follow the link in the alert mail or navigate to the
 [incidents section of Cloud Monitoring](https://console.cloud.google.com/monitoring/alerting/incidents).
-You should see the active incident marked in red: go ahead and explore it.
-Notice how the rate at which we are burning error budget is way past the
-threshold.
+You should see the active incident marked in red: First "Acknowledge Incident" 
+then go ahead and explore it. Notice how the rate at which we are burning error 
+budget is way past the threshold.
 
 Also look at the SLOs section of your Cloud Run service in the
 [Cloud Run section of the Google Cloud Console](https://console.cloud.google.com/run).
 The page tells you that the percentage of healthy, non-error responses from your
-service has dropped to 90%, which is below your SLO target of 95%!
+service has dropped to 90%, which is below your SLO target of 99%!
 
 Let's investigate a bit further. Head to the _Logs_ tab of the service. Next to
 your application logs, Cloud Run itself logs system events here. You can see how
@@ -1335,9 +1355,10 @@ which revision of the service belongs to the message. Turns out that all the
 errors are caused by the revision we previously marked as `next`.
 
 Now, before we tell the engineering team about the problem, we first keep calm
-and remember Cloud Run traffic management. To bring the system back to a safe
-state, let's rollback to the previous revision, the one we tagged with `good`.
-To do so, simply reconfigured the traffic pattern on the service like this:
+and remember Cloud Run traffic management and mitigate the incident. To bring the 
+system back to a safe state, let's rollback to the previous revision, the one we 
+tagged with `good`. To do so, simply reconfigured the traffic pattern on the service
+like this:
 
 ```bash
 gcloud run services update-traffic jokes \
@@ -1352,7 +1373,7 @@ hey -n 50000 $(gcloud run services describe jokes --format 'value(status.url)')
 ```
 
 Go back to the _SLOs_ section of your service and observe how the SLI for your
-error rate climbs back over 95%. Crisis averted!
+error rate climbs back over 99%. Crisis averted!
 
 ## Summary
 
