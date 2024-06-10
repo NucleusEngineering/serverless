@@ -1410,7 +1410,7 @@ present in the image.
 <walkthrough-tutorial-difficulty difficulty="2"></walkthrough-tutorial-difficulty>
 
 Estimated time:
-<walkthrough-tutorial-duration duration="30"></walkthrough-tutorial-duration>
+<walkthrough-tutorial-duration duration="40"></walkthrough-tutorial-duration>
 
 To get started, click **Start**.
 
