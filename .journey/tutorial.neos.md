@@ -1266,27 +1266,19 @@ strategy is commonly referred to as a
 automatically route all traffic to the new revision if it should pass minimum
 health checks.</walkthrough-info-message>
 
-Let's begin by deploying an image we know works well, in this case the previous
-version that uses the static tortune library.
-
-```bash
-gcloud run deploy jokes \
-    --image europe-north1-docker.pkg.dev/<walkthrough-project-id/>/my-repo/dockermultistage
-```
-
 In Cloud Run, you can tag your individual revisions. Each tagged revision can be
 easily referenced to by its tag and also gets an individual endpoint, just for
 itself. That means we can preview the revision even without assigning production
 traffic to it.
 
-Let's deploy a new revision of the jokes service using a different container
-image. We've been told that requirements have changed dramatically for this new
-version. We don't trust the image and decide to implement a canary release
-strategy. We begin by marking the current revision as 'good'.
+Let's begin by deploying an image we know works well, in this case the previous
+version that uses the static tortune library. Let's also tag this revision as
+'good'.
 
 ```bash
-gcloud run services update jokes \
-    --tag good
+gcloud run deploy jokes \
+    --tag good \
+    --image europe-north1-docker.pkg.dev/<walkthrough-project-id/>/my-repo/dockermultistage
 ```
 
 Good! The revision is tagged and gets a separate URL that looks something like
@@ -1297,6 +1289,11 @@ try it by directly cURLing it:
 ```bash
 curl $(gcloud run services describe jokes --format 'value(status.traffic[0].url)')
 ```
+
+Let's assume we are now told to deploy a new version and that we've been told
+that requirements have changed dramatically and it ships many changes.
+Naturally, we don't trust the image and decide to implement a canary release
+strategy.
 
 Now, let's deploy the new image, tag it and **route no traffic to it**, like so:
 
