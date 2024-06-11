@@ -1389,6 +1389,7 @@ continue by yourself and on-demand.
 ## Module 5: Securing the delivery process of our software artifacts
 
 ![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/secure.jpg)
+
 Our application is already running in a scalable fashion adapting to user
 demand. It is automatically built and we can dynamically deploy new versions
 after safely testing them in the same environment with full parity. Cloud Run's
@@ -1397,31 +1398,31 @@ version or roll back in case our monitoring setup reports spikes in errors
 caused by the introduced changes.
 
 Although we have limited the permissions on the service account in use by the
-Cloud Run service itself, we have almost completely ignored and emerging
+Cloud Run service itself, we have almost completely ignored an emerging
 security threat: attacks on our software supply chain.
 
 In this **module 5**, we'll explore how we can use several tools to strengthen
 the overall security posture of our software delivery process.
 
-Let's start by applying some general best practices around pinning specific
-versions of all the dependencies in use by our application. Additionally, we
-will also leverage both the Go and the Docker tool chains to enforce integrity
-checks of every software package loaded as dependency by explicitly tagging
+Let's start by applying some general best practices around **pinning** specific
+**versions** of all the dependencies in use by our application. Additionally, we
+will also leverage both the Go and the Docker tool chains to enforce **integrity
+checks** of every software package loaded as dependency by explicitly tagging
 their check sums. This exercise will bring us closer to achieving almost
-completely hermetic builds and will prevent loading dependencies that have been
+completely **hermetic builds** and will prevent loading dependencies that have been
 tampered with.
 
 Next, we'll have a look at the open framework _Security Levels for Software
-Artifacts_ (SLSA), which can be used to rate how secure our software delivery
-process is at any given time. Based on a rating we can then leverage it to
+Artifacts_ (SLSA), which can be used to rate how ****secure** our **software delivery
+process** is at any given time. Based on a rating we can then leverage it to
 improve the security posture of our process and increase our own confidence in
 the container images we run.
 
-After that, we will setup a policy for Binary Authorization on Cloud Run. This
+After that, we will setup a policy for **Binary Authorization** on Cloud Run. This
 will cause Cloud Run to check for a cryptographic signature to be present on all
 deployed container images or reject them. We can use this technique to make sure
 that all deployed software artifacts have been integrated and packaged by our
-trusted CI system, in this case Cloud Build.
+**trusted** CI system, in this case Cloud Build.
 
 Finally, we'll have some fun by building a completely different container image
 based on a vulnerable Java application running on an outdated Debian base. We
@@ -1535,7 +1536,7 @@ also using various Go dependencies.
 Luckily, Go already has us covered. Since our application is using Go Modules,
 Go automatically keeps track of it's dependencies. Take a look at the
 <walkthrough-editor-open-file filePath="cloudshell_open/serverless/go.mod">
-`go.mod`</walkthrough-editor-open-file> file. This file list all the
+`go.mod`</walkthrough-editor-open-file> file. This file lists all the
 dependencies our application requires and also pins their specific versions.
 
 Furthermore, Go Modules uses a second automatically generated file which keeps
@@ -1634,10 +1635,9 @@ both the software packages themselves and the infrastructure they run on.
 
 SLSA is an open-source project backed by Google and other organizations,
 fostering industry collaboration and promoting best practices. It is by all
-means am evolving framework: SLSA is still under development, with ongoing
-efforts to refine the requirements and make it easier to adopt. A growing
-ecosystem of tools is emerging to help you implement SLSA practices, from build
-systems to vulnerability scanners.
+means am evolving framework with ongoing efforts to refine the requirements and 
+make it easier to adopt. A growing ecosystem of tools is emerging to help you 
+implement SLSA practices, from build systems to vulnerability scanners.
 
 Cloud Build is one of those already integrated build systems that automatically
 attempts to give a SLSA rating and proactively surfaces relevant information.
@@ -1692,7 +1692,7 @@ Here's how it typically works:
 For our pipeline, we'd have Cloud Build as the trusted party that will sign the
 container artifacts it creates. We can then setup a policy in Binary
 Authorization, which says something like: "only trust and deploy images built by
-Cloud Build". Finally, the policy is enforced my Cloud Run, so every time a new
+Cloud Build". Finally, the policy is enforced by Cloud Run, so every time a new
 image gets deployed as a part of a new Cloud Run revision, the presence and
 validity of a signature created by Cloud Build will be checked.
 
@@ -1754,7 +1754,7 @@ enforced.
 <walkthrough-info-message>Did you know that you can also enforce the use of
 certain Binary Authorization policies? Using Organization Policies you can
 enforce the usage of policies at the level of an organization, a folder or
-individual projects in Resource Manager. You can allow-list with policies should
+individual projects in Resource Manager. You can allow-list which policies should
 be used by setting up the
 [`run.allowedBinaryAuthorizationPolicies`](https://cloud.google.com/binary-authorization/docs/run/requiring-binauthz-cloud-run#gcloud)
 policy.</walkthrough-info-message>
@@ -1884,7 +1884,7 @@ serverless applications in production!
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-You have completed the tutorial, congratulations! Please take a moment and let
+You have completed the tutorial, well done! Please take a moment and let
 us know what you think.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
