@@ -1228,7 +1228,9 @@ there and start the new SLO creation wizard. Define an SLO, that:
 - This means that your error budget is 1% of all requests or 14 minutes per day
   if your traffic is equally distributed throughout the day.
 
-Finally, also create an alert that will notify you in case a [fast-burn](https://cloud.google.com/stackdriver/docs/solutions/slo-monitoring/alerting-on-budget-burn-rate#burn-rates) of yourerror budget gets detected. Create an new alert, that:
+Finally, also create an alert that will notify you in case a
+[fast-burn](https://cloud.google.com/stackdriver/docs/solutions/slo-monitoring/alerting-on-budget-burn-rate#burn-rates)
+of yourerror budget gets detected. Create an new alert, that:
 
 - uses a **look back duration of 5 minutes**
 - breaches with a **fast-burn threshold 10(x baseline)**
@@ -1255,8 +1257,8 @@ Cloud Run comes with a built-in traffic control plane, which lets operators
 programmatically assign traffic to individual revisions of the same service.
 This allows you to deploy new changes to your service with none or only
 single-digit percentage traffic routed to them. Once you've slowly gained
-confidence in your new revision you can gradually increase traffic until you reach 
-100% of traffic on the new revision and your rollout is complete. This
+confidence in your new revision you can gradually increase traffic until you
+reach 100% of traffic on the new revision and your rollout is complete. This
 strategy is commonly referred to as a
 [canary release](https://cloud.google.com/deploy/docs/deployment-strategies/canary).
 
