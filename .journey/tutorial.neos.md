@@ -934,8 +934,7 @@ When running the code from Cloud Shell, the underlying implementation used
 Google
 [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/provide-credentials-adc)
 to find credentials. In this case it was using the credentials of the Cloud
-Shell user identity (yours).ADC to find credentials. In this case it was using
-the c redentials of the Cloud Shell user identity (yours).
+Shell user identity (yours).
 
 Cloud Run can be configured to use a service account, which exposes credentials
 to the code running in your container. Your application can then make
