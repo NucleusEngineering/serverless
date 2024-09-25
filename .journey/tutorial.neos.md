@@ -305,7 +305,7 @@ control over how we build our images. Finally, we'll use Cloud Build to also
 deploy to Cloud Run, so we can continuously deliver updates to our Cloud Run
 services.
 
-[Overview on Cloud Build](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-build.jpg)
+[Overview on Cloud Build](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/overview-build.png)
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
