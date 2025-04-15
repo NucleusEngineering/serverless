@@ -1925,7 +1925,7 @@ Create a Docker repository to store the container images for this tutorial:
 ```bash
 gcloud artifacts repositories create ollama-backend \
   --repository-format=docker \
-  --location=europe-west4
+  --location=${REGION}
 ```
 
 Then lets create a subfolder, and a Dockerfile for our Ollama service:
@@ -1992,7 +1992,7 @@ With the container image stored in a Artifact Registry repository, you're now re
 
 ```bash
 gcloud run deploy ollama-gemma \
-  --image europe-west4-docker.pkg.dev/<walkthrough-project-id/>/olamabackend/ollama-gemma \
+  --image ${REGION}-docker.pkg.dev/<walkthrough-project-id/>/olamabackend/ollama-gemma \
   --concurrency 4 \
   --cpu 8 \
   --set-env-vars OLLAMA_NUM_PARALLEL=4 \
@@ -2003,7 +2003,7 @@ gcloud run deploy ollama-gemma \
   --memory 32Gi \
   --no-cpu-throttling \
   --timeout=600 \
-  --region=europe-west4
+  --region=${REGION}
 ```
 
 ### Note the following important flags in this command:
@@ -2019,7 +2019,7 @@ gcloud run deploy ollama-gemma \
 Start the proxy, and when prompted to install the cloud-run-proxy component, choose Y:
 
 ```bash
-gcloud run services proxy ollama-gemma --port=9090 --region=europe-west4
+gcloud run services proxy ollama-gemma --port=9090 --region=${REGION}
 ```
 Send a request to it in a separate terminal tab, leaving the proxy running. Note that the proxy runs on localhost:9090:
 
@@ -2080,7 +2080,7 @@ code snippet.
 You need to addinally set the Environement Variable for the Ollama URI:
 
 ```bash
-export OLLAMA_URI="$(gcloud run services describe ollama-gemma --format 'value(status.url)' --region=europe-west4)/api/generate" 
+export OLLAMA_URI="$(gcloud run services describe ollama-gemma --format 'value(status.url)' --region=${REGION})/api/generate" 
 ```
 
 Let's check if the modified code compiles by running it:
@@ -2140,7 +2140,7 @@ gcloud run services add-iam-policy-binding ollama-gemma \
 The service account will now be able to call your infirence server. Finally, we need to deploy a new Jokes Cloud Run revision with your new code and the environment variable:
 
 ```bash
-gcloud run deploy jokes --set-env-vars OLLAMA_URI=$(gcloud run services describe ollama-gemma --format 'value(status.url)' --region=europe-west4)/api/generate --source .
+gcloud run deploy jokes --set-env-vars OLLAMA_URI=$(gcloud run services describe ollama-gemma --format 'value(status.url)' --region=${REGION})/api/generate --source .
 ```
 
 Once completed, you should be able to get fresh generated content by cURLing the
