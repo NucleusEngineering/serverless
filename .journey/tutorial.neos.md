@@ -2192,7 +2192,6 @@ SERVICE_URL=$(gcloud run services describe ollama-gemma --format 'value(status.u
 OLLAMA_URI="${SERVICE_URL}/api/generate"
 gcloud run deploy jokes \
   --set-env-vars OLLAMA_URI=${OLLAMA_URI} \
-  --region=${REGION}) \
   --source .
 ```
 
