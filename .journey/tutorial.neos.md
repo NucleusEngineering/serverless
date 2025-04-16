@@ -1566,9 +1566,8 @@ verifying checksums.
 Another best practice is to not only be specific about the dependencies we need
 to produce an artifact, but also be specific about what we produce. We can
 explicitly tag images at the end of our <walkthrough-editor-open-file
-  filePath="cloudshell_open/serverless/cloudbuild.yaml">
-`cloudbuild.yaml`</walkthrough-editor-open-file> file. Let's update the contents
-like this:
+  filePath="cloudshell_open/serverless/cloudbuild.yaml"> `cloudbuild.yaml`</walkthrough-editor-open-file>
+file. Let's update the contents like this:
 
 ```yaml
 steps:
@@ -1715,9 +1714,8 @@ attestation called
 enforce checking for a valid Cloud Build signature on any image being deployed.
 
 Create a new file called <walkthrough-editor-open-file
-  filePath="cloudshell_open/serverless/binauthz_policy.yaml">
-`binauthz_policy.yaml`</walkthrough-editor-open-file> file. Let's put in the
-following contents:
+  filePath="cloudshell_open/serverless/binauthz_policy.yaml"> `binauthz_policy.yaml`</walkthrough-editor-open-file>
+file. Let's put in the following contents:
 
 ```yaml
 defaultAdmissionRule:
@@ -1797,9 +1795,8 @@ vulnerabilities and surface the results in the Google Cloud Console.
 Let's demo this by building a vulnerable image on purpose.
 
 Create a new file called <walkthrough-editor-open-file
-  filePath="cloudshell_open/serverless/cloudbuild-insecure.yaml">
-`cloudbuild-insecure.yaml`</walkthrough-editor-open-file> file. Let's put in the
-following contents:
+  filePath="cloudshell_open/serverless/cloudbuild-insecure.yaml"> `cloudbuild-insecure.yaml`</walkthrough-editor-open-file>
+file. Let's put in the following contents:
 
 ```yaml
 steps:
@@ -1890,12 +1887,20 @@ serverless applications in production!
 
 ![Tutorial header image](https://raw.githubusercontent.com/NucleusEngineering/serverless/main/.images/apis.jpg)
 
+Welcome to Module 6! You'll learn how to deploy Google's Gemma 3, an open large
+language model (LLM), on a GPU-enabled Cloud Run service (for fast inference).
 
-Welcome to Module 6! You'll learn how to deploy Google's Gemma 3, an open large language model (LLM), on a GPU-enabled Cloud Run service (for fast inference).
+In this section, we'll bridge the gap between powerful AI models and scalable
+cloud deployment. You'll learn how to deploy a Google Cloud Run service equipped
+with GPU acceleration, specifically configured to run Ollama with the Gemma 3
+model.
 
-In this section, we'll bridge the gap between powerful AI models and scalable cloud deployment. You'll learn how to deploy a Google Cloud Run service equipped with GPU acceleration, specifically configured to run Ollama with the Gemma 3 model. 
-
-We'll transform this deployment into a practical inference server. Furthermore, we'll tackle a crucial aspect of microservice architectures: secure communication. You'll implement service-to-service interaction between Cloud Run services, authenticating securely using dedicated Service Accounts. By the end of this module, you'll have a fully functional, GPU-accelerated inference service running on Cloud Run, communicating securely with other services.
+We'll transform this deployment into a practical inference server. Furthermore,
+we'll tackle a crucial aspect of microservice architectures: secure
+communication. You'll implement service-to-service interaction between Cloud Run
+services, authenticating securely using dedicated Service Accounts. By the end
+of this module, you'll have a fully functional, GPU-accelerated inference
+service running on Cloud Run, communicating securely with other services.
 
 <walkthrough-tutorial-difficulty difficulty="3"></walkthrough-tutorial-difficulty>
 
@@ -1911,21 +1916,26 @@ the provided project ID.
 
 <walkthrough-project-setup billing="true"></walkthrough-project-setup>
 
-Important: To use the GPU feature, you must request Total Nvidia L4 GPU allocation, per project per region quota under Cloud Run Admin API in the [Quotas and system limits page.](https://cloud.google.com/run/quotas#increase)
+Important: To use the GPU feature, you must request Total Nvidia L4 GPU
+allocation, per project per region quota under Cloud Run Admin API in the
+[Quotas and system limits page.](https://cloud.google.com/run/quotas#increase)
 
-Serverless GPUs are not available for all regions to lets select a region, for which you have a GPU Cloud Run quota:
+Serverless GPUs are not available for all regions to lets select a region, for
+which you have a GPU Cloud Run quota:
 
 ```bash
-REGION="europe-west4"
+gcloud config set project <walkthrough-project-id/>
+gcloud config set run/region europe-west4
+gcloud config set artifacts/location europe-west4
 ```
+
 ## Use Docker to create a container image with Ollama and Gemma
 
 Create a Docker repository to store the container images for this tutorial:
 
 ```bash
 gcloud artifacts repositories create ollama-backend \
-  --repository-format=docker \
-  --location=${REGION}
+  --repository-format=docker
 ```
 
 Then lets create a subfolder, and a Dockerfile for our Ollama service:
@@ -1959,15 +1969,30 @@ This Dockerfile:
 6. Start Ollama
 
 ### Store model weights in the container image for faster instance starts
-Google recommends storing the model weights for Gemma 3 (4B) and similarly sized models directly in the container image.
 
-Model weights are the numerical parameters that define the behavior of an LLM. Ollama must fully read these files and load the weights into GPU memory (VRAM) during container instance startup, before it can start serving inference requests.
+Google recommends storing the model weights for Gemma 3 (4B) and similarly sized
+models directly in the container image.
 
-On Cloud Run, a fast container instance startup is important for minimizing request latency. If your container instance has a slow startup time, the service takes longer to scale from zero to one instance, and it needs more time to scale out during a traffic spike.
+Model weights are the numerical parameters that define the behavior of an LLM.
+Ollama must fully read these files and load the weights into GPU memory (VRAM)
+during container instance startup, before it can start serving inference
+requests.
 
-To ensure a fast startup, store the model files in the container image itself. This is faster and more reliable than downloading the files from a remote location during startup. Cloud Run's internal container image storage is optimized for handling traffic spikes, allowing it to quickly set up the container's file system when an instance starts.
+On Cloud Run, a fast container instance startup is important for minimizing
+request latency. If your container instance has a slow startup time, the service
+takes longer to scale from zero to one instance, and it needs more time to scale
+out during a traffic spike.
 
-Note that the model weights for Gemma 3 (4B) take up 8 GB of storage. Larger models have larger model weight files, and these might be impractical to store in the container image. Refer to [Best practices: AI inference on Cloud Run with GPUs for an overview of the trade-offs](https://cloud.google.com/run/docs/configuring/services/gpu-best-practices#loading-storing-models-tradeoff).
+To ensure a fast startup, store the model files in the container image itself.
+This is faster and more reliable than downloading the files from a remote
+location during startup. Cloud Run's internal container image storage is
+optimized for handling traffic spikes, allowing it to quickly set up the
+container's file system when an instance starts.
+
+Note that the model weights for Gemma 3 (4B) take up 8 GB of storage. Larger
+models have larger model weight files, and these might be impractical to store
+in the container image. Refer to
+[Best practices: AI inference on Cloud Run with GPUs for an overview of the trade-offs](https://cloud.google.com/run/docs/configuring/services/gpu-best-practices#loading-storing-models-tradeoff).
 
 ### Build the container image using Cloud Build
 
@@ -1975,24 +2000,31 @@ We can now submit the build context to Cloud Build and use the instructions in
 the Dockerfile to create a new image by running:
 
 ```bash
+REGION=${gcloud config get-value artifacts/location}
+IMAGE=${REGION}-docker.pkg.dev/<walkthrough-project-id/>/olamabackend/ollama-gemma
 gcloud builds submit \
-   --tag us-central1-docker.pkg.dev/<walkthrough-project-id/>/ollama-backend/ollama-gemma \
+   --tag ${IMAGE} \
    --machine-type e2-highcpu-32
 ```
 
 Note the following considerations:
 
-For a faster build, this command selects a powerful machine type with more CPU and network bandwidth.
-You should expect the build to take around 7 minutes.
-An alternative is to build the image locally with Docker and push it to Artifact Registry. This might be slower than running on Cloud Build, depending on your network bandwidth.
+For a faster build, this command selects a powerful machine type with more CPU
+and network bandwidth. You should expect the build to take around 7 minutes. An
+alternative is to build the image locally with Docker and push it to Artifact
+Registry. This might be slower than running on Cloud Build, depending on your
+network bandwidth.
 
 ## Deploy Ollama as a Cloud Run service
 
-With the container image stored in a Artifact Registry repository, you're now ready to deploy Ollama as a Cloud Run service.
+With the container image stored in a Artifact Registry repository, you're now
+ready to deploy Ollama as a Cloud Run service.
 
 ```bash
+REGION=${gcloud config get-value artifacts/location}
+IMAGE=${REGION}-docker.pkg.dev/<walkthrough-project-id/>/olamabackend/ollama-gemma
 gcloud run deploy ollama-gemma \
-  --image ${REGION}-docker.pkg.dev/<walkthrough-project-id/>/olamabackend/ollama-gemma \
+  --image ${IMAGE} \
   --concurrency 4 \
   --cpu 8 \
   --set-env-vars OLLAMA_NUM_PARALLEL=4 \
@@ -2002,26 +2034,35 @@ gcloud run deploy ollama-gemma \
   --max-instances 1 \
   --memory 32Gi \
   --no-cpu-throttling \
-  --timeout=600 \
-  --region=${REGION}
+  --timeout=600
 ```
 
-### Note the following important flags in this command:
+Note the following important flags in this command:
 
-- --concurrency 4 is set to match the value of the environment variable OLLAMA_NUM_PARALLEL.
-- --gpu 1 with --gpu-type nvidia-l4 assigns 1 NVIDIA L4 GPU to every Cloud Run instance in the service.
-- --max-instances 1 specifies the maximum number of instances to scale to. It has to be equal to or lower than your project's NVIDIA L4 GPU (Total Nvidia L4 GPU allocation, per project per region) quota.
-- --no-allow-unauthenticated restricts unauthenticated access to the service. By keeping the service private, you can rely on Cloud Run's built-in Identity and Access Management (IAM) authentication for service-to-service communication. Refer to Managing access using IAM.
+- --concurrency 4 is set to match the value of the environment variable
+  OLLAMA_NUM_PARALLEL.
+- --gpu 1 with --gpu-type nvidia-l4 assigns 1 NVIDIA L4 GPU to every Cloud Run
+  instance in the service.
+- --max-instances 1 specifies the maximum number of instances to scale to. It
+  has to be equal to or lower than your project's NVIDIA L4 GPU (Total Nvidia L4
+  GPU allocation, per project per region) quota.
+- --no-allow-unauthenticated restricts unauthenticated access to the service. By
+  keeping the service private, you can rely on Cloud Run's built-in Identity and
+  Access Management (IAM) authentication for service-to-service communication.
+  Refer to Managing access using IAM.
 - --no-cpu-throttling is required for enabling GPU.
 
 ### Test the deployed Ollama service with curl
 
-Start the proxy, and when prompted to install the cloud-run-proxy component, choose Y:
+Start the proxy, and when prompted to install the cloud-run-proxy component,
+choose Y:
 
 ```bash
-gcloud run services proxy ollama-gemma --port=9090 --region=${REGION}
+gcloud run services proxy ollama-gemma --port=9090
 ```
-Send a request to it in a separate terminal tab, leaving the proxy running. Note that the proxy runs on localhost:9090:
+
+Send a request to it in a separate terminal tab, leaving the proxy running. Note
+that the proxy runs on localhost:9090:
 
 ```bash
 curl http://localhost:9090/api/generate -d '{
@@ -2029,14 +2070,16 @@ curl http://localhost:9090/api/generate -d '{
   "prompt": "Why is the sky blue?"
 }'
 ```
-You should see a LLM response from Gemma3.
-You deployed a GPU-enabled Cloud Run service with Gemma 3 on Ollama and sent an inference request to it.
+
+You should see a LLM response from Gemma3. You deployed a GPU-enabled Cloud Run
+service with Gemma 3 on Ollama and sent an inference request to it.
 
 ## Extending the code
 
-To integrate your own inference server into the joke service, first have a look at the Go module
-`github.com/cstanger/tortunegemma`. The module provides the package
-`github.com/cstanger/tortunegemma/tortunegemma` which implements a http requests form your Joke Cloud Run Service to your Ollama Cloud Run Service.
+To integrate your own inference server into the joke service, first have a look
+at the Go module `github.com/cstanger/tortunegemma`. The module provides the
+package `github.com/cstanger/tortunegemma/tortunegemma` which implements a http
+requests form your Joke Cloud Run Service to your Ollama Cloud Run Service.
 [Read through the code](https://github.com/cstanger/tortunegemma/blob/main/tortunegemma/tortunegemma.go)
 of `tortunegemma.HitMe` and see how it implements the aforementioned steps to
 interact with your Ollama Cloud Run Service.
@@ -2050,26 +2093,27 @@ go get github.com/cstanger/tortunegemma@v0.0.1
 Once that is completed, we can update
 <walkthrough-editor-open-file filePath="cloudshell_open/serverless/main.go"> the
 main application source file main.go </walkthrough-editor-open-file> and change
-all references to the previously used package `tortune` or `tortuneai` to `tortunegemma`.
+all references to the previously used package `tortune` or `tortuneai` to
+`tortunegemma`.
 
 Notice that the signature for `tortuneai.HitMe()` is different from the previous
-`tortune.HitMe()`. You can pass the prompt and the model and the Ollama Server URI.
+`tortune.HitMe()`. You can pass the prompt and the model and the Ollama Server
+URI.
 
-The function now returns multiple return values: a
-`string` containing the response from the API and an `error`. If everything goes
-well, the error will be `nil`, if not it will contain information about what
-went wrong.
+The function now returns multiple return values: a `string` containing the
+response from the API and an `error`. If everything goes well, the error will be
+`nil`, if not it will contain information about what went wrong.
 
 Here is a possible implementation:
 
 ```golang
-	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
-		joke, err := tortunegemma.HitMe("tell me a joke about the alps and the tyrolien", "", os.Getenv("OLLAMA_URI"))
-		if err != nil {
-			fmt.Fprintf(w, "error: %v\n", err)
-		}
+  http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+    joke, err := tortunegemma.HitMe("tell me a joke about the alps and the tyrolien", "", os.Getenv("OLLAMA_URI"))
+    if err != nil {
+      fmt.Fprintf(w, "error: %v\n", err)
+    }
 
-		fmt.Fprint(w, joke)
+    fmt.Fprint(w, joke)
 ```
 
 Update the implementation of `http.HandleFunc()` in
@@ -2077,10 +2121,11 @@ Update the implementation of `http.HandleFunc()` in
 main application source file main.go </walkthrough-editor-open-file> with the
 code snippet.
 
-You need to addinally set the Environement Variable for the Ollama URI:
+You need to addinally set the Environment Variable for the Ollama URI:
 
 ```bash
-export OLLAMA_URI="$(gcloud run services describe ollama-gemma --format 'value(status.url)' --region=${REGION})/api/generate" 
+SERVICE_URL=$(gcloud run services describe ollama-gemma --format 'value(status.url)')
+export OLLAMA_URI="${SERVICE_URL}/api/generate"
 ```
 
 Let's check if the modified code compiles by running it:
@@ -2122,29 +2167,37 @@ Shell user identity (yours).
 
 Cloud Run can be configured to use a service account, which exposes credentials
 to the code running in your container. Your application can then make
-authenticated requests against the other Cloud Run Services, by adding the ID Token to the request.
+authenticated requests against the other Cloud Run services, by adding the ID
+token to the request.
 
-Our Joke Cloud Run Services uses the tortune Service Account as of Module 3.
+Our Cloud Run service uses the tortune service account as of Module 3.
 
-We now need to provide this service account the permissions to invoke the Ollama Cloud Run Service.
+We now need to provide this service account the permissions to invoke the Ollama
+Cloud Run service.
 
 ```bash
 PROJECT=$(gcloud config get-value project)
 ACCOUNT=tortune@${PROJECT}.iam.gserviceaccount.com
 gcloud run services add-iam-policy-binding ollama-gemma \
   --member serviceAccount:${ACCOUNT} \
-  --role='roles/run.invoker' \
-  --region=europe-west
+  --role='roles/run.invoker'
 ```
 
-The service account will now be able to call your infirence server. Finally, we need to deploy a new Jokes Cloud Run revision with your new code and the environment variable:
+The service account will now be able to call your inference server. Finally, we
+need to deploy a new Cloud Run revision with your new code and the environment
+variable:
 
 ```bash
-gcloud run deploy jokes --set-env-vars OLLAMA_URI=$(gcloud run services describe ollama-gemma --format 'value(status.url)' --region=${REGION})/api/generate --source .
+SERVICE_URL=$(gcloud run services describe ollama-gemma --format 'value(status.url)')
+OLLAMA_URI="${SERVICE_URL}/api/generate"
+gcloud run deploy jokes \
+  --set-env-vars OLLAMA_URI=${OLLAMA_URI} \
+  --region=${REGION}) \
+  --source .
 ```
 
 Once completed, you should be able to get fresh generated content by cURLing the
-endpoint of the Cloud Run Service:
+endpoint of the Cloud Run service:
 
 ```bash
 curl $(gcloud run services describe jokes --format 'value(status.url)')
@@ -2154,7 +2207,9 @@ Amazing!
 
 ## Summary
 
-You now know how to use Cloud Run GPUs for an Ollama Infirence Server using the open LLM Gemma3 and do a secured Service to Service communication between your Joke Service and Ollama. 
+You now know how to use Cloud Run GPUs for an Ollama inference server using the
+open LLM Gemma3 and do a secured service to service communication between your
+Joke Service and Ollama.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
